@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_scratch/constants.dart';
 
 class GameCardBig extends StatefulWidget {
   final String src;
@@ -49,7 +50,7 @@ class _GameCardBigState extends State<GameCardBig> {
             margin: EdgeInsets.fromLTRB(0, 3, 0, 0),
             width: 320,
             decoration: BoxDecoration(
-              color: Color(0xfffffdee),
+              color: kBackgroundColor,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(8),
                 bottomRight: Radius.circular(8),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_scratch/constants.dart';
 
 class GameCardCarousel extends StatefulWidget {
   final String src;
@@ -35,7 +36,7 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
         Container(
           width: 320,
           decoration: BoxDecoration(
-            color: Color(0xfffffdee),
+            color: kBackgroundColor,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(8),
               bottomRight: Radius.circular(8),
@@ -44,7 +45,7 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
               BoxShadow(
                 color: Colors.grey,
                 offset: Offset(0.0, 1.0), //(x,y)
-                blurRadius: 10.0,
+                blurRadius: 6.0,
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/widgets/bottom_nav_bar.dart';
 import 'package:simple_scratch/widgets/game_card_big.dart';
 import 'package:simple_scratch/widgets/game_card_small.dart';
@@ -21,7 +22,7 @@ class _GamesScreenState extends State<GamesScreen> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Color(0xfffffdee),
+        backgroundColor: kBackgroundColor,
         bottomNavigationBar: const BottomNavBar(
           selectedIndex: 1,
         ),
@@ -33,8 +34,12 @@ class _GamesScreenState extends State<GamesScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(
-                      width: 48,
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.menu,
+                        color: Colors.black,
+                      ),
                     ),
                     Stack(
                       children: [
@@ -49,7 +54,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
                                       ..strokeWidth = 2
-                                      ..color = Color(0xff696501),
+                                      ..color = kGreenOliveColor,
                                     fontFamily: 'Pacifico'),
                             textAlign: TextAlign.center,
                           ),
@@ -58,7 +63,7 @@ class _GamesScreenState extends State<GamesScreen> {
                           'Scratch-Offs',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Color(0xfff3e674),
+                                    color: kYellowLightColor,
                                     fontFamily: 'Pacifico',
                                   ),
                           textAlign: TextAlign.center,
@@ -80,11 +85,15 @@ class _GamesScreenState extends State<GamesScreen> {
                 Flexible(
                   child: ListView(
                     children: [
+                      // SizedBox(
+                      //   height: 300,
+                      //   child: GameCardBig(
+                      //       src:
+                      //           'https://nclottery.com/Content/Images/Instant/nc881_sqr.png'),
+                      // ),
                       SizedBox(
-                        height: 300,
-                        child: GameCardBig(
-                            src:
-                                'https://nclottery.com/Content/Images/Instant/nc881_sqr.png'),
+                        height: 345,
+                        child: GamesCarousel(),
                       ),
                       SizedBox(
                         height: 15,

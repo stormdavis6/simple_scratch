@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/widgets/bottom_nav_bar.dart';
+import 'package:simple_scratch/widgets/info_card.dart';
 
 import '../widgets/games_carousel.dart';
 
@@ -20,7 +22,7 @@ class _HomePageState extends State<HomePage> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Color(0xfffffdee),
+        backgroundColor: kBackgroundColor,
         bottomNavigationBar: BottomNavBar(
           selectedIndex: 0,
         ),
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
                                       ..strokeWidth = 2
-                                      ..color = Color(0xff696501),
+                                      ..color = kGreenOliveColor,
                                     fontFamily: 'Pacifico'),
                             textAlign: TextAlign.center,
                           ),
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                           'Simple Scratch',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: Color(0xfff3e674),
+                                    color: kYellowLightColor,
                                     fontFamily: 'Pacifico',
                                   ),
                           textAlign: TextAlign.center,
@@ -73,7 +75,57 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 345, child: GamesCarousel()),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Text(
+                      'Top Games',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 2
+                            ..color = Colors.black87,
+                          fontFamily: 'Montserrat'),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                Flexible(
+                  child: ListView(
+                    physics: ScrollPhysics(),
+                    children: [
+                      SizedBox(
+                        height: 345,
+                        child: GamesCarousel(),
+                      ),
+                      InfoCard(
+                        title: 'Simplify Your Odds',
+                        titleColor: kGreenLightColor,
+                        body:
+                            'Make the most informed decision when it comes to your scratch off games',
+                        btnText: 'Learn More',
+                        btnTextColor: Colors.white,
+                        btnColor: kGreenLightColor,
+                        backgroundColor: kBackgroundColor,
+                        borderColor: kGreenDarkColor,
+                      ),
+                      InfoCard(
+                        title: 'Frequently Asked Questions',
+                        titleColor: kYellowLightColor,
+                        body:
+                            'Get answers to common questions with our FAQs or contact us for help',
+                        btnText: 'Learn More',
+                        btnTextColor: Colors.white,
+                        btnColor: kYellowLightColor,
+                        backgroundColor: kBackgroundColor,
+                        borderColor: kGreenOliveColor,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
