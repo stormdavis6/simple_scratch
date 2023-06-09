@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "723528080405",
+    "project_id": "simplescratch-bcfe9",
+    "storage_bucket": "simplescratch-bcfe9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723528080405:android:ed96bd01b7281c9ae0c21c",
+        "android_client_info": {
+          "package_name": "com.example.simple_scratch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723528080405-09odk9e5pfcv4a335hl9johk67htnupb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAUIlhozckgEptzvWrZDRPF4ss-w0FFmI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723528080405-09odk9e5pfcv4a335hl9johk67htnupb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
