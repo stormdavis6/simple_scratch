@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 
+import '../models/ticket.dart';
+
 class GameCardSmall extends StatefulWidget {
-  final String src;
-  const GameCardSmall({Key? key, required this.src}) : super(key: key);
+  final Ticket ticket;
+  const GameCardSmall({Key? key, required this.ticket}) : super(key: key);
 
   @override
   State<GameCardSmall> createState() => _GameCardSmallState();
@@ -30,34 +32,31 @@ class _GameCardSmallState extends State<GameCardSmall> {
                       topRight: Radius.circular(8),
                     ),
                     child: Image.network(
-                      widget.src,
+                      widget.ticket.img,
                       fit: BoxFit.fill,
                       width: 320,
                       height: 320,
                     ),
                   ),
                   Positioned(
+                    width: widget.ticket.price.toString().length == 1 ? 23 : 31,
                     top: 0.0,
                     left: 0.0,
-                    right: 0.0,
                     child: Container(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(200, 0, 0, 0),
-                            Color.fromARGB(0, 0, 0, 0)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
+                        color: kGreenLightColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
                         ),
                       ),
                       padding:
-                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
                       child: Text(
-                        '\$1',
+                        '\$${widget.ticket.price.toString()}',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 15.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -89,7 +88,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
@@ -97,15 +96,15 @@ class _GameCardSmallState extends State<GameCardSmall> {
                           text: 'Overall Odds: ',
                         ),
                         TextSpan(
-                          text: '1 ',
+                          text: widget.ticket.overallOdds.substring(0, 2),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         TextSpan(
-                          text: 'in ',
+                          text: widget.ticket.overallOdds.substring(2, 4),
                         ),
                         TextSpan(
-                          text: '3.14',
+                          text: widget.ticket.overallOdds.substring(4),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
@@ -123,7 +122,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
@@ -131,15 +130,17 @@ class _GameCardSmallState extends State<GameCardSmall> {
                           text: 'Calculated Odds: ',
                         ),
                         TextSpan(
-                          text: '1 ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          text: widget.ticket.calcOdds.substring(0, 2),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         TextSpan(
-                          text: 'in ',
+                          text: widget.ticket.calcOdds.substring(2, 4),
                         ),
                         TextSpan(
-                          text: '15.9',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          text: widget.ticket.calcOdds.substring(4),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ],
                     ),

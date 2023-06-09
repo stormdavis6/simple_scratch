@@ -3,33 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:simple_scratch/widgets/game_card_big.dart';
 import 'package:simple_scratch/widgets/game_card_carousel.dart';
 
-final List<String> gamesList = [
-  'https://nclottery.com/Content/Images/Instant/nc881_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc882_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc871_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc883_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc880_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc884_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc805_sqr.png',
-  'https://nclottery.com/Content/Images/Instant/nc876_sqr.png'
-];
+import '../database/ticket_database.dart';
+import '../models/ticket.dart';
 
 class GamesCarousel extends StatefulWidget {
-  const GamesCarousel({Key? key}) : super(key: key);
+  final List<Ticket> bestTickets;
+  const GamesCarousel({Key? key, required this.bestTickets}) : super(key: key);
 
   @override
   State<GamesCarousel> createState() => _GamesCarouselState();
 }
 
 class _GamesCarouselState extends State<GamesCarousel> {
-  final List<Widget> gameSliders =
-      gamesList.map((item) => GameCardBig(src: item)).toList();
+  List<Widget> gameSliders = [];
 
   @override
   void initState() {
+    gameSliders = widget.bestTickets
+        .map((ticket) => GameCardBig(ticket: ticket))
+        .toList();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      gamesList.forEach((imageUrl) {
-        precacheImage(NetworkImage(imageUrl), context);
+      widget.bestTickets.forEach((ticket) {
+        precacheImage(NetworkImage(ticket.img), context);
       });
     });
     super.initState();
@@ -39,7 +34,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
   Widget build(BuildContext context) {
     return Container(
       child: CarouselSlider.builder(
-        itemCount: gamesList.length,
+        itemCount: widget.bestTickets.length,
         options: CarouselOptions(
           autoPlay: false,
           aspectRatio: 1.25,
@@ -47,7 +42,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
           enlargeFactor: 0.3,
         ),
         itemBuilder: (context, index, realIdx) {
-          return GameCardCarousel(src: gamesList[index]);
+          return GameCardCarousel(ticket: widget.bestTickets[index]);
         },
       ),
     );

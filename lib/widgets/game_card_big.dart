@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 
+import '../models/ticket.dart';
+
 class GameCardBig extends StatefulWidget {
-  final String src;
-  const GameCardBig({Key? key, required this.src}) : super(key: key);
+  final Ticket ticket;
+  const GameCardBig({Key? key, required this.ticket}) : super(key: key);
 
   @override
   State<GameCardBig> createState() => _GameCardBigState();
@@ -30,7 +32,7 @@ class _GameCardBigState extends State<GameCardBig> {
                     topRight: Radius.circular(8),
                   ),
                   child: Image.network(
-                    widget.src,
+                    widget.ticket.img,
                     fit: BoxFit.fill,
                     width: 320,
                     height: 320,
@@ -75,7 +77,7 @@ class _GameCardBigState extends State<GameCardBig> {
                               text: 'Ticket Price: ',
                             ),
                             TextSpan(
-                              text: '\$20',
+                              text: '\$${widget.ticket.price.toString()}',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -94,15 +96,15 @@ class _GameCardBigState extends State<GameCardBig> {
                               text: 'Overall Odds: ',
                             ),
                             TextSpan(
-                              text: '1 ',
+                              text: widget.ticket.overallOdds.substring(0, 2),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             TextSpan(
-                              text: 'in ',
+                              text: widget.ticket.overallOdds.substring(2, 4),
                             ),
                             TextSpan(
-                              text: '3.14',
+                              text: widget.ticket.overallOdds.substring(4),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -134,7 +136,7 @@ class _GameCardBigState extends State<GameCardBig> {
                               text: 'Top Prize: ',
                             ),
                             TextSpan(
-                              text: '\$1,000',
+                              text: widget.ticket.topPrize,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -153,15 +155,15 @@ class _GameCardBigState extends State<GameCardBig> {
                               text: 'Calculated Odds: ',
                             ),
                             TextSpan(
-                              text: '1 ',
+                              text: widget.ticket.overallOdds.substring(0, 2),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             TextSpan(
-                              text: 'in ',
+                              text: widget.ticket.overallOdds.substring(2, 4),
                             ),
                             TextSpan(
-                              text: '15.9',
+                              text: widget.ticket.overallOdds.substring(4),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),

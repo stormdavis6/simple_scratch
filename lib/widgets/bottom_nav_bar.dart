@@ -33,33 +33,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 if (widget.selectedIndex != 0) {
                   Navigator.pushNamed(context, '/');
                 }
-                break;
-              case 1:
-                if (widget.selectedIndex != 1) {
-                  Navigator.pushNamed(context, '/games');
-                }
             }
           },
           tabs: [
             GButton(
-              icon: Icons.home,
-              text: 'Home',
-              active: widget.selectedIndex == 0 ? true : false,
-            ),
-            GButton(
               icon: Icons.games,
               text: 'Games',
-              active: widget.selectedIndex == 1 ? true : false,
+              active: widget.selectedIndex == 0 ? true : false,
             ),
             GButton(
               icon: Icons.analytics,
               text: 'Analysis',
-              active: widget.selectedIndex == 2 ? true : false,
+              active: widget.selectedIndex == 1 ? true : false,
             ),
             GButton(
               icon: Icons.person,
               text: 'Login',
-              active: widget.selectedIndex == 3 ? true : false,
+              active: widget.selectedIndex == 2 ? true : false,
             ),
           ],
         ),

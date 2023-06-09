@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 
+import '../models/ticket.dart';
+
 class GameCardCarousel extends StatefulWidget {
-  final String src;
-  const GameCardCarousel({Key? key, required this.src}) : super(key: key);
+  final Ticket ticket;
+  const GameCardCarousel({Key? key, required this.ticket}) : super(key: key);
 
   @override
   State<GameCardCarousel> createState() => _GameCardCarouselState();
@@ -24,12 +26,35 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                   topRight: Radius.circular(8),
                 ),
                 child: Image.network(
-                  widget.src,
+                  widget.ticket.img,
                   fit: BoxFit.fill,
                   width: 320,
                   height: 320,
                 ),
               ),
+              // Positioned(
+              //   width: widget.ticket.price.toString().length == 1 ? 29 : 41,
+              //   top: 0.0,
+              //   left: 0.0,
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       color: kGreenLightColor,
+              //       borderRadius: BorderRadius.only(
+              //         topLeft: Radius.circular(8),
+              //         bottomRight: Radius.circular(8),
+              //       ),
+              //     ),
+              //     padding: EdgeInsets.symmetric(vertical: 3.0, horizontal: 3.0),
+              //     child: Text(
+              //       '\$${widget.ticket.price.toString()}',
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //         fontSize: 20.0,
+              //         fontWeight: FontWeight.bold,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -52,33 +77,33 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                padding: EdgeInsets.fromLTRB(3, 0, 3, 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // RichText(
+                    //   text: TextSpan(
+                    //     style: const TextStyle(
+                    //       fontFamily: 'Montserrat',
+                    //       fontSize: 14,
+                    //       color: Colors.black,
+                    //     ),
+                    //     children: <TextSpan>[
+                    //       TextSpan(
+                    //         text: 'Ticket Price: ',
+                    //       ),
+                    //       TextSpan(
+                    //         text: '\$${widget.ticket.price.toString()}',
+                    //         style: TextStyle(fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     RichText(
                       text: TextSpan(
                         style: const TextStyle(
                           fontFamily: 'Montserrat',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Ticket Price: ',
-                          ),
-                          TextSpan(
-                            text: '\$20',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14,
+                          fontSize: 16,
                           color: Colors.black,
                         ),
                         children: <TextSpan>[
@@ -86,15 +111,17 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                             text: 'Overall Odds: ',
                           ),
                           TextSpan(
-                            text: '1 ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            text: widget.ticket.overallOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                           TextSpan(
-                            text: 'in ',
+                            text: widget.ticket.overallOdds.substring(2, 4),
                           ),
                           TextSpan(
-                            text: '3.14',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            text: widget.ticket.overallOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                         ],
                       ),
@@ -103,38 +130,38 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                 ),
               ),
               Divider(
-                color: Colors.black,
+                color: kGreenLightColor,
                 height: 3,
-                thickness: 1,
+                thickness: 1.5,
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(3, 0, 3, 5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // RichText(
+                    //   text: TextSpan(
+                    //     style: const TextStyle(
+                    //       fontFamily: 'Montserrat',
+                    //       fontSize: 14,
+                    //       color: Colors.black,
+                    //     ),
+                    //     children: <TextSpan>[
+                    //       TextSpan(
+                    //         text: 'Top Prize: ',
+                    //       ),
+                    //       TextSpan(
+                    //         text: widget.ticket.topPrize,
+                    //         style: TextStyle(fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     RichText(
                       text: TextSpan(
                         style: const TextStyle(
                           fontFamily: 'Montserrat',
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Top Prize: ',
-                          ),
-                          TextSpan(
-                            text: '\$1,000',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 14,
+                          fontSize: 16,
                           color: Colors.black,
                         ),
                         children: <TextSpan>[
@@ -142,15 +169,17 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                             text: 'Calculated Odds: ',
                           ),
                           TextSpan(
-                            text: '1 ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            text: widget.ticket.calcOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                           TextSpan(
-                            text: 'in ',
+                            text: widget.ticket.calcOdds.substring(2, 4),
                           ),
                           TextSpan(
-                            text: '15.9',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            text: widget.ticket.calcOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                         ],
                       ),
