@@ -185,7 +185,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                                 selectedFiltersList[index]
                                                     .filterText,
                                                 style: TextStyle(
-                                                    color: kGreenLightColor,
+                                                    color: Colors.white,
                                                     fontFamily: 'Montserrat',
                                                     fontWeight:
                                                         FontWeight.bold),
