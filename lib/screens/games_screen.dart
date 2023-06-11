@@ -119,26 +119,52 @@ class _GamesScreenState extends State<GamesScreen> {
                               ),
                             ],
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              dynamic result = await Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return GamesFilterScreen(
-                                  selectedFiltersListPassed:
-                                      selectedFiltersList,
-                                );
-                              }));
-                              if (result != null) {
-                                selectedFiltersList = result;
-                              }
-                              setState(() {});
-                            },
-                            icon: Icon(
-                              Icons.filter_list_sharp,
-                              color: selectedFiltersList.isNotEmpty
-                                  ? kGreenLightColor
-                                  : Colors.black,
-                            ),
+                          Stack(
+                            children: [
+                              selectedFiltersList.isNotEmpty
+                                  ? Positioned(
+                                      width: 10,
+                                      height: 10,
+                                      top: 10.0,
+                                      right: 5.0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: kYellowLightColor,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                            topRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    ),
+                              IconButton(
+                                onPressed: () async {
+                                  dynamic result = await Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return GamesFilterScreen(
+                                      selectedFiltersListPassed:
+                                          selectedFiltersList,
+                                    );
+                                  }));
+                                  if (result != null) {
+                                    selectedFiltersList = result;
+                                  }
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  Icons.filter_list_sharp,
+                                  color: selectedFiltersList.isNotEmpty
+                                      ? kGreenLightColor
+                                      : Colors.black,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
