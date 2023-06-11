@@ -171,7 +171,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                               onPressed: () {},
                                               style: TextButton.styleFrom(
                                                 backgroundColor:
-                                                    kBackgroundColor,
+                                                    kGreenLightColor,
                                                 elevation: 0,
                                                 shape: RoundedRectangleBorder(
                                                     borderRadius:
