@@ -12,6 +12,7 @@ class GameCardCarousel extends StatefulWidget {
 }
 
 class _GameCardCarouselState extends State<GameCardCarousel> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -30,6 +31,23 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                   fit: BoxFit.fill,
                   width: 320,
                   height: 320,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: kGreenLightColor,
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return const Icon(Icons.error);
+                  },
                 ),
               ),
               // Positioned(
@@ -130,9 +148,9 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                 ),
               ),
               Divider(
-                color: kGreenLightColor,
+                color: Color(0xff363636),
                 height: 3,
-                thickness: 1.5,
+                thickness: 1,
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(3, 0, 3, 5),

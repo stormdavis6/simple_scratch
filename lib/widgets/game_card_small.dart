@@ -36,6 +36,23 @@ class _GameCardSmallState extends State<GameCardSmall> {
                       fit: BoxFit.fill,
                       width: 320,
                       height: 320,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: kGreenLightColor,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return const Icon(Icons.error);
+                      },
                     ),
                   ),
                   Positioned(
@@ -113,7 +130,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                   ),
                 ),
                 Divider(
-                  color: Colors.black,
+                  color: Color(0xff363636),
                   height: 3,
                   thickness: 1,
                 ),
@@ -122,7 +139,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
@@ -132,7 +149,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                         TextSpan(
                           text: widget.ticket.calcOdds.substring(0, 2),
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                         TextSpan(
                           text: widget.ticket.calcOdds.substring(2, 4),
@@ -140,7 +157,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                         TextSpan(
                           text: widget.ticket.calcOdds.substring(4),
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                              fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ],
                     ),

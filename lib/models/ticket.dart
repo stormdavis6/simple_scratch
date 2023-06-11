@@ -7,7 +7,7 @@ class Ticket {
   String name;
   String overallOdds;
   int price;
-  double prob;
+  double? prob;
   String topPrize;
 
   Ticket(
@@ -27,6 +27,17 @@ class Ticket {
         overallOdds: json['overallOdds'],
         price: json['price'],
         prob: json['prob'],
+        topPrize: json['topPrize']);
+  }
+
+  factory Ticket.fromJsonNoProb(Map<String, dynamic> json) {
+    return Ticket(
+        calcOdds: json['calcOdds'],
+        img: json['img'],
+        name: json['name'],
+        overallOdds: json['overallOdds'],
+        price: json['price'],
+        prob: null,
         topPrize: json['topPrize']);
   }
 }

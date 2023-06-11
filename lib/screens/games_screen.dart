@@ -33,13 +33,19 @@ class _GamesScreenState extends State<GamesScreen> {
     setState(() {
       isLoading = true;
     });
+
     TicketDatabase ticketDatabase = TicketDatabase();
     await Firebase.initializeApp();
     await ticketDatabase.getBestTicketsFromFirestore();
     bestTickets = ticketDatabase.getBestTickets();
     print('best tickets list size: ${bestTickets.length}');
-    bestTickets.forEach((element) {
-      print(element.name);
+    await ticketDatabase.getAllTicketsFromFirestore();
+    allTickets = ticketDatabase.getAllTickets();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allTickets.forEach((ticket) {
+        precacheImage(NetworkImage(ticket.img), context);
+      });
     });
 
     setState(() {
@@ -200,10 +206,10 @@ class _GamesScreenState extends State<GamesScreen> {
                                         childAspectRatio: 1,
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 10),
-                                itemCount: bestTickets.length,
+                                itemCount: allTickets.length,
                                 itemBuilder: (BuildContext ctx, index) {
                                   return GameCardSmall(
-                                    ticket: bestTickets[index],
+                                    ticket: allTickets[index],
                                   );
                                 }),
                           ],
