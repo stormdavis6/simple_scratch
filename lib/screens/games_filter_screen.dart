@@ -42,23 +42,23 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
   }
 
   List<FilterItem> priceFilters = [
-    FilterItem(filterText: '\$1', filterType: 1, id: 1),
-    FilterItem(filterText: '\$2', filterType: 1, id: 2),
-    FilterItem(filterText: '\$3', filterType: 1, id: 3),
-    FilterItem(filterText: '\$5', filterType: 1, id: 4),
-    FilterItem(filterText: '\$10', filterType: 1, id: 5),
-    FilterItem(filterText: '\$20', filterType: 1, id: 6),
-    FilterItem(filterText: '\$25', filterType: 1, id: 7),
-    FilterItem(filterText: '\$30', filterType: 1, id: 8),
+    FilterItem(filterText: '\$30', filterType: 1, id: 1),
+    FilterItem(filterText: '\$25', filterType: 1, id: 2),
+    FilterItem(filterText: '\$20', filterType: 1, id: 3),
+    FilterItem(filterText: '\$10', filterType: 1, id: 4),
+    FilterItem(filterText: '\$5', filterType: 1, id: 5),
+    FilterItem(filterText: '\$3', filterType: 1, id: 6),
+    FilterItem(filterText: '\$2', filterType: 1, id: 7),
+    FilterItem(filterText: '\$1', filterType: 1, id: 8)
   ];
   List<FilterItem> topPrizeFilters = [
-    FilterItem(filterText: '1M+', filterType: 2, id: 10),
-    FilterItem(filterText: '\$500k+', filterType: 2, id: 11),
-    FilterItem(filterText: '\$250k - \$500k', filterType: 2, id: 12),
+    FilterItem(filterText: 'Less Than \$5k', filterType: 2, id: 10),
+    FilterItem(filterText: '\$5k - \$50k', filterType: 2, id: 11),
+    FilterItem(filterText: '\$50k - \$100k', filterType: 2, id: 12),
     FilterItem(filterText: '\$100k - \$250k', filterType: 2, id: 13),
-    FilterItem(filterText: '\$50k - \$100k', filterType: 2, id: 14),
-    FilterItem(filterText: '\$5k - \$50k', filterType: 2, id: 15),
-    FilterItem(filterText: 'Less Than \$5k', filterType: 2, id: 16)
+    FilterItem(filterText: '\$250k - \$500k', filterType: 2, id: 14),
+    FilterItem(filterText: '\$500k+', filterType: 2, id: 15),
+    FilterItem(filterText: '1M+', filterType: 2, id: 16)
   ];
   List<FilterItem> selectedFiltersList = [];
   List<FilterItem> defaultFiltersList = [];

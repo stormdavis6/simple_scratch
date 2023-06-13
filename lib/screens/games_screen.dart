@@ -8,6 +8,7 @@ import 'package:simple_scratch/widgets/game_card_small.dart';
 import 'package:simple_scratch/widgets/games_carousel.dart';
 import '../models/filterItem.dart';
 import '../models/ticket.dart';
+import '../widgets/side_navigation_drawer.dart';
 
 class GamesScreen extends StatefulWidget {
   const GamesScreen({Key? key}) : super(key: key);
@@ -162,6 +163,7 @@ class _GamesScreenState extends State<GamesScreen> {
     });
   }
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>(); // Create a key
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context)
@@ -177,10 +179,12 @@ class _GamesScreenState extends State<GamesScreen> {
               return false;
             },
             child: Scaffold(
+              key: _scaffoldKey,
               backgroundColor: kBackgroundColor,
               bottomNavigationBar: const BottomNavBar(
                 selectedIndex: 0,
               ),
+              drawer: SideNavigationDrawer(),
               body: SafeArea(
                 child: Padding(
                   padding:
@@ -191,7 +195,10 @@ class _GamesScreenState extends State<GamesScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print('Drawer button pressed!');
+                              _scaffoldKey.currentState?.openDrawer();
+                            },
                             icon: Icon(
                               Icons.menu,
                               color: Colors.black,
@@ -264,6 +271,8 @@ class _GamesScreenState extends State<GamesScreen> {
                                   setState(() {
                                     if (result != null && result != -1) {
                                       selectedFiltersList = result;
+                                      selectedFiltersList
+                                          .sort((a, b) => b.id.compareTo(a.id));
                                       filterTickets();
                                       SearchTickets(searchController.text);
                                     } else {
@@ -448,9 +457,6 @@ class _GamesScreenState extends State<GamesScreen> {
                                   });
                                 },
                               ),
-                            ),
-                            SizedBox(
-                              height: 5,
                             ),
                             GridView.builder(
                                 physics: ScrollPhysics(),
