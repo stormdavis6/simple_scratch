@@ -17,6 +17,8 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
   @override
   void initState() {
     super.initState();
+    priceFilters.sort((a, b) => b.id.compareTo(a.id));
+    topPrizeFilters.sort((a, b) => b.id.compareTo(a.id));
     selectFilters();
   }
 
@@ -24,8 +26,6 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
     setState(() {
       if (widget.selectedFiltersListPassed.isNotEmpty) {
         selectedFiltersList = widget.selectedFiltersListPassed;
-        defaultFiltersList = widget.selectedFiltersListPassed;
-        print('select filters function list $selectedFiltersList');
         for (var item in selectedFiltersList) {
           if (item.id < 10) {
             priceFilters[
@@ -61,7 +61,6 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
     FilterItem(filterText: '1M+', filterType: 2, id: 16)
   ];
   List<FilterItem> selectedFiltersList = [];
-  List<FilterItem> defaultFiltersList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,23 +245,13 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
                     setState(() {
                       if (!filters[index].isSelected) {
                         selectedFiltersList.add(filters[index]);
-                        print('Selected filter ${filters[index].filterText}');
-                        selectedFiltersList.forEach((element) {
-                          print(element.filterText);
-                        });
                       } else {
                         selectedFiltersList.removeAt(
                             selectedFiltersList.indexWhere(
                                 (element) => element.id == filters[index].id));
-                        print(
-                            'UN-Selected filter ${filters[index].filterText}');
-                        selectedFiltersList.forEach((element) {
-                          print(element.filterText);
-                        });
                       }
                       filters[index].isSelected = !filters[index].isSelected;
                     });
-                    print(defaultFiltersList);
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: filters[index].isSelected
