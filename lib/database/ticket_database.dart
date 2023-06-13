@@ -49,6 +49,6 @@ class TicketDatabase {
       _allTickets.add(Ticket.fromJsonNoProb(element as Map<String, dynamic>));
     });
 
-    // _allTickets.sort((a, b) => a.name.compareTo(b.name));
+    _allTickets.sort((a, b) => b.price.compareTo(a.price));
   }
 }

@@ -14,16 +14,20 @@ class GameCardSmall extends StatefulWidget {
 class _GameCardSmallState extends State<GameCardSmall> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Material(
-            elevation: 3,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-            child: Container(
+    return GestureDetector(
+      onTap: () {
+        print('${widget.ticket.name} tapped!');
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Material(
+              elevation: 3,
+              color: kBackgroundColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
               child: Stack(
                 children: <Widget>[
                   ClipRRect(
@@ -61,7 +65,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     left: 0.0,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: kGreenLightColor,
+                        color: Color(0xff363636),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8),
                           bottomRight: Radius.circular(8),
@@ -83,91 +87,91 @@ class _GameCardSmallState extends State<GameCardSmall> {
               ),
             ),
           ),
-        ),
-        Material(
-          elevation: 3,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(8),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: kBackgroundColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(8),
-                bottomRight: Radius.circular(8),
+          Material(
+            elevation: 3,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: kBackgroundColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Overall Odds: ',
+                          ),
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(2, 4),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Color(0xff363636),
+                    height: 3,
+                    thickness: 1,
+                  ),
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Calculated Odds: ',
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(2, 4),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 13,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Overall Odds: ',
-                        ),
-                        TextSpan(
-                          text: widget.ticket.overallOdds.substring(0, 2),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        TextSpan(
-                          text: widget.ticket.overallOdds.substring(2, 4),
-                        ),
-                        TextSpan(
-                          text: widget.ticket.overallOdds.substring(4),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Color(0xff363636),
-                  height: 3,
-                  thickness: 1,
-                ),
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 12,
-                        color: Colors.black,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Calculated Odds: ',
-                        ),
-                        TextSpan(
-                          text: widget.ticket.calcOdds.substring(0, 2),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
-                        TextSpan(
-                          text: widget.ticket.calcOdds.substring(2, 4),
-                        ),
-                        TextSpan(
-                          text: widget.ticket.calcOdds.substring(4),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

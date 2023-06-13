@@ -20,13 +20,25 @@ class _GamesScreenState extends State<GamesScreen> {
   List<FilterItem> selectedFiltersList = [];
   List<Ticket> bestTickets = [];
   List<Ticket> allTickets = [];
+  List<Ticket> duplicateAllTickets = [];
+  List<Ticket> allTicketsFiltered = [];
+  List<Ticket> duplicateAllTicketsFiltered = [];
   bool isLoading = false;
+  bool searchIsFocused = false;
+  late TextEditingController searchController;
 
   @override
   void initState() {
     super.initState();
 
     getTickets();
+    searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   Future getTickets() async {
@@ -38,10 +50,9 @@ class _GamesScreenState extends State<GamesScreen> {
     await Firebase.initializeApp();
     await ticketDatabase.getBestTicketsFromFirestore();
     bestTickets = ticketDatabase.getBestTickets();
-    print('best tickets list size: ${bestTickets.length}');
     await ticketDatabase.getAllTicketsFromFirestore();
     allTickets = ticketDatabase.getAllTickets();
-
+    duplicateAllTickets = allTickets;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allTickets.forEach((ticket) {
         precacheImage(NetworkImage(ticket.img), context);
@@ -50,6 +61,104 @@ class _GamesScreenState extends State<GamesScreen> {
 
     setState(() {
       isLoading = false;
+    });
+  }
+
+  void filterTickets() {
+    allTicketsFiltered = allTickets;
+    List<Ticket> tempFilteredTicketsListPrice = [];
+    List<Ticket> tempFilteredListTopPrize = [];
+    for (var item in selectedFiltersList) {
+      if (item.filterType == 1) {
+        allTicketsFiltered
+            .where((ticket) =>
+                ticket.price ==
+                int.parse(item.filterText.replaceAll(RegExp(r"\D"), "")))
+            .toList()
+            .forEach((ticket) {
+          tempFilteredTicketsListPrice.add(ticket);
+        });
+      } else {
+        for (var ticket in allTicketsFiltered) {
+          int topPrize =
+              int.parse(ticket.topPrize.replaceAll(RegExp(r"\D"), ""));
+          //1M+ top prize
+          if (item.filterText == '1M+') {
+            if (topPrize >= 1000000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //500k+ top prize
+          else if (item.filterText == '\$500k+') {
+            if (topPrize >= 500000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //250k - 500k top prize
+          else if (item.filterText == '\$250k - \$500k') {
+            if (topPrize >= 250000 && topPrize <= 500000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //100k - 250k top prize
+          else if (item.filterText == '\$100k - \$250k') {
+            if (topPrize >= 100000 && topPrize <= 250000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //50k - 100k top prize
+          else if (item.filterText == '\$50k - \$100k') {
+            if (topPrize >= 50000 && topPrize <= 100000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //5k - 50k top prize
+          else if (item.filterText == '\$5k - \$50k') {
+            if (topPrize >= 5000 && topPrize <= 50000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+          //5k - 50k top prize
+          else if (item.filterText == 'Less Than \$5k') {
+            if (topPrize < 5000) {
+              tempFilteredListTopPrize.add(ticket);
+            }
+          }
+        }
+      }
+    }
+
+    List<Ticket> filteredTicketsIntersection = [];
+    if (tempFilteredTicketsListPrice.isEmpty) {
+      filteredTicketsIntersection = tempFilteredListTopPrize;
+    } else {
+      filteredTicketsIntersection = tempFilteredTicketsListPrice;
+      if (tempFilteredListTopPrize.isNotEmpty) {
+        filteredTicketsIntersection.removeWhere(
+            (element) => !tempFilteredListTopPrize.contains(element));
+      }
+    }
+
+    filteredTicketsIntersection.sort((a, b) => b.price.compareTo(a.price));
+    allTicketsFiltered = filteredTicketsIntersection;
+    duplicateAllTicketsFiltered = filteredTicketsIntersection;
+  }
+
+  //function to search through list of exercises
+  void SearchTickets(String query) {
+    setState(() {
+      if (selectedFiltersList.isNotEmpty) {
+        allTicketsFiltered = duplicateAllTicketsFiltered
+            .where((ticket) =>
+                ticket.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      } else {
+        allTickets = duplicateAllTickets
+            .where((ticket) =>
+                ticket.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+      allTickets.sort((a, b) => b.price.compareTo(a.price));
     });
   }
 
@@ -93,7 +202,7 @@ class _GamesScreenState extends State<GamesScreen> {
                               Positioned.directional(
                                 textDirection: TextDirection.rtl,
                                 child: Text(
-                                  'Scratch-Offs',
+                                  'Simple Scratch',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleLarge
@@ -107,7 +216,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                 ),
                               ),
                               Text(
-                                'Scratch-Offs',
+                                'Simple Scratch',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleLarge
@@ -123,10 +232,10 @@ class _GamesScreenState extends State<GamesScreen> {
                             children: [
                               selectedFiltersList.isNotEmpty
                                   ? Positioned(
-                                      width: 10,
-                                      height: 10,
-                                      top: 10.0,
-                                      right: 5.0,
+                                      width: 8,
+                                      height: 8,
+                                      top: 9.0,
+                                      right: 9.0,
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: kYellowLightColor,
@@ -145,17 +254,24 @@ class _GamesScreenState extends State<GamesScreen> {
                                     ),
                               IconButton(
                                 onPressed: () async {
-                                  dynamic result = await Navigator.push(context,
+                                  final result = await Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return GamesFilterScreen(
                                       selectedFiltersListPassed:
                                           selectedFiltersList,
                                     );
                                   }));
-                                  if (result != null) {
-                                    selectedFiltersList = result;
-                                  }
-                                  setState(() {});
+                                  setState(() {
+                                    if (result != null && result != -1) {
+                                      selectedFiltersList = result;
+                                      filterTickets();
+                                      SearchTickets(searchController.text);
+                                    } else {
+                                      allTicketsFiltered = allTickets;
+                                      selectedFiltersList = [];
+                                      SearchTickets(searchController.text);
+                                    }
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.filter_list_sharp,
@@ -168,13 +284,14 @@ class _GamesScreenState extends State<GamesScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
                       Flexible(
                         child: ListView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           children: [
-                            selectedFiltersList.isEmpty
+                            selectedFiltersList.isEmpty &&
+                                    !searchIsFocused &&
+                                    searchController.text.isEmpty
                                 ? SizedBox(
                                     height: 345,
                                     child: GamesCarousel(
@@ -183,7 +300,8 @@ class _GamesScreenState extends State<GamesScreen> {
                                   )
                                 : SizedBox(
                                     width: 150,
-                                    height: 35,
+                                    height:
+                                        selectedFiltersList.isNotEmpty ? 35 : 0,
                                     child: ListView.builder(
                                         physics: ScrollPhysics(),
                                         itemCount: selectedFiltersList.length,
@@ -193,35 +311,146 @@ class _GamesScreenState extends State<GamesScreen> {
                                           return Padding(
                                             padding:
                                                 EdgeInsets.fromLTRB(1, 0, 5, 0),
-                                            child: TextButton(
-                                              onPressed: () {},
-                                              style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    kGreenLightColor,
-                                                elevation: 0,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    side: BorderSide(
-                                                        color:
-                                                            kGreenLightColor)),
-                                              ),
-                                              child: Text(
-                                                selectedFiltersList[index]
-                                                    .filterText,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'Montserrat',
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
+                                            child: Stack(
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    selectedFiltersList
+                                                        .removeAt(index);
+                                                    filterTickets();
+                                                    SearchTickets(
+                                                        searchController.text);
+                                                    setState(() {});
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    padding: EdgeInsets.zero,
+                                                    tapTargetSize:
+                                                        MaterialTapTargetSize
+                                                            .shrinkWrap,
+                                                    foregroundColor:
+                                                        kGreenLightColor,
+                                                    backgroundColor:
+                                                        kGreenLightColor,
+                                                    elevation: 0,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        side: BorderSide(
+                                                            color:
+                                                                kGreenLightColor)),
+                                                  ),
+                                                  child: Text(
+                                                    selectedFiltersList[index]
+                                                                .filterText
+                                                                .length <=
+                                                            3
+                                                        ? selectedFiltersList[
+                                                                index]
+                                                            .filterText
+                                                        : '     ${selectedFiltersList[index].filterText}     ',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                    width: 15,
+                                                    height: 15,
+                                                    top: 0.0,
+                                                    right: 0.0,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        print(
+                                                            'Button pressed at index $index');
+                                                        selectedFiltersList
+                                                            .removeAt(index);
+                                                        filterTickets();
+                                                        SearchTickets(
+                                                            searchController
+                                                                .text);
+                                                        setState(() {});
+                                                        print(
+                                                            'filter list size: ${selectedFiltersList.length}');
+                                                      },
+                                                      child: Icon(
+                                                        Icons.close,
+                                                        color: Colors.white,
+                                                        size: 12,
+                                                      ),
+                                                    ))
+                                              ],
                                             ),
                                           );
                                         }),
                                   ),
+                            //This container is the search bar
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 0),
+                              decoration: BoxDecoration(
+                                color: kBackgroundColor,
+                                border: Border.all(
+                                    color: searchIsFocused
+                                        ? kGreenLightColor
+                                        : Colors.grey[700]!),
+                                borderRadius: BorderRadius.circular(29.5),
+                              ),
+                              child: TextField(
+                                controller: searchController,
+                                cursorColor: kGreenLightColor,
+                                decoration: InputDecoration(
+                                  hintText: "Search",
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: Colors.grey[700],
+                                  ),
+                                  border: InputBorder.none,
+                                  suffixIcon: searchController.text.isEmpty
+                                      ? const SizedBox(
+                                          width: 0,
+                                          height: 0,
+                                        )
+                                      : IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: Colors.grey[700],
+                                          ),
+                                          onPressed: () {
+                                            searchController.clear();
+                                            SearchTickets('');
+                                          }),
+                                ),
+                                onChanged: (query) {
+                                  SearchTickets(query);
+                                },
+                                onTap: () {
+                                  setState(() {
+                                    searchIsFocused = true;
+                                  });
+                                },
+                                onSubmitted: (query) {
+                                  setState(() {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    searchIsFocused = false;
+                                  });
+                                },
+                                onTapOutside: (pointer) {
+                                  setState(() {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    searchIsFocused = false;
+                                  });
+                                },
+                              ),
+                            ),
                             SizedBox(
-                              height: 15,
+                              height: 5,
                             ),
                             GridView.builder(
                                 physics: ScrollPhysics(),
@@ -232,12 +461,19 @@ class _GamesScreenState extends State<GamesScreen> {
                                         childAspectRatio: 1,
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 10),
-                                itemCount: allTickets.length,
+                                itemCount: selectedFiltersList.isEmpty
+                                    ? allTickets.length
+                                    : allTicketsFiltered.length,
                                 itemBuilder: (BuildContext ctx, index) {
                                   return GameCardSmall(
-                                    ticket: allTickets[index],
+                                    ticket: selectedFiltersList.isEmpty
+                                        ? allTickets[index]
+                                        : allTicketsFiltered[index],
                                   );
                                 }),
+                            SizedBox(
+                              height: 5,
+                            ),
                           ],
                         ),
                       ),

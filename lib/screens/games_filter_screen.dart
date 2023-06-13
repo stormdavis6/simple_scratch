@@ -17,42 +17,51 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.selectedFiltersListPassed.isNotEmpty) {
-      selectedFiltersList = widget.selectedFiltersListPassed;
-      for (var item in selectedFiltersList) {
-        if (item.id < 10) {
-          priceFilters[
-                  priceFilters.indexWhere((element) => element.id == item.id)]
-              .isSelected = true;
-        } else {
-          topPrizeFilters[topPrizeFilters
-                  .indexWhere((element) => element.id == item.id)]
-              .isSelected = true;
+    selectFilters();
+  }
+
+  void selectFilters() {
+    setState(() {
+      if (widget.selectedFiltersListPassed.isNotEmpty) {
+        selectedFiltersList = widget.selectedFiltersListPassed;
+        defaultFiltersList = widget.selectedFiltersListPassed;
+        print('select filters function list $selectedFiltersList');
+        for (var item in selectedFiltersList) {
+          if (item.id < 10) {
+            priceFilters[
+                    priceFilters.indexWhere((element) => element.id == item.id)]
+                .isSelected = true;
+          } else {
+            topPrizeFilters[topPrizeFilters
+                    .indexWhere((element) => element.id == item.id)]
+                .isSelected = true;
+          }
         }
       }
-    }
+    });
   }
 
   List<FilterItem> priceFilters = [
-    FilterItem(filterText: '\$1', id: 1),
-    FilterItem(filterText: '\$2', id: 2),
-    FilterItem(filterText: '\$3', id: 3),
-    FilterItem(filterText: '\$5', id: 4),
-    FilterItem(filterText: '\$10', id: 5),
-    FilterItem(filterText: '\$20', id: 6),
-    FilterItem(filterText: '\$25', id: 7),
-    FilterItem(filterText: '\$30', id: 8),
+    FilterItem(filterText: '\$1', filterType: 1, id: 1),
+    FilterItem(filterText: '\$2', filterType: 1, id: 2),
+    FilterItem(filterText: '\$3', filterType: 1, id: 3),
+    FilterItem(filterText: '\$5', filterType: 1, id: 4),
+    FilterItem(filterText: '\$10', filterType: 1, id: 5),
+    FilterItem(filterText: '\$20', filterType: 1, id: 6),
+    FilterItem(filterText: '\$25', filterType: 1, id: 7),
+    FilterItem(filterText: '\$30', filterType: 1, id: 8),
   ];
   List<FilterItem> topPrizeFilters = [
-    FilterItem(filterText: '1M+', id: 10),
-    FilterItem(filterText: '\$500k+', id: 11),
-    FilterItem(filterText: '\$250k - \$500k', id: 12),
-    FilterItem(filterText: '\$100k - \$250k', id: 13),
-    FilterItem(filterText: '\$50k - \$100k', id: 14),
-    FilterItem(filterText: '\$5k - \$50k', id: 15),
-    FilterItem(filterText: 'Less Than \$5k', id: 16)
+    FilterItem(filterText: '1M+', filterType: 2, id: 10),
+    FilterItem(filterText: '\$500k+', filterType: 2, id: 11),
+    FilterItem(filterText: '\$250k - \$500k', filterType: 2, id: 12),
+    FilterItem(filterText: '\$100k - \$250k', filterType: 2, id: 13),
+    FilterItem(filterText: '\$50k - \$100k', filterType: 2, id: 14),
+    FilterItem(filterText: '\$5k - \$50k', filterType: 2, id: 15),
+    FilterItem(filterText: 'Less Than \$5k', filterType: 2, id: 16)
   ];
   List<FilterItem> selectedFiltersList = [];
+  List<FilterItem> defaultFiltersList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,131 +69,130 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.arrow_back_ios_new_rounded),
-                  ),
-                  Stack(
-                    children: [
-                      Positioned.directional(
-                        textDirection: TextDirection.rtl,
-                        child: Text(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context, -1);
+                      },
+                      icon: Icon(Icons.arrow_back_ios_new_rounded),
+                    ),
+                    Stack(
+                      children: [
+                        Positioned.directional(
+                          textDirection: TextDirection.rtl,
+                          child: Text(
+                            'Filter Scratch-Offs',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 2
+                                      ..color = kGreenOliveColor,
+                                    fontFamily: 'Pacifico'),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Text(
                           'Filter Scratch-Offs',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  foreground: Paint()
-                                    ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 2
-                                    ..color = kGreenOliveColor,
-                                  fontFamily: 'Pacifico'),
+                                    color: kYellowLightColor,
+                                    fontFamily: 'Pacifico',
+                                  ),
                           textAlign: TextAlign.center,
                         ),
-                      ),
-                      Text(
-                        'Filter Scratch-Offs',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: kYellowLightColor,
-                              fontFamily: 'Pacifico',
+                      ],
+                    ),
+                    SizedBox(
+                      width: 24,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FilterCard('Ticket Price', kGreenLightColor, kGreenDarkColor, 5,
+                    priceFilters),
+                SizedBox(
+                  height: 10,
+                ),
+                FilterCard('Top Prize', kGreenLightColor, kGreenDarkColor, 3,
+                    topPrizeFilters),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    selectedFiltersList.isEmpty
+                        ? SizedBox(
+                            height: 0,
+                            width: 0,
+                          )
+                        : TextButton(
+                            onPressed: () {
+                              setState(() {
+                                for (var element in priceFilters) {
+                                  element.isSelected = false;
+                                }
+                                for (var element in topPrizeFilters) {
+                                  element.isSelected = false;
+                                }
+                                selectedFiltersList = [];
+                              });
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: kBackgroundColor,
+                              foregroundColor: kBackgroundColor,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 24,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              FilterCard('Ticket Price', kGreenLightColor, kGreenDarkColor, 5,
-                  priceFilters),
-              SizedBox(
-                height: 10,
-              ),
-              FilterCard('Top Prize', kGreenLightColor, kGreenDarkColor, 3,
-                  topPrizeFilters),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  selectedFiltersList.isEmpty
-                      ? SizedBox(
-                          height: 0,
-                          width: 0,
-                        )
-                      : TextButton(
-                          onPressed: () {
-                            for (var element in priceFilters) {
-                              element.isSelected = false;
-                            }
-                            for (var element in topPrizeFilters) {
-                              element.isSelected = false;
-                            }
-                            selectedFiltersList = [];
-                            print(selectedFiltersList.length);
-                            setState(() {});
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: kBackgroundColor,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            child: Text(
+                              'Clear Selected',
+                              style: TextStyle(
+                                  color: kGreenLightColor,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                          child: Text(
-                            'Clear Selected',
-                            style: TextStyle(
-                                color: kGreenLightColor,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold),
-                          ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context, selectedFiltersList);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: kGreenLightColor,
+                        foregroundColor: kGreenDarkColor,
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (selectedFiltersList.isNotEmpty) {
-                        print('Sending Filters: ');
-                        for (int i = 0; i < selectedFiltersList.length; i++) {
-                          print(selectedFiltersList[i].filterText);
-                        }
-                        Navigator.pop(context, selectedFiltersList);
-                      } else {
-                        Navigator.pop(context, selectedFiltersList);
-                      }
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: kGreenLightColor,
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Done',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -239,6 +247,9 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
                       if (!filters[index].isSelected) {
                         selectedFiltersList.add(filters[index]);
                         print('Selected filter ${filters[index].filterText}');
+                        selectedFiltersList.forEach((element) {
+                          print(element.filterText);
+                        });
                       } else {
                         selectedFiltersList.removeAt(
                             selectedFiltersList.indexWhere(
@@ -251,8 +262,12 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
                       }
                       filters[index].isSelected = !filters[index].isSelected;
                     });
+                    print(defaultFiltersList);
                   },
                   style: TextButton.styleFrom(
+                    foregroundColor: filters[index].isSelected
+                        ? kBackgroundColor
+                        : kGreenDarkColor,
                     backgroundColor: filters[index].isSelected
                         ? kGreenLightColor
                         : kBackgroundColor,
