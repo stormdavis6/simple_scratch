@@ -1,11 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
+
+import '../screens/login_screen.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    bool isSignedIn = false;
+    if (user != null) {
+      isSignedIn = true;
+    }
+
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
     return Drawer(
@@ -13,10 +22,11 @@ class SideNavigationDrawer extends StatelessWidget {
       width: size.width * .75,
       elevation: 100,
       child: ListView(
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 110,
+            height: size.height * .18,
             child: DrawerHeader(
               margin: EdgeInsets.zero,
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -72,35 +82,47 @@ class SideNavigationDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            title: Text(
-              'Sign In',
-              style: TextStyle(
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text(
-              'Register',
-              style: TextStyle(
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
-            ),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text(
-              'Sign Out',
-              style: TextStyle(
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
-            ),
-            onTap: () {},
-          ),
-          Divider(
-            color: Color(0xff363636),
-            height: 2,
-            thickness: 1,
-          ),
+          isSignedIn
+              ? SizedBox(
+                  width: 0,
+                  height: 0,
+                )
+              : ListTile(
+                  title: Text(
+                    'Sign In',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return LoginScreen();
+                    }));
+                  },
+                ),
+          isSignedIn
+              ? SizedBox(
+                  width: 0,
+                  height: 0,
+                )
+              : ListTile(
+                  title: Text(
+                    'Register',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () {},
+                ),
+          isSignedIn
+              ? SizedBox(
+                  width: 0,
+                  height: 0,
+                )
+              : Divider(
+                  color: Color(0xff363636),
+                  height: 2,
+                  thickness: 1,
+                ),
           ListTile(
             title: Text(
               'Scratch-Offs',
@@ -162,6 +184,22 @@ class SideNavigationDrawer extends StatelessWidget {
             ),
             onTap: () {},
           ),
+          isSignedIn
+              ? ListTile(
+                  title: Text(
+                    'Sign Out',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
+                  ),
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                    Navigator.pushNamed(context, '/');
+                  },
+                )
+              : SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
         ],
       ),
     );

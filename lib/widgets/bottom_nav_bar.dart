@@ -12,7 +12,6 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
-    print('current nav item index :  ${widget.selectedIndex}');
     return Container(
       color: Color(0xfffffdee),
       child: Padding(
@@ -26,7 +25,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           gap: 8,
           selectedIndex: widget.selectedIndex,
           onTabChange: (index) {
-            print(index);
             setState(() {});
             switch (index) {
               case 0:

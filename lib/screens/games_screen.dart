@@ -1,4 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/database/ticket_database.dart';
@@ -48,7 +48,6 @@ class _GamesScreenState extends State<GamesScreen> {
     });
 
     TicketDatabase ticketDatabase = TicketDatabase();
-    await Firebase.initializeApp();
     await ticketDatabase.getBestTicketsFromFirestore();
     bestTickets = ticketDatabase.getBestTickets();
     await ticketDatabase.getAllTicketsFromFirestore();
@@ -166,8 +165,17 @@ class _GamesScreenState extends State<GamesScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>(); // Create a key
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    bool isSignedIn = false;
+    if (user != null) {
+      isSignedIn = true;
+      //print(user.email);
+    } else {
+      //print('User not signed in');
+    }
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
+    final ThemeData defaultTheme = Theme.of(context);
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -196,7 +204,6 @@ class _GamesScreenState extends State<GamesScreen> {
                         children: <Widget>[
                           IconButton(
                             onPressed: () {
-                              print('Drawer button pressed!');
                               _scaffoldKey.currentState?.openDrawer();
                             },
                             icon: Icon(
@@ -295,6 +302,7 @@ class _GamesScreenState extends State<GamesScreen> {
                       ),
                       Flexible(
                         child: ListView(
+                          physics: BouncingScrollPhysics(),
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           children: [
@@ -312,7 +320,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                     height:
                                         selectedFiltersList.isNotEmpty ? 35 : 0,
                                     child: ListView.builder(
-                                        physics: ScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         itemCount: selectedFiltersList.length,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,

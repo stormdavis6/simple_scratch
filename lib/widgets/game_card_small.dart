@@ -139,41 +139,31 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     thickness: 1,
                   ),
                   Center(
-                    child: Blur(
-                      blur: 5,
-                      blurColor: kGreenLightColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
-                        topRight: Radius.circular(8),
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 12,
-                            color: Colors.black,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Calculated Odds: ',
-                            ),
-                            TextSpan(
-                              text: widget.ticket.calcOdds.substring(0, 2),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
-                            ),
-                            TextSpan(
-                              text: widget.ticket.calcOdds.substring(2, 4),
-                            ),
-                            TextSpan(
-                              text: widget.ticket.calcOdds.substring(4),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
-                            ),
-                          ],
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 12,
+                          color: Colors.black,
                         ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Calculated Odds: ',
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(2, 4),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.calcOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                        ],
                       ),
                     ),
                   ),
