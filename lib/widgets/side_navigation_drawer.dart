@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:simple_scratch/constants.dart';
 
 import '../screens/login_screen.dart';
@@ -193,7 +194,21 @@ class SideNavigationDrawer extends StatelessWidget {
                   ),
                   onTap: () {
                     FirebaseAuth.instance.signOut();
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pop(context);
+
+                    var snackBar = SnackBar(
+                      content: Text(
+                        'Signed Out Successfully',
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: Color(0xff363636),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(29.5),
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                      margin: EdgeInsets.fromLTRB(50, 0, 50, 5),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                 )
               : SizedBox(
