@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/main.dart';
 
 import '../screens/login_screen.dart';
+import '../screens/register_screen.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({super.key});
@@ -111,7 +113,12 @@ class SideNavigationDrawer extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return RegisterScreen();
+                    }));
+                  },
                 ),
           isSignedIn
               ? SizedBox(
@@ -129,7 +136,13 @@ class SideNavigationDrawer extends StatelessWidget {
               style: TextStyle(
                   fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
             ),
-            onTap: () {},
+            onTap: () {
+              if (ModalRoute.of(context)?.settings.name == '/') {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushNamed(context, '/');
+              }
+            },
           ),
           ListTile(
             title: Text(

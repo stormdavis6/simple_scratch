@@ -112,8 +112,8 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
                       ],
                     ),
                     SizedBox(
-                      width: 24,
-                    )
+                      width: 48,
+                    ),
                   ],
                 ),
                 SizedBox(
