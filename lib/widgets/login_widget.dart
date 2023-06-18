@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool submitted = false;
-  bool validLogin = true;
+  String errorText = '';
 
   @override
   void initState() {
@@ -94,146 +95,148 @@ class _LoginWidgetState extends State<LoginWidget> {
                 Center(
                   child: SizedBox(
                     width: 300,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Welcome back',
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontFamily: 'Montserrat'),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Sign in to your account',
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Montserrat'),
-                        ),
-                        const SizedBox(height: 30),
-                        TextField(
-                          controller: emailController,
-                          cursorColor: kGreenLightColor,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Welcome back',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Sign in to your account',
+                            style: TextStyle(
+                                fontSize: 23,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          const SizedBox(height: 30),
+                          TextFormField(
+                            controller: emailController,
+                            cursorColor: kGreenLightColor,
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
                               hintText: 'Email',
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: kGreenLightColor),
                               ),
-                              errorText: submitted ? _emailErrorText : null),
-                          onChanged: (string) {
-                            setState(() {
-                              submitted = false;
-                              validLogin = true;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          controller: passwordController,
-                          cursorColor: kGreenLightColor,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (email) =>
+                                email != null && !EmailValidator.validate(email)
+                                    ? 'Enter a valid email'
+                                    : null,
+                            onChanged: (string) {},
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          TextFormField(
+                            controller: passwordController,
+                            cursorColor: kGreenLightColor,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
                               hintText: 'Password',
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: kGreenLightColor),
                               ),
-                              errorText: submitted ? _passwordErrorText : null),
-                          onChanged: (string) {
-                            setState(() {
-                              submitted = false;
-                              validLogin = true;
-                            });
-                          },
-                          obscureText: true,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        validLogin
-                            ? SizedBox(
-                                height: 0,
-                                width: 0,
-                              )
-                            : Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Text(
-                                    'Invalid email or password',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RichText(
-                                text: TextSpan(
-                              // recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
-                              text: 'Forgot Password?',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: kGreenLightColor),
-                            )),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: Size.fromHeight(40),
-                              foregroundColor: kGreenDarkColor,
-                              backgroundColor: kGreenLightColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              elevation: 5),
-                          child: Text(
-                            'Sign In',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              submitted = true;
-                            });
-                            signIn();
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                      color: kBlackLightColor, fontSize: 16),
-                                  text: 'Don\'t have an account?  ',
-                                  children: [
-                                    TextSpan(
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = widget.onClickedSignUp,
-                                        text: 'Sign Up',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: kGreenLightColor))
-                                  ]),
                             ),
-                          ],
-                        ),
-                      ],
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) => value != null && value.isEmpty
+                                ? 'Password is required'
+                                : null,
+                            onChanged: (string) {},
+                            obscureText: true,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          errorText.isNotEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                    child: Text(
+                                      errorText,
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 14),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  height: 0,
+                                  width: 0,
+                                ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                // recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
+                                text: 'Forgot Password?',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: kGreenLightColor),
+                              )),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: Size.fromHeight(40),
+                                foregroundColor: kGreenDarkColor,
+                                backgroundColor: kGreenLightColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 5),
+                            child: Text(
+                              'Sign In',
+                              style:
+                                  TextStyle(fontSize: 24, color: Colors.white),
+                            ),
+                            onPressed: () {
+                              signIn();
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                    style: TextStyle(
+                                        color: kBlackLightColor, fontSize: 16),
+                                    text: 'Don\'t have an account?  ',
+                                    children: [
+                                      TextSpan(
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = widget.onClickedSignUp,
+                                          text: 'Sign Up',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: kGreenLightColor))
+                                    ]),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -248,34 +251,10 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  String? get _emailErrorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = emailController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Email can\'t be empty';
-    }
-    if (!text.contains('@')) {
-      return 'Not a valid email';
-    }
-    // return null if the text is valid
-    return null;
-  }
-
-  String? get _passwordErrorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = passwordController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Password can\'t be empty';
-    }
-    // return null if the text is valid
-    return null;
-  }
-
   Future signIn() async {
+    final isValid = formKey.currentState!.validate();
+    if (!isValid) return;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -307,13 +286,15 @@ class _LoginWidgetState extends State<LoginWidget> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } on FirebaseAuthException catch (e) {
-      print(e);
-      navigatorKey.currentState!.pop();
+      String exCode = e.code.toString();
       setState(() {
-        if (_emailErrorText == null && _passwordErrorText == null) {
-          validLogin = false;
+        if (exCode == 'invalid-email' ||
+            exCode == 'wrong-password' ||
+            exCode == 'user-not-found') {
+          errorText = 'Username or password is invalid';
         }
       });
+      navigatorKey.currentState!.pop();
     }
   }
 }
