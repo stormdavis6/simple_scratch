@@ -182,7 +182,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             RichText(
                               text: TextSpan(
                                   style: TextStyle(
-                                      color: Color(0xff363636), fontSize: 16),
+                                      color: kBlackLightColor, fontSize: 16),
                                   text: 'Alredy have an account?  ',
                                   children: [
                                     TextSpan(

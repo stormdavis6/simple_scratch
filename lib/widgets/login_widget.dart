@@ -217,7 +217,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             RichText(
                               text: TextSpan(
                                   style: TextStyle(
-                                      color: Color(0xff363636), fontSize: 16),
+                                      color: kBlackLightColor, fontSize: 16),
                                   text: 'Don\'t have an account?  ',
                                   children: [
                                     TextSpan(
@@ -298,7 +298,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           'Welcome, ${FirebaseAuth.instance.currentUser?.email!}',
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Color(0xff363636),
+        backgroundColor: kBlackLightColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(29.5),
         ),

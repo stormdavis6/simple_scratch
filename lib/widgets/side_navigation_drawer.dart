@@ -127,7 +127,7 @@ class SideNavigationDrawer extends StatelessWidget {
                   height: 0,
                 )
               : Divider(
-                  color: Color(0xff363636),
+                  color: kBlackLightColor,
                   height: 2,
                   thickness: 1,
                 ),
@@ -162,7 +162,7 @@ class SideNavigationDrawer extends StatelessWidget {
             onTap: () {},
           ),
           Divider(
-            color: Color(0xff363636),
+            color: kBlackLightColor,
             height: 2,
             thickness: 1,
           ),
@@ -215,7 +215,7 @@ class SideNavigationDrawer extends StatelessWidget {
                         '${user?.email} was signed out',
                         textAlign: TextAlign.center,
                       ),
-                      backgroundColor: Color(0xff363636),
+                      backgroundColor: kBlackLightColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(29.5),
                       ),

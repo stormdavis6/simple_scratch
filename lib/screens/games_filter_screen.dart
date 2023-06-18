@@ -219,7 +219,7 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
                   child: Text(
                     title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Color(0xff363636),
+                          color: kBlackLightColor,
                           fontFamily: 'Montserrat',
                           fontWeight: FontWeight.bold,
                         ),

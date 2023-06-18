@@ -78,7 +78,7 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                   left: 0.0,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFF363636),
+                      color: kBlackLightColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8),
@@ -172,7 +172,7 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                   ),
                 ),
                 Divider(
-                  color: Color(0xff363636),
+                  color: kBlackLightColor,
                   height: 3,
                   thickness: 1,
                 ),

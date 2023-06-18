@@ -66,7 +66,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     left: 0.0,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Color(0xff363636),
+                        color: kBlackLightColor,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8),
                           bottomRight: Radius.circular(8),
@@ -134,7 +134,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     ),
                   ),
                   Divider(
-                    color: Color(0xff363636),
+                    color: kBlackLightColor,
                     height: 3,
                     thickness: 1,
                   ),
