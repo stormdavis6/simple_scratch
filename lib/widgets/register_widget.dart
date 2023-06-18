@@ -1,21 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_scratch/constants.dart';
 
-import '../main.dart';
-import 'games_screen.dart';
+import '../constants.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterWidget extends StatefulWidget {
+  final VoidCallback onClickedSignUp;
+  const RegisterWidget({Key? key, required this.onClickedSignUp})
+      : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterWidget> createState() => _RegisterWidgetState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterWidgetState extends State<RegisterWidget> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailConfirmController = TextEditingController();
   bool submitted = false;
   bool validLogin = true;
 
@@ -28,10 +28,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    emailConfirmController.dispose();
     super.dispose();
   }
 
-  //https://www.youtube.com/watch?v=4vKiJZNPhss&ab_channel=HeyFlutter%E2%80%A4com
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Welcome back',
+                          'Welcome!',
                           style: TextStyle(
                               fontSize: 17,
                               color: Colors.black,
@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Sign in to your account',
+                          'Create an account',
                           style: TextStyle(
                               fontSize: 23,
                               color: Colors.black,
@@ -120,17 +120,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           cursorColor: kGreenLightColor,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
-                              hintText: 'Email',
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: kGreenLightColor),
-                              ),
-                              errorText: submitted ? _emailErrorText : null),
-                          onChanged: (string) {
-                            setState(() {
-                              submitted = false;
-                              validLogin = true;
-                            });
-                          },
+                            hintText: 'Email',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kGreenLightColor),
+                            ),
+                          ),
+                          onChanged: (string) {},
+                        ),
+                        TextField(
+                          controller: emailConfirmController,
+                          cursorColor: kGreenLightColor,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            hintText: 'Confirm Email',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kGreenLightColor),
+                            ),
+                          ),
+                          onChanged: (string) {},
                         ),
                         SizedBox(
                           height: 5,
@@ -140,50 +147,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           cursorColor: kGreenLightColor,
                           textInputAction: TextInputAction.done,
                           decoration: InputDecoration(
-                              hintText: 'Password',
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: kGreenLightColor),
-                              ),
-                              errorText: submitted ? _passwordErrorText : null),
-                          onChanged: (string) {
-                            setState(() {
-                              submitted = false;
-                              validLogin = true;
-                            });
-                          },
+                            hintText: 'Password',
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: kGreenLightColor),
+                            ),
+                          ),
+                          onChanged: (string) {},
                           obscureText: true,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        validLogin
-                            ? SizedBox(
-                                height: 0,
-                                width: 0,
-                              )
-                            : Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Text(
-                                    'Invalid email or password',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RichText(
-                                text: TextSpan(
-                              // recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
-                              text: 'Forgot Password?',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: kGreenLightColor),
-                            )),
-                          ],
                         ),
                         SizedBox(
                           height: 10,
@@ -198,15 +168,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               elevation: 5),
                           child: Text(
-                            'Sign In',
+                            'Sign Up',
                             style: TextStyle(fontSize: 24, color: Colors.white),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              submitted = true;
-                            });
-                            signIn();
-                          },
+                          onPressed: () {},
                         ),
                         SizedBox(
                           height: 20,
@@ -218,11 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               text: TextSpan(
                                   style: TextStyle(
                                       color: Color(0xff363636), fontSize: 16),
-                                  text: 'Don\'t have an account?  ',
+                                  text: 'Alredy have an account?  ',
                                   children: [
                                     TextSpan(
-                                        // recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
-                                        text: 'Sign Up',
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = widget.onClickedSignUp,
+                                        text: 'Sign In',
                                         style: TextStyle(
                                             fontSize: 20,
                                             decoration:
@@ -245,74 +211,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  String? get _emailErrorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = emailController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Email can\'t be empty';
-    }
-    if (!text.contains('@')) {
-      return 'Not a valid email';
-    }
-    // return null if the text is valid
-    return null;
-  }
-
-  String? get _passwordErrorText {
-    // at any time, we can get the text from _controller.value.text
-    final text = passwordController.value.text;
-    // Note: you can do your own custom validation here
-    // Move this logic this outside the widget for more testable code
-    if (text.isEmpty) {
-      return 'Password can\'t be empty';
-    }
-    // return null if the text is valid
-    return null;
-  }
-
-  Future signIn() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: CircularProgressIndicator(
-          color: kGreenLightColor,
-        ),
-      ),
-    );
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      navigatorKey.currentState?.popUntil((route) => route.isFirst);
-      navigatorKey.currentState?.pop();
-      var snackBar = SnackBar(
-        content: Text(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}',
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Color(0xff363636),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(29.5),
-        ),
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.fromLTRB(50, 0, 50, 5),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      navigatorKey.currentState!.pop();
-      setState(() {
-        if (_emailErrorText == null && _passwordErrorText == null) {
-          validLogin = false;
-        }
-      });
-    }
   }
 }

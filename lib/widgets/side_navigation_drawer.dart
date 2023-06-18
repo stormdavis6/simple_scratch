@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/main.dart';
-
-import '../screens/login_screen.dart';
-import '../screens/register_screen.dart';
+import 'package:simple_scratch/screens/auth_screen.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({super.key});
@@ -98,7 +95,9 @@ class SideNavigationDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return LoginScreen();
+                      return AuthScreen(
+                        isLogin: true,
+                      );
                     }));
                   },
                 ),
@@ -116,7 +115,9 @@ class SideNavigationDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return RegisterScreen();
+                      return AuthScreen(
+                        isLogin: false,
+                      );
                     }));
                   },
                 ),
