@@ -17,7 +17,6 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(
