@@ -173,9 +173,6 @@ class _GamesScreenState extends State<GamesScreen> {
     } else {
       //print('User not signed in');
     }
-    var size = MediaQuery.of(context)
-        .size; //this gonna give us total height and with of our device
-    final ThemeData defaultTheme = Theme.of(context);
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -193,6 +190,10 @@ class _GamesScreenState extends State<GamesScreen> {
                 selectedIndex: 0,
               ),
               drawer: SideNavigationDrawer(),
+              drawerEdgeDragWidth: MediaQuery.of(context).size.width * .15,
+              // endDrawer: GamesFilterScreen(
+              //   selectedFiltersListPassed: selectedFiltersList,
+              // ),
               body: SafeArea(
                 child: Padding(
                   padding:
@@ -288,6 +289,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                       SearchTickets(searchController.text);
                                     }
                                   });
+                                  // _scaffoldKey.currentState?.openEndDrawer();
                                 },
                                 icon: Icon(
                                   Icons.filter_list_sharp,
@@ -301,194 +303,219 @@ class _GamesScreenState extends State<GamesScreen> {
                         ],
                       ),
                       Flexible(
-                        child: ListView(
-                          physics: BouncingScrollPhysics(),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          children: [
-                            selectedFiltersList.isEmpty &&
-                                    !searchIsFocused &&
-                                    searchController.text.isEmpty
-                                ? SizedBox(
-                                    height: 345,
-                                    child: GamesCarousel(
-                                      bestTickets: bestTickets,
-                                    ),
-                                  )
-                                : SizedBox(
-                                    width: 150,
-                                    height:
-                                        selectedFiltersList.isNotEmpty ? 35 : 0,
-                                    child: ListView.builder(
-                                        physics: BouncingScrollPhysics(),
-                                        itemCount: selectedFiltersList.length,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding:
-                                                EdgeInsets.fromLTRB(1, 0, 5, 0),
-                                            child: Stack(
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    selectedFiltersList
-                                                        .removeAt(index);
-                                                    filterTickets();
-                                                    SearchTickets(
-                                                        searchController.text);
-                                                    setState(() {});
-                                                  },
-                                                  style: TextButton.styleFrom(
-                                                    padding: EdgeInsets.zero,
-                                                    tapTargetSize:
-                                                        MaterialTapTargetSize
-                                                            .shrinkWrap,
-                                                    foregroundColor:
-                                                        kGreenLightColor,
-                                                    backgroundColor:
-                                                        kGreenLightColor,
-                                                    elevation: 0,
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        side: BorderSide(
-                                                            color:
-                                                                kGreenLightColor)),
-                                                  ),
-                                                  child: Text(
-                                                    selectedFiltersList[index]
-                                                                .filterText
-                                                                .length <=
-                                                            3
-                                                        ? selectedFiltersList[
-                                                                index]
-                                                            .filterText
-                                                        : '     ${selectedFiltersList[index].filterText}     ',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Positioned(
-                                                    width: 15,
-                                                    height: 15,
-                                                    top: 0.0,
-                                                    right: 0.0,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        print(
-                                                            'Button pressed at index $index');
-                                                        selectedFiltersList
-                                                            .removeAt(index);
-                                                        filterTickets();
-                                                        SearchTickets(
-                                                            searchController
-                                                                .text);
-                                                        setState(() {});
-                                                        print(
-                                                            'filter list size: ${selectedFiltersList.length}');
-                                                      },
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        color: Colors.white,
-                                                        size: 12,
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            scrollbarTheme: ScrollbarThemeData(
+                                thumbColor:
+                                    MaterialStateProperty.all(kBlackLightColor),
+                                crossAxisMargin: -6),
+                          ),
+                          child: Scrollbar(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: BouncingScrollPhysics(),
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              children: [
+                                selectedFiltersList.isEmpty &&
+                                        !searchIsFocused &&
+                                        searchController.text.isEmpty
+                                    ? SizedBox(
+                                        height: 345,
+                                        child: GamesCarousel(
+                                          bestTickets: bestTickets,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        width: 150,
+                                        height: selectedFiltersList.isNotEmpty
+                                            ? 35
+                                            : 0,
+                                        child: Scrollbar(
+                                          child: ListView.builder(
+                                              physics: BouncingScrollPhysics(),
+                                              itemCount:
+                                                  selectedFiltersList.length,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      1, 0, 5, 0),
+                                                  child: Stack(
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          selectedFiltersList
+                                                              .removeAt(index);
+                                                          filterTickets();
+                                                          SearchTickets(
+                                                              searchController
+                                                                  .text);
+                                                          setState(() {});
+                                                        },
+                                                        style: TextButton
+                                                            .styleFrom(
+                                                          padding:
+                                                              EdgeInsets.zero,
+                                                          tapTargetSize:
+                                                              MaterialTapTargetSize
+                                                                  .shrinkWrap,
+                                                          foregroundColor:
+                                                              kGreenLightColor,
+                                                          backgroundColor:
+                                                              kGreenLightColor,
+                                                          elevation: 0,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              side: BorderSide(
+                                                                  color:
+                                                                      kGreenLightColor)),
+                                                        ),
+                                                        child: Text(
+                                                          selectedFiltersList[
+                                                                          index]
+                                                                      .filterText
+                                                                      .length <=
+                                                                  3
+                                                              ? selectedFiltersList[
+                                                                      index]
+                                                                  .filterText
+                                                              : '     ${selectedFiltersList[index].filterText}     ',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  'Montserrat',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
-                                                    ))
-                                              ],
-                                            ),
-                                          );
-                                        }),
+                                                      Positioned(
+                                                          width: 15,
+                                                          height: 15,
+                                                          top: 0.0,
+                                                          right: 0.0,
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              print(
+                                                                  'Button pressed at index $index');
+                                                              selectedFiltersList
+                                                                  .removeAt(
+                                                                      index);
+                                                              filterTickets();
+                                                              SearchTickets(
+                                                                  searchController
+                                                                      .text);
+                                                              setState(() {});
+                                                              print(
+                                                                  'filter list size: ${selectedFiltersList.length}');
+                                                            },
+                                                            child: Icon(
+                                                              Icons.close,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 12,
+                                                            ),
+                                                          ))
+                                                    ],
+                                                  ),
+                                                );
+                                              }),
+                                        ),
+                                      ),
+                                //This container is the search bar
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 0),
+                                  decoration: BoxDecoration(
+                                    color: kBackgroundColor,
+                                    border: Border.all(
+                                        color: searchIsFocused
+                                            ? kGreenLightColor
+                                            : Colors.grey[700]!),
+                                    borderRadius: BorderRadius.circular(29.5),
                                   ),
-                            //This container is the search bar
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 0),
-                              decoration: BoxDecoration(
-                                color: kBackgroundColor,
-                                border: Border.all(
-                                    color: searchIsFocused
-                                        ? kGreenLightColor
-                                        : Colors.grey[700]!),
-                                borderRadius: BorderRadius.circular(29.5),
-                              ),
-                              child: TextField(
-                                controller: searchController,
-                                cursorColor: kGreenLightColor,
-                                decoration: InputDecoration(
-                                  hintText: "Search",
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.grey[700],
+                                  child: TextField(
+                                    controller: searchController,
+                                    cursorColor: kGreenLightColor,
+                                    decoration: InputDecoration(
+                                      hintText: "Search",
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: Colors.grey[700],
+                                      ),
+                                      border: InputBorder.none,
+                                      suffixIcon: searchController.text.isEmpty
+                                          ? const SizedBox(
+                                              width: 0,
+                                              height: 0,
+                                            )
+                                          : IconButton(
+                                              icon: Icon(
+                                                Icons.close,
+                                                color: Colors.grey[700],
+                                              ),
+                                              onPressed: () {
+                                                searchController.clear();
+                                                SearchTickets('');
+                                              }),
+                                    ),
+                                    onChanged: (query) {
+                                      SearchTickets(query);
+                                    },
+                                    onTap: () {
+                                      setState(() {
+                                        searchIsFocused = true;
+                                      });
+                                    },
+                                    onSubmitted: (query) {
+                                      setState(() {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                        searchIsFocused = false;
+                                      });
+                                    },
+                                    onTapOutside: (pointer) {
+                                      setState(() {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                        searchIsFocused = false;
+                                      });
+                                    },
                                   ),
-                                  border: InputBorder.none,
-                                  suffixIcon: searchController.text.isEmpty
-                                      ? const SizedBox(
-                                          width: 0,
-                                          height: 0,
-                                        )
-                                      : IconButton(
-                                          icon: Icon(
-                                            Icons.close,
-                                            color: Colors.grey[700],
-                                          ),
-                                          onPressed: () {
-                                            searchController.clear();
-                                            SearchTickets('');
-                                          }),
                                 ),
-                                onChanged: (query) {
-                                  SearchTickets(query);
-                                },
-                                onTap: () {
-                                  setState(() {
-                                    searchIsFocused = true;
-                                  });
-                                },
-                                onSubmitted: (query) {
-                                  setState(() {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    searchIsFocused = false;
-                                  });
-                                },
-                                onTapOutside: (pointer) {
-                                  setState(() {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    searchIsFocused = false;
-                                  });
-                                },
-                              ),
+                                GridView.builder(
+                                    physics: ScrollPhysics(),
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 200,
+                                            childAspectRatio: 1,
+                                            crossAxisSpacing: 10,
+                                            mainAxisSpacing: 10),
+                                    itemCount: selectedFiltersList.isEmpty
+                                        ? allTickets.length
+                                        : allTicketsFiltered.length,
+                                    itemBuilder: (BuildContext ctx, index) {
+                                      return GameCardSmall(
+                                        ticket: selectedFiltersList.isEmpty
+                                            ? allTickets[index]
+                                            : allTicketsFiltered[index],
+                                      );
+                                    }),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                              ],
                             ),
-                            GridView.builder(
-                                physics: ScrollPhysics(),
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 200,
-                                        childAspectRatio: 1,
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10),
-                                itemCount: selectedFiltersList.isEmpty
-                                    ? allTickets.length
-                                    : allTicketsFiltered.length,
-                                itemBuilder: (BuildContext ctx, index) {
-                                  return GameCardSmall(
-                                    ticket: selectedFiltersList.isEmpty
-                                        ? allTickets[index]
-                                        : allTicketsFiltered[index],
-                                  );
-                                }),
-                            SizedBox(
-                              height: 5,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ],

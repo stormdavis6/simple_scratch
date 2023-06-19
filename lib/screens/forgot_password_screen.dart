@@ -1,28 +1,22 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_list.dart';
-import 'package:flutter_signin_button/button_view.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/screens/forgot_password_screen.dart';
 import 'package:simple_scratch/utils.dart';
-
 import '../main.dart';
 
-class LoginWidget extends StatefulWidget {
-  final VoidCallback onClickedSignUp;
-  const LoginWidget({super.key, required this.onClickedSignUp});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({
+    super.key,
+  });
 
   @override
-  State<LoginWidget> createState() => _LoginWidgetState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
   String errorText = '';
 
   @override
@@ -33,7 +27,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   void dispose() {
     emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -58,7 +51,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         Navigator.pop(context);
                       },
                       icon: Icon(
-                        Icons.close,
+                        Icons.arrow_back_ios_new_rounded,
                         color: Colors.black,
                       ),
                     ),
@@ -107,7 +100,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Welcome back',
+                            'Forgot your password?',
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
@@ -115,7 +108,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Sign in to your account',
+                            'Reset your password',
                             style: TextStyle(
                                 fontSize: 23,
                                 color: Colors.black,
@@ -142,27 +135,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                             onChanged: (string) {},
                           ),
                           SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            controller: passwordController,
-                            cursorColor: kGreenLightColor,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              hintText: 'Password',
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: kGreenLightColor),
-                              ),
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) => value != null && value.isEmpty
-                                ? 'Password is required'
-                                : null,
-                            onChanged: (string) {},
-                            obscureText: true,
-                          ),
-                          SizedBox(
                             height: 10,
                           ),
                           errorText.isNotEmpty
@@ -181,30 +153,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   height: 0,
                                   width: 0,
                                 ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Forgot Password?',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: kGreenLightColor),
-                                  ),
-                                ),
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return ForgotPasswordScreen();
-                                  }));
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 minimumSize: Size.fromHeight(40),
@@ -215,55 +163,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 ),
                                 elevation: 5),
                             child: Text(
-                              'Sign In',
+                              'Reset Password',
                               style:
                                   TextStyle(fontSize: 24, color: Colors.white),
                             ),
                             onPressed: () {
-                              signIn();
+                              resetPassword();
                             },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Center(
-                            child: SignInButton(
-                              Buttons.Google,
-                              onPressed: () {
-                                signInWithGoogle();
-                              },
-                            ),
-                          ),
-                          Center(
-                            child: SignInButton(
-                              Buttons.FacebookNew,
-                              onPressed: () {},
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        color: kBlackLightColor, fontSize: 16),
-                                    text: 'Don\'t have an account?  ',
-                                    children: [
-                                      TextSpan(
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = widget.onClickedSignUp,
-                                          text: 'Sign Up',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              color: kGreenLightColor))
-                                    ]),
-                              ),
-                            ],
                           ),
                         ],
                       ),
@@ -281,7 +187,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Future signIn() async {
+  Future resetPassword() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -296,70 +202,26 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      navigatorKey.currentState
-        ?..popUntil((route) => route.isFirst)
-        ..pop();
-      //navigatorKey.currentState?.pop();
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text.trim());
+
       Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
+          'Password reset email sent to ${emailController.text.trim()}');
+      navigatorKey.currentState!.pop();
+      navigatorKey.currentState!.pop();
     } on FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
-        if (exCode == 'invalid-email' ||
-            exCode == 'wrong-password' ||
-            exCode == 'user-not-found') {
-          errorText = 'Email or password is invalid';
+        if (exCode == 'invalid-email') {
+          errorText = 'Email is invalid';
+        } else if (exCode == 'user-not-found') {
+          print(e.message.toString());
+        } else {
+          Utils.showSnackBar(e.message.toString());
         }
       });
       navigatorKey.currentState!.pop();
-    }
-  }
-
-  Future signInWithGoogle() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: CircularProgressIndicator(
-          color: kGreenLightColor,
-        ),
-      ),
-    );
-
-    final googleSignIn = GoogleSignIn();
-
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return;
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      navigatorKey.currentState
-        ?..popUntil((route) => route.isFirst)
-        ..pop();
-      Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
-    } on FirebaseAuthException catch (e) {
-      String exCode = e.code.toString();
-      setState(() {
-        if (exCode == 'invalid-email' ||
-            exCode == 'wrong-password' ||
-            exCode == 'user-not-found') {
-          errorText = 'Email or password is invalid';
-        }
-      });
-      navigatorKey.currentState!.pop();
+      errorText.isNotEmpty ? null : navigatorKey.currentState!.pop();
     }
   }
 }

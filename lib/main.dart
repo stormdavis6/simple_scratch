@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/screens/games_screen.dart';
+import 'package:simple_scratch/utils.dart';
 
 import 'firebase_options.dart';
 
@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: Utils.messengerKey,
       navigatorKey: navigatorKey,
       title: 'Simple Scratch',
       theme: ThemeData(),

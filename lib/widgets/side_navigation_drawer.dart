@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/screens/auth_screen.dart';
 
+import '../utils.dart';
+
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({super.key});
 
@@ -24,60 +26,54 @@ class SideNavigationDrawer extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
-          SizedBox(
-            height: size.height * .18,
-            child: DrawerHeader(
-              margin: EdgeInsets.zero,
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              decoration: BoxDecoration(color: kBackgroundColor),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.arrow_back_ios_new_rounded),
-                        ),
-                        Stack(
-                          children: [
-                            Positioned.directional(
-                              textDirection: TextDirection.rtl,
-                              child: Text(
-                                'Simple Scratch',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(
-                                        foreground: Paint()
-                                          ..style = PaintingStyle.stroke
-                                          ..strokeWidth = 2
-                                          ..color = kGreenOliveColor,
-                                        fontFamily: 'Pacifico'),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Text(
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back_ios_new_rounded),
+                      ),
+                      Stack(
+                        children: [
+                          Positioned.directional(
+                            textDirection: TextDirection.rtl,
+                            child: Text(
                               'Simple Scratch',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(
-                                    color: kYellowLightColor,
-                                    fontFamily: 'Pacifico',
-                                  ),
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 2
+                                        ..color = kGreenOliveColor,
+                                      fontFamily: 'Pacifico'),
                               textAlign: TextAlign.center,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                          ),
+                          Text(
+                            'Simple Scratch',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  color: kYellowLightColor,
+                                  fontFamily: 'Pacifico',
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
@@ -210,19 +206,7 @@ class SideNavigationDrawer extends StatelessWidget {
                     FirebaseAuth.instance.signOut();
                     Navigator.pop(context);
 
-                    var snackBar = SnackBar(
-                      content: Text(
-                        '${user?.email} was signed out',
-                        textAlign: TextAlign.center,
-                      ),
-                      backgroundColor: kBlackLightColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(29.5),
-                      ),
-                      behavior: SnackBarBehavior.floating,
-                      margin: EdgeInsets.fromLTRB(50, 0, 50, 5),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    Utils.showSnackBar('${user?.email} was signed out');
                   },
                 )
               : SizedBox(

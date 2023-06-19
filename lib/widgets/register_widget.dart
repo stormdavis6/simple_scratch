@@ -2,6 +2,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:simple_scratch/utils.dart';
 
 import '../constants.dart';
 import '../main.dart';
@@ -104,7 +108,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Welcome!',
+                            'Welcome',
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
@@ -177,9 +181,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             ),
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            validator: (value) => value != null && value.isEmpty
-                                ? 'Password is required'
-                                : null,
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Password is required';
+                              } else if (value!.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              } else {
+                                return null;
+                              }
+                            },
                             onChanged: (string) {},
                             obscureText: true,
                           ),
@@ -223,7 +233,24 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             },
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
+                          ),
+                          Center(
+                            child: SignInButton(
+                              Buttons.Google,
+                              onPressed: () {
+                                signUpWithGoogle();
+                              },
+                            ),
+                          ),
+                          Center(
+                            child: SignInButton(
+                              Buttons.FacebookNew,
+                              onPressed: () {},
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -282,21 +309,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      navigatorKey.currentState?.popUntil((route) => route.isFirst);
-      navigatorKey.currentState?.pop();
-      var snackBar = SnackBar(
-        content: Text(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}',
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: kBlackLightColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(29.5),
-        ),
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.fromLTRB(50, 0, 50, 5),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      navigatorKey.currentState
+        ?..popUntil((route) => route.isFirst)
+        ..pop();
+      Utils.showSnackBar(
+          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
     } on FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
@@ -304,6 +321,50 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           errorText = 'Email is invalid';
         } else if (exCode == 'email-already-in-use') {
           errorText = 'Email address is already in use by another account';
+        }
+      });
+      navigatorKey.currentState!.pop();
+    }
+  }
+
+  Future signUpWithGoogle() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(
+          color: kGreenLightColor,
+        ),
+      ),
+    );
+
+    final googleSignIn = GoogleSignIn();
+
+    final googleUser = await googleSignIn.signIn();
+    if (googleUser == null) return;
+
+    final googleAuth = await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      navigatorKey.currentState
+        ?..popUntil((route) => route.isFirst)
+        ..pop();
+      Utils.showSnackBar(
+          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
+    } on FirebaseAuthException catch (e) {
+      String exCode = e.code.toString();
+      setState(() {
+        if (exCode == 'invalid-email' ||
+            exCode == 'wrong-password' ||
+            exCode == 'user-not-found') {
+          errorText = 'Email or password is invalid';
         }
       });
       navigatorKey.currentState!.pop();

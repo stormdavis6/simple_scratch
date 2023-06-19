@@ -2,8 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/widgets/game_card_big.dart';
 import 'package:simple_scratch/widgets/game_card_carousel.dart';
-
-import '../database/ticket_database.dart';
 import '../models/ticket.dart';
 
 class GamesCarousel extends StatefulWidget {

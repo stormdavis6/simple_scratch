@@ -14,7 +14,6 @@ class GameCardBig extends StatefulWidget {
 class _GameCardBigState extends State<GameCardBig> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(
