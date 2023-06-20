@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -229,17 +230,22 @@ class _LoginWidgetState extends State<LoginWidget> {
                           Center(
                             child: SignInButton(
                               Buttons.Google,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               onPressed: () {
                                 signInWithGoogle();
                               },
                             ),
                           ),
-                          Center(
-                            child: SignInButton(
-                              Buttons.FacebookNew,
-                              onPressed: () {},
-                            ),
-                          ),
+                          // Center(
+                          //   child: SignInButton(
+                          //     Buttons.FacebookNew,
+                          //     onPressed: () {
+                          //       signInWithFacebook();
+                          //     },
+                          //   ),
+                          // ),
                           SizedBox(
                             height: 10,
                           ),

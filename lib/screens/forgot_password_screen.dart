@@ -100,19 +100,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Forgot your password?',
+                            'Forgot Your Password?',
+                            style: TextStyle(
+                                fontSize: 23,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Montserrat'),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'No worries, it happens!',
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.black,
                                 fontFamily: 'Montserrat'),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 5),
                           Text(
-                            'Reset your password',
+                            'Enter the email address associated with your account and we will send a link to reset your password.',
                             style: TextStyle(
-                                fontSize: 23,
+                                fontSize: 17,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w700,
                                 fontFamily: 'Montserrat'),
                           ),
                           const SizedBox(height: 30),

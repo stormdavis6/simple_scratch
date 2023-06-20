@@ -491,25 +491,62 @@ class _GamesScreenState extends State<GamesScreen> {
                                     },
                                   ),
                                 ),
-                                GridView.builder(
-                                    physics: ScrollPhysics(),
-                                    shrinkWrap: true,
-                                    gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 200,
-                                            childAspectRatio: 1,
-                                            crossAxisSpacing: 10,
-                                            mainAxisSpacing: 10),
-                                    itemCount: selectedFiltersList.isEmpty
-                                        ? allTickets.length
-                                        : allTicketsFiltered.length,
-                                    itemBuilder: (BuildContext ctx, index) {
-                                      return GameCardSmall(
-                                        ticket: selectedFiltersList.isEmpty
-                                            ? allTickets[index]
-                                            : allTicketsFiltered[index],
-                                      );
-                                    }),
+                                allTickets.isEmpty ||
+                                        (allTicketsFiltered.isEmpty &&
+                                            selectedFiltersList.isNotEmpty)
+                                    ? Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.search_off_rounded,
+                                              size: 70,
+                                            ),
+                                            Text(
+                                              'Hmmmm, we couldn\'t find any results.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black,
+                                                  fontFamily: 'Montserrat'),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              selectedFiltersList.isNotEmpty
+                                                  ? 'Please check your spelling or try removing some filters.'
+                                                  : 'Please check your spelling or try different keywords.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  color: Colors.black,
+                                                  fontFamily: 'Montserrat'),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : GridView.builder(
+                                        physics: ScrollPhysics(),
+                                        shrinkWrap: true,
+                                        gridDelegate:
+                                            SliverGridDelegateWithMaxCrossAxisExtent(
+                                                maxCrossAxisExtent: 200,
+                                                childAspectRatio: 1,
+                                                crossAxisSpacing: 10,
+                                                mainAxisSpacing: 10),
+                                        itemCount: selectedFiltersList.isEmpty
+                                            ? allTickets.length
+                                            : allTicketsFiltered.length,
+                                        itemBuilder: (BuildContext ctx, index) {
+                                          return GameCardSmall(
+                                            ticket: selectedFiltersList.isEmpty
+                                                ? allTickets[index]
+                                                : allTicketsFiltered[index],
+                                          );
+                                        }),
                                 SizedBox(
                                   height: 5,
                                 ),

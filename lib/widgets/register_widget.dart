@@ -238,17 +238,20 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           Center(
                             child: SignInButton(
                               Buttons.Google,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               onPressed: () {
                                 signUpWithGoogle();
                               },
                             ),
                           ),
-                          Center(
-                            child: SignInButton(
-                              Buttons.FacebookNew,
-                              onPressed: () {},
-                            ),
-                          ),
+                          // Center(
+                          //   child: SignInButton(
+                          //     Buttons.FacebookNew,
+                          //     onPressed: () {},
+                          //   ),
+                          // ),
                           SizedBox(
                             height: 10,
                           ),
