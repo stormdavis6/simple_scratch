@@ -23,7 +23,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final emailConfirmController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
   String errorText = '';
 
   @override
@@ -35,7 +35,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    emailConfirmController.dispose();
+    passwordConfirmController.dispose();
     super.dispose();
   }
 
@@ -142,30 +142,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     : null,
                             onChanged: (string) {},
                           ),
-                          TextFormField(
-                            controller: emailConfirmController,
-                            cursorColor: kGreenLightColor,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              hintText: 'Confirm Email',
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: kGreenLightColor),
-                              ),
-                            ),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (email) {
-                              if (email != null &&
-                                  !EmailValidator.validate(email)) {
-                                return 'Enter a valid email';
-                              } else if (email != emailController.text) {
-                                return 'Emails must match';
-                              } else {
-                                return null;
-                              }
-                            },
-                            onChanged: (string) {},
-                          ),
                           SizedBox(
                             height: 5,
                           ),
@@ -192,6 +168,31 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             },
                             onChanged: (string) {},
                             obscureText: true,
+                          ),
+                          TextFormField(
+                            controller: passwordConfirmController,
+                            cursorColor: kGreenLightColor,
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              hintText: 'Confirm Password',
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: kGreenLightColor),
+                              ),
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value != null && value.isEmpty) {
+                                return 'Password is required';
+                              } else if (value!.length < 6) {
+                                return 'Password must be at least 6 characters';
+                              } else if (value != passwordController.text) {
+                                return 'Passwords must match';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (string) {},
                           ),
                           SizedBox(
                             height: 10,

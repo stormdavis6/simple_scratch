@@ -1,5 +1,7 @@
+import 'package:blur/blur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/database/ticket_database.dart';
 import 'package:simple_scratch/screens/games_filter_screen.dart';
@@ -8,6 +10,7 @@ import 'package:simple_scratch/widgets/game_card_small.dart';
 import 'package:simple_scratch/widgets/games_carousel.dart';
 import '../models/filterItem.dart';
 import '../models/ticket.dart';
+import '../services/auth_service.dart';
 import '../widgets/side_navigation_drawer.dart';
 
 class GamesScreen extends StatefulWidget {
@@ -165,14 +168,7 @@ class _GamesScreenState extends State<GamesScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>(); // Create a key
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    bool isSignedIn = false;
-    if (user != null) {
-      isSignedIn = true;
-      //print(user.email);
-    } else {
-      //print('User not signed in');
-    }
+    final authService = Provider.of<AuthService>(context);
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(

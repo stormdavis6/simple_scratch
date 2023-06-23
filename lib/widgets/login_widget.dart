@@ -1,13 +1,16 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/models/user.dart';
 import 'package:simple_scratch/screens/forgot_password_screen.dart';
+import 'package:simple_scratch/services/auth_service.dart';
 import 'package:simple_scratch/utils.dart';
 
 import '../main.dart';
@@ -41,6 +44,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   //https://www.youtube.com/watch?v=4vKiJZNPhss&ab_channel=HeyFlutter%E2%80%A4com
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
@@ -220,8 +224,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                               style:
                                   TextStyle(fontSize: 24, color: Colors.white),
                             ),
-                            onPressed: () {
-                              signIn();
+                            onPressed: () async {
+                              signIn(authService);
                             },
                           ),
                           SizedBox(
@@ -234,7 +238,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               onPressed: () {
-                                signInWithGoogle();
+                                signInWithGoogle(authService);
                               },
                             ),
                           ),
@@ -287,7 +291,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
   }
 
-  Future signIn() async {
+  Future signIn(AuthService authService) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -302,17 +306,11 @@ class _LoginWidgetState extends State<LoginWidget> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      navigatorKey.currentState
-        ?..popUntil((route) => route.isFirst)
-        ..pop();
-      //navigatorKey.currentState?.pop();
-      Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
-    } on FirebaseAuthException catch (e) {
+      User? user = await authService.signInWithEmailAndPassword(
+          emailController.text.trim(), passwordController.text.trim());
+      navigatorKey.currentState?.pushNamed('/');
+      Utils.showSnackBar('Welcome, ${user?.email}');
+    } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
         if (exCode == 'invalid-email' ||
@@ -325,7 +323,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     }
   }
 
-  Future signInWithGoogle() async {
+  Future signInWithGoogle(AuthService authService) async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -336,27 +334,13 @@ class _LoginWidgetState extends State<LoginWidget> {
       ),
     );
 
-    final googleSignIn = GoogleSignIn();
-
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return;
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
     try {
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
+      User? user = await authService.signInWithGoogle();
       navigatorKey.currentState
         ?..popUntil((route) => route.isFirst)
         ..pop();
-      Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
-    } on FirebaseAuthException catch (e) {
+      Utils.showSnackBar('Welcome, ${user?.email}');
+    } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
         if (exCode == 'invalid-email' ||

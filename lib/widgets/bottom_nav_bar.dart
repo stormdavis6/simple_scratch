@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:simple_scratch/screens/auth_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key, required this.selectedIndex}) : super(key: key);
@@ -12,6 +14,12 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    bool isSignedIn = false;
+    if (user != null) {
+      isSignedIn = true;
+    }
+
     return Container(
       color: Color(0xfffffdee),
       child: Padding(
@@ -31,6 +39,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 if (widget.selectedIndex != 0) {
                   Navigator.pushNamed(context, '/');
                 }
+                break;
+              case 2:
+                if (!isSignedIn) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return AuthScreen(
+                      isLogin: true,
+                    );
+                  }));
+                }
+                break;
             }
           },
           tabs: [
@@ -46,7 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             GButton(
               icon: Icons.person,
-              text: 'Login',
+              text: isSignedIn ? 'Account' : 'Sign In',
               active: widget.selectedIndex == 2 ? true : false,
             ),
           ],

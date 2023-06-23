@@ -1,9 +1,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/utils.dart';
 import '../main.dart';
+import '../services/auth_service.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({
@@ -33,6 +35,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   //https://www.youtube.com/watch?v=4vKiJZNPhss&ab_channel=HeyFlutter%E2%80%A4com
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
@@ -111,17 +114,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           Text(
                             'No worries, it happens!',
                             style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontFamily: 'Montserrat'),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Enter the email address associated with your account and we will send a link to reset your password.',
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontFamily: 'Montserrat'),
+                              fontSize: 17,
+                              color: Colors.black45,
+                              fontFamily: 'Montserrat',
+                            ),
                           ),
                           const SizedBox(height: 30),
                           TextFormField(
@@ -176,8 +172,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   TextStyle(fontSize: 24, color: Colors.white),
                             ),
                             onPressed: () {
-                              resetPassword();
+                              resetPassword(authService);
                             },
+                          ),
+                          const SizedBox(height: 30),
+                          Text(
+                            'Enter the email associated with your account and we will send a link to reset your password.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.black87,
+                                fontFamily: 'Montserrat'),
                           ),
                         ],
                       ),
@@ -195,7 +200,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  Future resetPassword() async {
+  Future resetPassword(AuthService authService) async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -210,9 +215,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
 
     try {
-      await FirebaseAuth.instance
-          .sendPasswordResetEmail(email: emailController.text.trim());
-
+      await authService.sendPasswordResetEmail(emailController.text.trim());
       Utils.showSnackBar(
           'Password reset email sent to ${emailController.text.trim()}');
       navigatorKey.currentState!.pop();
