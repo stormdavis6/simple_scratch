@@ -1,5 +1,4 @@
 import 'package:blur/blur.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:simple_scratch/constants.dart';

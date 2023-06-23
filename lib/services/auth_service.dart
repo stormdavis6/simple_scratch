@@ -59,8 +59,8 @@ class AuthService {
 
   void GetUserDetails(auth.User? user) async {
     if (user != null) {
-      final idTokenResult = await user?.getIdTokenResult(true);
-      isPremium = idTokenResult?.claims?['stripeRole'] != null ? true : false;
+      final idTokenResult = await user.getIdTokenResult(true);
+      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
       print('User is premium? --> $isPremium');
     } else {
       //print('User not signed in');
