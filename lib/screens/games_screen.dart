@@ -50,11 +50,16 @@ class _GamesScreenState extends State<GamesScreen> {
     });
 
     TicketDatabase ticketDatabase = TicketDatabase();
+
+    print('Getting best tickets from DB');
     await ticketDatabase.getBestTicketsFromFirestore();
     bestTickets = ticketDatabase.getBestTickets();
+
+    print('Getting all tickets from DB');
     await ticketDatabase.getAllTicketsFromFirestore();
     allTickets = ticketDatabase.getAllTickets();
     duplicateAllTickets = allTickets;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allTickets.forEach((ticket) {
         precacheImage(NetworkImage(ticket.img), context);
@@ -168,6 +173,13 @@ class _GamesScreenState extends State<GamesScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final user = authService.getUser();
+    bool isSignedIn = false;
+    bool isPremium = false;
+    if (user != null) {
+      isSignedIn = true;
+      isPremium = user.isPremium;
+    }
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -319,8 +331,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                         height: 345,
                                         child: GamesCarousel(
                                           bestTickets: bestTickets,
-                                        ),
-                                      )
+                                        ))
                                     : SizedBox(
                                         width: 150,
                                         height: selectedFiltersList.isNotEmpty
@@ -440,6 +451,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                   child: TextField(
                                     controller: searchController,
                                     cursorColor: kGreenLightColor,
+                                    textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       hintText: "Search",
                                       icon: Icon(

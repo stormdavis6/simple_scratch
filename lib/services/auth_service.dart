@@ -10,7 +10,7 @@ class AuthService {
     if (user == null) {
       return null;
     }
-    GetUserDetails(user);
+    getUserIsPremium(user);
     return User(uid: user.uid, email: user.email, isPremium: isPremium);
   }
 
@@ -57,14 +57,14 @@ class AuthService {
     return await _firebaseAuth.signOut();
   }
 
-  void GetUserDetails(auth.User? user) async {
+  void getUserIsPremium(auth.User? user) async {
     if (user != null) {
       final idTokenResult = await user.getIdTokenResult(true);
       isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
-      print('User is premium? --> $isPremium');
-    } else {
-      //print('User not signed in');
-      print('user is not premium');
     }
+  }
+
+  User? getUser() {
+    return _userFromFirebase(_firebaseAuth.currentUser);
   }
 }

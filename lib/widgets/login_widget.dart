@@ -26,10 +26,12 @@ class _LoginWidgetState extends State<LoginWidget> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String errorText = '';
+  late bool passwordVisible;
 
   @override
   void initState() {
     super.initState();
+    passwordVisible = false;
   }
 
   @override
@@ -156,6 +158,19 @@ class _LoginWidgetState extends State<LoginWidget> {
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: kGreenLightColor),
                               ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey[700],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    passwordVisible = !passwordVisible;
+                                  });
+                                },
+                              ),
                             ),
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
@@ -163,7 +178,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                 ? 'Password is required'
                                 : null,
                             onChanged: (string) {},
-                            obscureText: true,
+                            obscureText: !passwordVisible,
                           ),
                           SizedBox(
                             height: 10,

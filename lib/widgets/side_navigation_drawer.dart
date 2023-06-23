@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/screens/auth_screen.dart';
 
+import '../models/user.dart';
 import '../services/auth_service.dart';
 import '../utils.dart';
 
@@ -12,13 +13,12 @@ class SideNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.getUser();
     bool isSignedIn = false;
     if (user != null) {
       isSignedIn = true;
     }
-
-    final authService = Provider.of<AuthService>(context);
 
     var size = MediaQuery.of(context)
         .size; //this gonna give us total height and with of our device
@@ -206,10 +206,10 @@ class SideNavigationDrawer extends StatelessWidget {
                         fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
                   ),
                   onTap: () {
+                    User? user = authService.getUser();
                     authService.signOut();
                     Navigator.pushNamed(context, '/');
-                    // Utils.showSnackBar(
-                    //     '${await authService.user?.last.email} was signed out');
+                    Utils.showSnackBar('${user?.email} was signed out');
                   },
                 )
               : SizedBox(

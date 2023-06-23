@@ -25,9 +25,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
   String errorText = '';
+  late bool passwordVisible;
+  late bool passwordConfirmVisible;
 
   @override
   void initState() {
+    passwordVisible = false;
+    passwordConfirmVisible = false;
     super.initState();
   }
 
@@ -148,11 +152,26 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           TextFormField(
                             controller: passwordController,
                             cursorColor: kGreenLightColor,
-                            textInputAction: TextInputAction.done,
+                            textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                               hintText: 'Password',
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: kGreenLightColor),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey[700],
+                                ),
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      passwordVisible = !passwordVisible;
+                                    },
+                                  );
+                                },
                               ),
                             ),
                             autovalidateMode:
@@ -167,16 +186,34 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               }
                             },
                             onChanged: (string) {},
-                            obscureText: true,
+                            onFieldSubmitted: (string) {
+                              // Move the focus to the next node explicitly.
+                              FocusScope.of(context).nextFocus();
+                            },
+                            obscureText: !passwordVisible,
                           ),
                           TextFormField(
                             controller: passwordConfirmController,
                             cursorColor: kGreenLightColor,
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               hintText: 'Confirm Password',
                               focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: kGreenLightColor),
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  passwordConfirmVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.grey[700],
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    passwordConfirmVisible =
+                                        !passwordConfirmVisible;
+                                  });
+                                },
                               ),
                             ),
                             autovalidateMode:
@@ -193,6 +230,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               }
                             },
                             onChanged: (string) {},
+                            obscureText: !passwordConfirmVisible,
                           ),
                           SizedBox(
                             height: 10,
