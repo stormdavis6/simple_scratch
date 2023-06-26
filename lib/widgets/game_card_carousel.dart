@@ -24,6 +24,8 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
         bottomLeft: Radius.circular(8),
         bottomRight: Radius.circular(8),
       ),
+      blur: 50,
+      blurColor: kGreenLightColor,
       child: Column(
         children: [
           Expanded(

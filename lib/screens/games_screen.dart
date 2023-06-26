@@ -41,6 +41,7 @@ class _GamesScreenState extends State<GamesScreen> {
   @override
   void dispose() {
     searchController.dispose();
+
     super.dispose();
   }
 
@@ -172,14 +173,6 @@ class _GamesScreenState extends State<GamesScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>(); // Create a key
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    final user = authService.getUser();
-    bool isSignedIn = false;
-    bool isPremium = false;
-    if (user != null) {
-      isSignedIn = true;
-      isPremium = user.isPremium;
-    }
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -319,7 +312,7 @@ class _GamesScreenState extends State<GamesScreen> {
                           ),
                           child: Scrollbar(
                             child: ListView(
-                              shrinkWrap: true,
+                              controller: ScrollController(),
                               physics: BouncingScrollPhysics(),
                               keyboardDismissBehavior:
                                   ScrollViewKeyboardDismissBehavior.onDrag,
@@ -339,19 +332,77 @@ class _GamesScreenState extends State<GamesScreen> {
                                             : 0,
                                         child: Scrollbar(
                                           child: ListView.builder(
-                                              physics: BouncingScrollPhysics(),
-                                              itemCount:
-                                                  selectedFiltersList.length,
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.horizontal,
-                                              itemBuilder: (context, index) {
-                                                return Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      1, 0, 5, 0),
-                                                  child: Stack(
-                                                    children: [
-                                                      TextButton(
-                                                        onPressed: () {
+                                            controller: ScrollController(),
+                                            physics: BouncingScrollPhysics(),
+                                            itemCount:
+                                                selectedFiltersList.length,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    1, 0, 5, 0),
+                                                child: Stack(
+                                                  children: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        selectedFiltersList
+                                                            .removeAt(index);
+                                                        filterTickets();
+                                                        SearchTickets(
+                                                            searchController
+                                                                .text);
+                                                        setState(() {});
+                                                      },
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                        padding:
+                                                            EdgeInsets.zero,
+                                                        tapTargetSize:
+                                                            MaterialTapTargetSize
+                                                                .shrinkWrap,
+                                                        foregroundColor:
+                                                            kGreenLightColor,
+                                                        backgroundColor:
+                                                            kGreenLightColor,
+                                                        elevation: 0,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                            side: BorderSide(
+                                                                color:
+                                                                    kGreenLightColor)),
+                                                      ),
+                                                      child: Text(
+                                                        selectedFiltersList[
+                                                                        index]
+                                                                    .filterText
+                                                                    .length <=
+                                                                3
+                                                            ? selectedFiltersList[
+                                                                    index]
+                                                                .filterText
+                                                            : '     ${selectedFiltersList[index].filterText}     ',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      width: 15,
+                                                      height: 15,
+                                                      top: 0.0,
+                                                      right: 0.0,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          print(
+                                                              'Button pressed at index $index');
                                                           selectedFiltersList
                                                               .removeAt(index);
                                                           filterTickets();
@@ -359,80 +410,21 @@ class _GamesScreenState extends State<GamesScreen> {
                                                               searchController
                                                                   .text);
                                                           setState(() {});
+                                                          print(
+                                                              'filter list size: ${selectedFiltersList.length}');
                                                         },
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                          padding:
-                                                              EdgeInsets.zero,
-                                                          tapTargetSize:
-                                                              MaterialTapTargetSize
-                                                                  .shrinkWrap,
-                                                          foregroundColor:
-                                                              kGreenLightColor,
-                                                          backgroundColor:
-                                                              kGreenLightColor,
-                                                          elevation: 0,
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8),
-                                                              side: BorderSide(
-                                                                  color:
-                                                                      kGreenLightColor)),
-                                                        ),
-                                                        child: Text(
-                                                          selectedFiltersList[
-                                                                          index]
-                                                                      .filterText
-                                                                      .length <=
-                                                                  3
-                                                              ? selectedFiltersList[
-                                                                      index]
-                                                                  .filterText
-                                                              : '     ${selectedFiltersList[index].filterText}     ',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  'Montserrat',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          color: Colors.white,
+                                                          size: 12,
                                                         ),
                                                       ),
-                                                      Positioned(
-                                                          width: 15,
-                                                          height: 15,
-                                                          top: 0.0,
-                                                          right: 0.0,
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              print(
-                                                                  'Button pressed at index $index');
-                                                              selectedFiltersList
-                                                                  .removeAt(
-                                                                      index);
-                                                              filterTickets();
-                                                              SearchTickets(
-                                                                  searchController
-                                                                      .text);
-                                                              setState(() {});
-                                                              print(
-                                                                  'filter list size: ${selectedFiltersList.length}');
-                                                            },
-                                                            child: Icon(
-                                                              Icons.close,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 12,
-                                                            ),
-                                                          ))
-                                                    ],
-                                                  ),
-                                                );
-                                              }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                 //This container is the search bar
@@ -536,7 +528,8 @@ class _GamesScreenState extends State<GamesScreen> {
                                         ),
                                       )
                                     : GridView.builder(
-                                        physics: ScrollPhysics(),
+                                        controller: ScrollController(),
+                                        physics: NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         gridDelegate:
                                             SliverGridDelegateWithMaxCrossAxisExtent(

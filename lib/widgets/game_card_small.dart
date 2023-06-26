@@ -1,6 +1,7 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/widgets/blur_wrapper.dart';
 
 import '../models/ticket.dart';
 
@@ -138,34 +139,64 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     height: 3,
                     thickness: 1,
                   ),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12,
-                          color: Colors.black,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 12,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Calculated Odds: ',
+                              ),
+                            ],
+                          ),
                         ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Calculated Odds: ',
-                          ),
-                          TextSpan(
-                            text: widget.ticket.calcOdds.substring(0, 2),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                          TextSpan(
-                            text: widget.ticket.calcOdds.substring(2, 4),
-                          ),
-                          TextSpan(
-                            text: widget.ticket.calcOdds.substring(4),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                        ],
                       ),
-                    ),
+                      Center(
+                        child: BlurWrapper(
+                          blur: 15,
+                          blurColor: kGreenLightColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8),
+                          ),
+                          child: RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 12,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: widget.ticket.calcOdds.substring(0, 2),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                                TextSpan(
+                                  text: widget.ticket.calcOdds.substring(2, 4),
+                                ),
+                                TextSpan(
+                                  text: widget.ticket.calcOdds.substring(4),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 1,

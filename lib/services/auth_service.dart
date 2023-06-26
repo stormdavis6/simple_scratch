@@ -11,7 +11,12 @@ class AuthService {
       return null;
     }
     getUserIsPremium(user);
-    return User(uid: user.uid, email: user.email, isPremium: isPremium);
+    return User(
+        uid: user.uid,
+        email: user.email,
+        isPremium: isPremium,
+        creationTime: user.metadata.creationTime,
+        lastSignInTime: user.metadata.lastSignInTime);
   }
 
   Stream<User?>? get user {
@@ -59,7 +64,7 @@ class AuthService {
 
   void getUserIsPremium(auth.User? user) async {
     if (user != null) {
-      final idTokenResult = await user.getIdTokenResult(true);
+      final idTokenResult = await user.getIdTokenResult();
       isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
     }
   }

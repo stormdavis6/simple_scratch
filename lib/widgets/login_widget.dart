@@ -323,6 +323,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           emailController.text.trim(), passwordController.text.trim());
       navigatorKey.currentState?.pushNamed('/');
       Utils.showSnackBar('Welcome, ${user?.email}');
+      //print(user?.lastSignInTime.toString());
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {

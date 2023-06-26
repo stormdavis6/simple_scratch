@@ -1,23 +1,30 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:simple_scratch/constants.dart';
 
 import '../services/auth_service.dart';
 
 class BlurWrapper extends StatelessWidget {
   final Widget child;
+  final double blur;
+  final Color blurColor;
   final BorderRadius? borderRadius;
-  const BlurWrapper({super.key, required this.child, this.borderRadius});
+  final Widget? overlay;
+
+  const BlurWrapper(
+      {super.key,
+      required this.child,
+      required this.blur,
+      required this.blurColor,
+      this.borderRadius,
+      this.overlay});
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final user = authService.getUser();
-    bool isSignedIn = false;
     bool isPremium = false;
     if (user != null) {
-      isSignedIn = true;
       isPremium = user.isPremium;
     }
     return isPremium
@@ -25,15 +32,10 @@ class BlurWrapper extends StatelessWidget {
             child: child,
           )
         : Blur(
-            blur: 50,
-            blurColor: kGreenLightColor,
+            blur: blur,
+            blurColor: blurColor,
             borderRadius: borderRadius,
-            // BorderRadius.only(
-            //   topLeft: Radius.circular(8),
-            //   topRight: Radius.circular(8),
-            //   bottomLeft: Radius.circular(8),
-            //   bottomRight: Radius.circular(8),
-            // ),
+            overlay: overlay,
             child: child,
           );
   }
