@@ -1,14 +1,37 @@
-import 'package:flutter/cupertino.dart';
+/* Best_Tickets
+* calcOdds (String)
+* img (String)
+* name (String)
+* overallOdds (String)
+* price (int)
+* prob (double)
+* topPrize (String)
+*/
+
+/* Games_Dashboard
+* calcOdds (String)
+* calcProb (String)
+* claimDeadline (String)
+* endDate (String)
+* gameNum (String)
+* img (String)
+* launchDate (String)
+* name (String)
+* overallOdds (String)
+* price (int)
+* prizes (array of maps) [key: index, value: odds (String), Remaining (String), Total (String), Value (String)]
+* status (String)
+* topPrize (String)
+*/
 
 class Ticket {
-  int id = UniqueKey().hashCode;
-  String calcOdds;
-  String img;
-  String name;
-  String overallOdds;
-  int price;
-  double? prob;
-  String topPrize;
+  final String calcOdds;
+  final String img;
+  final String name;
+  final String overallOdds;
+  final int price;
+  final double? prob;
+  final String topPrize;
 
   Ticket(
       {required this.calcOdds,
@@ -19,7 +42,7 @@ class Ticket {
       required this.prob,
       required this.topPrize});
 
-  factory Ticket.fromJson(Map<String, dynamic> json) {
+  factory Ticket.fromJsonBestTicket(Map<String, dynamic> json) {
     return Ticket(
         calcOdds: json['calcOdds'],
         img: json['img'],
@@ -30,7 +53,7 @@ class Ticket {
         topPrize: json['topPrize']);
   }
 
-  factory Ticket.fromJsonNoProb(Map<String, dynamic> json) {
+  factory Ticket.fromJsonDashboard(Map<String, dynamic> json) {
     return Ticket(
         calcOdds: json['calcOdds'],
         img: json['img'],

@@ -29,7 +29,8 @@ class TicketDatabase {
     var bestTicketsList = querySnapshot.docs.map((doc) => doc.data());
 
     bestTicketsList.forEach((element) {
-      _bestTickets.add(Ticket.fromJson(element as Map<String, dynamic>));
+      _bestTickets
+          .add(Ticket.fromJsonBestTicket(element as Map<String, dynamic>));
     });
 
     _bestTickets.sort((a, b) => a.price.compareTo(b.price));
@@ -46,7 +47,8 @@ class TicketDatabase {
     var allTicketsList = querySnapshot.docs.map((doc) => doc.data());
 
     allTicketsList.forEach((element) {
-      _allTickets.add(Ticket.fromJsonNoProb(element as Map<String, dynamic>));
+      _allTickets
+          .add(Ticket.fromJsonDashboard(element as Map<String, dynamic>));
     });
 
     _allTickets.sort((a, b) => b.price.compareTo(a.price));

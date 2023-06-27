@@ -1,9 +1,12 @@
 import 'package:blur/blur.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/widgets/blur_wrapper.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../models/ticket.dart';
+import '../services/auth_service.dart';
 
 class GameCardSmall extends StatefulWidget {
   final Ticket ticket;
@@ -16,6 +19,12 @@ class GameCardSmall extends StatefulWidget {
 class _GameCardSmallState extends State<GameCardSmall> {
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+    final user = authService.getUser();
+    bool isPremium = false;
+    if (user != null) {
+      isPremium = user.isPremium;
+    }
     return GestureDetector(
       onTap: () {
         print('${widget.ticket.name} tapped!');
@@ -37,28 +46,32 @@ class _GameCardSmallState extends State<GameCardSmall> {
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),
                     ),
-                    child: Image.network(
-                      widget.ticket.img,
+                    child: FadeInImage.memoryNetwork(
+                      image: widget.ticket.img,
                       fit: BoxFit.fill,
                       width: 320,
-                      height: 320,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: kGreenLightColor,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
+                      height: 320, placeholder: kTransparentImage,
+                      imageErrorBuilder: (BuildContext context,
+                          Object exception, StackTrace? stackTrace) {
                         return const Icon(Icons.error);
                       },
+                      // loadingBuilder: (BuildContext context, Widget child,
+                      //     ImageChunkEvent? loadingProgress) {
+                      //   if (loadingProgress == null) return child;
+                      //   return Center(
+                      //     child: CircularProgressIndicator(
+                      //       color: kGreenLightColor,
+                      //       value: loadingProgress.expectedTotalBytes != null
+                      //           ? loadingProgress.cumulativeBytesLoaded /
+                      //               loadingProgress.expectedTotalBytes!
+                      //           : null,
+                      //     ),
+                      //   );
+                      // },
+                      // errorBuilder: (BuildContext context, Object exception,
+                      //     StackTrace? stackTrace) {
+                      //   return const Icon(Icons.error);
+                      // },
                     ),
                   ),
                   Positioned(
@@ -139,65 +152,91 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     height: 3,
                     thickness: 1,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 12,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Calculated Odds: ',
+                  isPremium
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Calculated Odds: ',
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: BlurWrapper(
-                          blur: 15,
-                          blurColor: kGreenLightColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
-                            bottomRight: Radius.circular(8),
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                              style: const TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 12,
-                                color: Colors.black,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: widget.ticket.calcOdds.substring(0, 2),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                                TextSpan(
-                                  text: widget.ticket.calcOdds.substring(2, 4),
-                                ),
-                                TextSpan(
-                                  text: widget.ticket.calcOdds.substring(4),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14),
-                                ),
-                              ],
                             ),
-                          ),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds
+                                          .substring(0, 2),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds
+                                          .substring(2, 4),
+                                    ),
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds.substring(4),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Calculated Odds: ',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: RichText(
+                                  text: TextSpan(
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {},
+                                      text: 'Premium',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                          color: kGreenLightColor))),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 1,
                   )
