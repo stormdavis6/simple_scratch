@@ -63,7 +63,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
                       Radius.circular(8),
                     ),
                     child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 30, sigmaY: 40),
+                        imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
                         child:
                             GameCardCarousel(ticket: widget.bestTickets.first)),
                   )
@@ -86,7 +86,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
                         fontFamily: 'Montserrat',
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: kGreenLightColor,
+                        color: kBlackLightColor,
                       ),
                       children: <TextSpan>[
                         TextSpan(
@@ -98,7 +98,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
                           style: TextStyle(
                               fontSize: 25,
                               decoration: TextDecoration.underline,
-                              color: kGreenLightColor),
+                              color: kBlackLightColor),
                         ),
                       ],
                     ),
