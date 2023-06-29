@@ -9,19 +9,19 @@
 */
 
 /* Games_Dashboard
-* calcOdds (String)
+* calcOdds (String) ✔
 * calcProb (String)
 * claimDeadline (String)
 * endDate (String)
 * gameNum (String)
-* img (String)
+* img (String) ✔
 * launchDate (String)
-* name (String)
-* overallOdds (String)
-* price (int)
+* name (String) ✔
+* overallOdds (String) ✔
+* price (int) ✔
 * prizes (array of maps) [key: index, value: odds (String), Remaining (String), Total (String), Value (String)]
 * status (String)
-* topPrize (String)
+* topPrize (String) ✔
 */
 
 class Ticket {
@@ -30,8 +30,15 @@ class Ticket {
   final String name;
   final String overallOdds;
   final int price;
-  final double? prob;
   final String topPrize;
+  final double? prob;
+  final String? calcProb;
+  final String? claimDeadline;
+  final String? endDate;
+  final String? gameNum;
+  final String? launchDate;
+  final String? status;
+  final dynamic prizes;
 
   Ticket(
       {required this.calcOdds,
@@ -39,8 +46,15 @@ class Ticket {
       required this.name,
       required this.overallOdds,
       required this.price,
+      required this.topPrize,
       required this.prob,
-      required this.topPrize});
+      required this.calcProb,
+      required this.claimDeadline,
+      required this.endDate,
+      required this.gameNum,
+      required this.launchDate,
+      required this.status,
+      required this.prizes});
 
   factory Ticket.fromJsonBestTicket(Map<String, dynamic> json) {
     return Ticket(
@@ -49,8 +63,15 @@ class Ticket {
         name: json['name'],
         overallOdds: json['overallOdds'],
         price: json['price'],
+        topPrize: json['topPrize'],
         prob: json['prob'],
-        topPrize: json['topPrize']);
+        calcProb: null,
+        claimDeadline: null,
+        endDate: null,
+        gameNum: null,
+        launchDate: null,
+        status: null,
+        prizes: null);
   }
 
   factory Ticket.fromJsonDashboard(Map<String, dynamic> json) {
@@ -60,7 +81,14 @@ class Ticket {
         name: json['name'],
         overallOdds: json['overallOdds'],
         price: json['price'],
+        topPrize: json['topPrize'],
         prob: null,
-        topPrize: json['topPrize']);
+        calcProb: json['calcProb'],
+        claimDeadline: json['claimDeadline'],
+        endDate: json['endDate'],
+        gameNum: json['gameNum'],
+        launchDate: json['launchDate'],
+        status: json['status'],
+        prizes: json['prizes']);
   }
 }

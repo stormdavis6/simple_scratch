@@ -23,7 +23,7 @@ class TicketDatabase {
 
     // ${formatter.format(now)}
     CollectionReference bestTickets =
-        _instance!.collection('BEST_TICKETS_06082023');
+        _instance!.collection('BEST_TICKETS_06282023');
 
     QuerySnapshot querySnapshot = await bestTickets.get();
     var bestTicketsList = querySnapshot.docs.map((doc) => doc.data());
@@ -41,7 +41,7 @@ class TicketDatabase {
 
     // ${formatter.format(now)}
     CollectionReference allTickets =
-        _instance!.collection('GAMES_DASHBOARD_06082023');
+        _instance!.collection('GAMES_DASHBOARD_06282023');
 
     QuerySnapshot querySnapshot = await allTickets.get();
     var allTicketsList = querySnapshot.docs.map((doc) => doc.data());

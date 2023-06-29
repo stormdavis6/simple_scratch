@@ -16,7 +16,8 @@ class AuthService {
         email: user.email,
         isPremium: isPremium,
         creationTime: user.metadata.creationTime,
-        lastSignInTime: user.metadata.lastSignInTime);
+        lastSignInTime: user.metadata.lastSignInTime,
+        providerId: user.providerData[0].providerId);
   }
 
   Stream<User?>? get user {
