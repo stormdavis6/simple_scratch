@@ -7,6 +7,7 @@ import 'package:simple_scratch/screens/games_filter_screen.dart';
 import 'package:simple_scratch/widgets/bottom_nav_bar.dart';
 import 'package:simple_scratch/widgets/game_card_small.dart';
 import 'package:simple_scratch/widgets/games_carousel.dart';
+import 'package:simple_scratch/widgets/games_filter_sheet.dart';
 import '../models/filterItem.dart';
 import '../models/ticket.dart';
 import '../services/auth_service.dart';
@@ -269,25 +270,39 @@ class _GamesScreenState extends State<GamesScreen> {
                                     ),
                               IconButton(
                                 onPressed: () async {
-                                  final result = await Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return GamesFilterScreen(
-                                      selectedFiltersListPassed:
-                                          selectedFiltersList,
-                                    );
-                                  }));
+                                  final result = await showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      backgroundColor: kBackgroundColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(8),
+                                        ),
+                                      ),
+                                      context: context,
+                                      builder: (context) => GamesFilterSheet(
+                                          selectedFiltersListPassed:
+                                              selectedFiltersList));
+                                  // await Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return GamesFilterScreen(
+                                  //     selectedFiltersListPassed:
+                                  //         selectedFiltersList,
+                                  //   );
+                                  // }));
                                   setState(() {
-                                    if (result != null && result != -1) {
+                                    if (result != null) {
                                       selectedFiltersList = result;
                                       selectedFiltersList
                                           .sort((a, b) => b.id.compareTo(a.id));
                                       filterTickets();
                                       SearchTickets(searchController.text);
-                                    } else {
-                                      allTicketsFiltered = allTickets;
-                                      selectedFiltersList = [];
-                                      SearchTickets(searchController.text);
                                     }
+                                    // else {
+                                    //   allTicketsFiltered = allTickets;
+                                    //   selectedFiltersList = [];
+                                    //   SearchTickets(searchController.text);
+                                    // }
                                   });
                                   // _scaffoldKey.currentState?.openEndDrawer();
                                 },

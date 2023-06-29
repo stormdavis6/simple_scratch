@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/models/filterItem.dart';
 
-class GamesFilterScreen extends StatefulWidget {
+class GamesFilterSheet extends StatefulWidget {
   final List<FilterItem> selectedFiltersListPassed;
-  const GamesFilterScreen({
-    Key? key,
-    required this.selectedFiltersListPassed,
-  }) : super(key: key);
+  const GamesFilterSheet({super.key, required this.selectedFiltersListPassed});
 
   @override
-  State<GamesFilterScreen> createState() => _GamesFilterScreenState();
+  State<GamesFilterSheet> createState() => _GamesFilterSheetState();
 }
 
-class _GamesFilterScreenState extends State<GamesFilterScreen> {
+class _GamesFilterSheetState extends State<GamesFilterSheet> {
   @override
   void initState() {
     super.initState();
@@ -61,138 +58,96 @@ class _GamesFilterScreenState extends State<GamesFilterScreen> {
     FilterItem(filterText: '1M+', filterType: 2, id: 16)
   ];
   List<FilterItem> selectedFiltersList = [];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SafeArea(
+    return Container(
+      decoration: BoxDecoration(
+        color: kBackgroundColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context, -1);
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new_rounded),
-                    ),
-                    Stack(
-                      children: [
-                        Positioned.directional(
-                          textDirection: TextDirection.rtl,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FilterCard('Ticket Price', kGreenLightColor, kGreenDarkColor, 5,
+                  priceFilters),
+              SizedBox(
+                height: 10,
+              ),
+              FilterCard('Top Prize', kGreenLightColor, kGreenDarkColor, 3,
+                  topPrizeFilters),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  selectedFiltersList.isEmpty
+                      ? SizedBox(
+                          height: 0,
+                          width: 0,
+                        )
+                      : TextButton(
+                          onPressed: () {
+                            setState(() {
+                              for (var element in priceFilters) {
+                                element.isSelected = false;
+                              }
+                              for (var element in topPrizeFilters) {
+                                element.isSelected = false;
+                              }
+                              selectedFiltersList = [];
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: kBackgroundColor,
+                            foregroundColor: kBackgroundColor,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           child: Text(
-                            'Filter Scratch-Offs',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 2
-                                      ..color = kGreenOliveColor,
-                                    fontFamily: 'Pacifico'),
-                            textAlign: TextAlign.center,
+                            'Clear Selected',
+                            style: TextStyle(
+                                color: kGreenLightColor,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Text(
-                          'Filter Scratch-Offs',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                    color: kYellowLightColor,
-                                    fontFamily: 'Pacifico',
-                                  ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 48,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                FilterCard('Ticket Price', kGreenLightColor, kGreenDarkColor, 5,
-                    priceFilters),
-                SizedBox(
-                  height: 10,
-                ),
-                FilterCard('Top Prize', kGreenLightColor, kGreenDarkColor, 3,
-                    topPrizeFilters),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    selectedFiltersList.isEmpty
-                        ? SizedBox(
-                            height: 0,
-                            width: 0,
-                          )
-                        : TextButton(
-                            onPressed: () {
-                              setState(() {
-                                for (var element in priceFilters) {
-                                  element.isSelected = false;
-                                }
-                                for (var element in topPrizeFilters) {
-                                  element.isSelected = false;
-                                }
-                                selectedFiltersList = [];
-                              });
-                            },
-                            style: TextButton.styleFrom(
-                              backgroundColor: kBackgroundColor,
-                              foregroundColor: kBackgroundColor,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              'Clear Selected',
-                              style: TextStyle(
-                                  color: kGreenLightColor,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, selectedFiltersList);
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: kGreenLightColor,
-                        foregroundColor: kGreenDarkColor,
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        'Done',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, selectedFiltersList);
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: kGreenLightColor,
+                      foregroundColor: kGreenDarkColor,
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    child: Text(
+                      'Done',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
