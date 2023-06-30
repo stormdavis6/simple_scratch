@@ -13,8 +13,9 @@ class SideNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build called in side navigation');
     final authService = Provider.of<AuthService>(context);
-    final user = authService.getUser();
+    final user = context.watch<User?>();
     bool isSignedIn = false;
     if (user != null) {
       isSignedIn = true;
@@ -206,7 +207,6 @@ class SideNavigationDrawer extends StatelessWidget {
                         fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
                   ),
                   onTap: () {
-                    User? user = authService.getUser();
                     authService.signOut();
                     Navigator.pushNamed(context, '/');
                     Utils.showSnackBar('${user?.email} was signed out');

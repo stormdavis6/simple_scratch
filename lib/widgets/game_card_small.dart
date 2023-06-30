@@ -6,6 +6,7 @@ import 'package:simple_scratch/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/ticket.dart';
+import '../models/user.dart';
 import '../services/auth_service.dart';
 
 class GameCardSmall extends StatefulWidget {
@@ -19,8 +20,7 @@ class GameCardSmall extends StatefulWidget {
 class _GameCardSmallState extends State<GameCardSmall> {
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    final user = authService.getUser();
+    final user = context.watch<User?>();
     bool isPremium = false;
     if (user != null) {
       isPremium = user.isPremium;

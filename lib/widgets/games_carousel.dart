@@ -8,6 +8,7 @@ import 'package:simple_scratch/widgets/game_card_carousel.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../constants.dart';
 import '../models/ticket.dart';
+import '../models/user.dart';
 import '../services/auth_service.dart';
 
 class GamesCarousel extends StatefulWidget {
@@ -36,8 +37,8 @@ class _GamesCarouselState extends State<GamesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    final user = authService.getUser();
+    print('build called in carousel');
+    final user = context.watch<User?>();
     bool isPremium = false;
     if (user != null) {
       isPremium = user.isPremium;

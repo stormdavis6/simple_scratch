@@ -3,14 +3,19 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_scratch/models/user.dart';
 
 class AuthService {
-  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+  final auth.FirebaseAuth _firebaseAuth;
+
+  AuthService(this._firebaseAuth);
   bool isPremium = false;
 
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
+      print('User is not signed in');
       return null;
     }
-    getUserIsPremium(user);
+    getUserIsPremium(user).then((value) {});
+    // print('User is signed in as ${user.email}');
+    // print('User is premium ? --> $isPremium');
     return User(
         uid: user.uid,
         email: user.email,
@@ -63,14 +68,11 @@ class AuthService {
     return await _firebaseAuth.signOut();
   }
 
-  void getUserIsPremium(auth.User? user) async {
+  Future<void> getUserIsPremium(auth.User? user) async {
     if (user != null) {
+      await user.getIdToken(true);
       final idTokenResult = await user.getIdTokenResult();
       isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
     }
-  }
-
-  User? getUser() {
-    return _userFromFirebase(_firebaseAuth.currentUser);
   }
 }
