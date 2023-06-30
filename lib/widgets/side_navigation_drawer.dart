@@ -13,7 +13,6 @@ class SideNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build called in side navigation');
     final authService = Provider.of<AuthService>(context);
     final user = context.watch<User?>();
     bool isSignedIn = false;

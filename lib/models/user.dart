@@ -1,7 +1,7 @@
 class User {
   final String uid;
   final String? email;
-  final bool isPremium;
+  bool isPremium;
   final DateTime? creationTime;
   final DateTime? lastSignInTime;
   final String providerId;

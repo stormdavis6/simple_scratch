@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,10 +22,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<User?>();
-    bool isPremium = false;
-    if (user != null) {
-      isPremium = user.isPremium;
-    }
+    bool isPremium = user?.isPremium == null ? false : true;
     return GestureDetector(
       onTap: () {
         print('${widget.ticket.name} tapped!');

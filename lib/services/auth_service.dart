@@ -1,21 +1,23 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simple_scratch/models/user.dart';
 
 class AuthService {
-  final auth.FirebaseAuth _firebaseAuth;
-
-  AuthService(this._firebaseAuth);
+  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
   bool isPremium = false;
+
+  // AuthService() {
+  //   _getUserIsPremium(_firebaseAuth.currentUser);
+  // }
 
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
       print('User is not signed in');
       return null;
     }
-    getUserIsPremium(user).then((value) {});
-    // print('User is signed in as ${user.email}');
-    // print('User is premium ? --> $isPremium');
+    _getUserIsPremium(user);
     return User(
         uid: user.uid,
         email: user.email,
@@ -26,7 +28,7 @@ class AuthService {
   }
 
   Stream<User?>? get user {
-    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
+    return _firebaseAuth.userChanges().map(_userFromFirebase);
   }
 
   Future<User?> signInWithEmailAndPassword(
@@ -68,11 +70,12 @@ class AuthService {
     return await _firebaseAuth.signOut();
   }
 
-  Future<void> getUserIsPremium(auth.User? user) async {
+  Future _getUserIsPremium(auth.User? user) async {
     if (user != null) {
       await user.getIdToken(true);
       final idTokenResult = await user.getIdTokenResult();
       isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+      print(isPremium);
     }
   }
 }

@@ -37,12 +37,8 @@ class _GamesCarouselState extends State<GamesCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    print('build called in carousel');
     final user = context.watch<User?>();
-    bool isPremium = false;
-    if (user != null) {
-      isPremium = user.isPremium;
-    }
+    bool isPremium = user?.isPremium == null ? false : true;
     return isPremium
         ? CarouselSlider(
             items: widget.bestTickets
