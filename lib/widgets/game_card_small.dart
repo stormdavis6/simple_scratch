@@ -19,10 +19,28 @@ class GameCardSmall extends StatefulWidget {
 }
 
 class _GameCardSmallState extends State<GameCardSmall> {
+  late bool isPremium = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getUserIsPremium(auth.FirebaseAuth.instance.currentUser);
+      print('curerrent user is : ${auth.FirebaseAuth.instance.currentUser}');
+    });
+  }
+
+  getUserIsPremium(auth.User? user) async {
+    if (user != null) {
+      await user.getIdToken(true);
+      final idTokenResult = await user.getIdTokenResult();
+      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+      // setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<User?>();
-    bool isPremium = user?.isPremium == null ? false : true;
     return GestureDetector(
       onTap: () {
         print('${widget.ticket.name} tapped!');

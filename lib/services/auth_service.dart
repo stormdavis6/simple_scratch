@@ -17,7 +17,7 @@ class AuthService {
       print('User is not signed in');
       return null;
     }
-    _getUserIsPremium(user);
+    //_getUserIsPremium(user);
     return User(
         uid: user.uid,
         email: user.email,
@@ -70,12 +70,12 @@ class AuthService {
     return await _firebaseAuth.signOut();
   }
 
-  Future _getUserIsPremium(auth.User? user) async {
-    if (user != null) {
-      await user.getIdToken(true);
-      final idTokenResult = await user.getIdTokenResult();
-      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
-      print(isPremium);
-    }
-  }
+  // Future _getUserIsPremium(auth.User? user) async {
+  //   if (user != null) {
+  //     await user.getIdToken(true);
+  //     final idTokenResult = await user.getIdTokenResult();
+  //     isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+  //     print(isPremium);
+  //   }
+  // }
 }
