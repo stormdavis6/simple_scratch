@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:simple_scratch/constants.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../models/ticket.dart';
@@ -15,25 +14,6 @@ class GameCardCarousel extends StatefulWidget {
 }
 
 class _GameCardCarouselState extends State<GameCardCarousel> {
-  late bool isPremium = false;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getUserIsPremium(auth.FirebaseAuth.instance.currentUser);
-      print('curerrent user is : ${auth.FirebaseAuth.instance.currentUser}');
-    });
-  }
-
-  getUserIsPremium(auth.User? user) async {
-    if (user != null) {
-      await user.getIdToken(true);
-      final idTokenResult = await user.getIdTokenResult();
-      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
-      // setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(

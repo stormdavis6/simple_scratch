@@ -10,6 +10,7 @@ import '../constants.dart';
 import '../models/ticket.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class GamesCarousel extends StatefulWidget {
   final List<Ticket> bestTickets;
@@ -21,6 +22,8 @@ class GamesCarousel extends StatefulWidget {
 
 class _GamesCarouselState extends State<GamesCarousel> {
   List<Widget> gameSliders = [];
+  late bool isPremium = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -32,78 +35,105 @@ class _GamesCarouselState extends State<GamesCarousel> {
         precacheImage(NetworkImage(ticket.img), context);
       });
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getUserIsPremium(auth.FirebaseAuth.instance.currentUser);
+    });
+    print(
+        'Current firebase user is ${auth.FirebaseAuth.instance.currentUser?.email}');
     super.initState();
+  }
+
+  getUserIsPremium(auth.User? user) async {
+    setState(() {
+      isLoading = true;
+    });
+    if (user != null) {
+      //await user.getIdToken(true);
+      final idTokenResult = await user.getIdTokenResult();
+      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+      // setState(() {});
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final user = context.watch<User?>();
-    bool isPremium = user?.isPremium == null ? false : true;
-    return isPremium
-        ? CarouselSlider(
-            items: widget.bestTickets
-                .map((ticket) => GameCardCarousel(ticket: ticket))
-                .toList(),
-            options: CarouselOptions(
-              autoPlay: false,
-              aspectRatio: 1.25,
-              enlargeCenterPage: true,
-              enlargeFactor: 0.3,
+    //bool isPremium = user?.isPremium == null ? false : true;
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: kGreenLightColor,
             ),
           )
-        : Stack(
-            children: [
-              CarouselSlider(
-                items: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
-                        child:
-                            GameCardCarousel(ticket: widget.bestTickets.first)),
-                  )
-                ],
+        : isPremium
+            ? CarouselSlider(
+                items: widget.bestTickets
+                    .map((ticket) => GameCardCarousel(ticket: ticket))
+                    .toList(),
                 options: CarouselOptions(
-                  scrollPhysics: NeverScrollableScrollPhysics(),
                   autoPlay: false,
                   aspectRatio: 1.25,
                   enlargeCenterPage: true,
                   enlargeFactor: 0.3,
                 ),
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: kBlackLightColor,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Premium Content\n',
+              )
+            : Stack(
+                children: [
+                  CarouselSlider(
+                    items: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
                         ),
-                        TextSpan(
-                          recognizer: TapGestureRecognizer()..onTap = () {},
-                          text: 'Upgrade Today!',
-                          style: TextStyle(
-                              fontSize: 25,
-                              decoration: TextDecoration.underline,
-                              color: kBlackLightColor),
-                        ),
-                      ],
+                        child: ImageFiltered(
+                            imageFilter:
+                                ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+                            child: GameCardCarousel(
+                                ticket: widget.bestTickets.first)),
+                      )
+                    ],
+                    options: CarouselOptions(
+                      scrollPhysics: NeverScrollableScrollPhysics(),
+                      autoPlay: false,
+                      aspectRatio: 1.25,
+                      enlargeCenterPage: true,
+                      enlargeFactor: 0.3,
                     ),
                   ),
-                ),
-              ),
-            ],
-          );
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: kBlackLightColor,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Premium Content\n',
+                            ),
+                            TextSpan(
+                              recognizer: TapGestureRecognizer()..onTap = () {},
+                              text: 'Upgrade Today!',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  decoration: TextDecoration.underline,
+                                  color: kBlackLightColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
     // Center(
     //         child: Stack(
     //           children: [
