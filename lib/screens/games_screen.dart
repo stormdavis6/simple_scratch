@@ -352,6 +352,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                           height: 345,
                                           child: GamesCarousel(
                                             bestTickets: bestTickets,
+                                            allTickets: allTickets,
                                             isPremium: isPremium,
                                           ),
                                         )
@@ -472,55 +473,69 @@ class _GamesScreenState extends State<GamesScreen> {
                                               : Colors.grey[700]!),
                                       borderRadius: BorderRadius.circular(29.5),
                                     ),
-                                    child: TextField(
-                                      controller: searchController,
-                                      cursorColor: kGreenLightColor,
-                                      textInputAction: TextInputAction.done,
-                                      decoration: InputDecoration(
-                                        hintText: "Search",
-                                        icon: Icon(
-                                          Icons.search,
-                                          color: Colors.grey[700],
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextField(
+                                            controller: searchController,
+                                            cursorColor: kGreenLightColor,
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            decoration: InputDecoration(
+                                              hintText: "Search",
+                                              icon: Icon(
+                                                Icons.search,
+                                                color: Colors.grey[700],
+                                              ),
+                                              border: InputBorder.none,
+                                              suffixIcon: searchController
+                                                      .text.isEmpty
+                                                  ? const SizedBox(
+                                                      width: 0,
+                                                      height: 0,
+                                                    )
+                                                  : IconButton(
+                                                      icon: Icon(
+                                                        Icons.close,
+                                                        color: Colors.grey[700],
+                                                      ),
+                                                      onPressed: () {
+                                                        searchController
+                                                            .clear();
+                                                        SearchTickets('');
+                                                      }),
+                                            ),
+                                            onChanged: (query) {
+                                              SearchTickets(query);
+                                            },
+                                            onTap: () {
+                                              setState(() {
+                                                searchIsFocused = true;
+                                              });
+                                            },
+                                            onSubmitted: (query) {
+                                              setState(() {
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
+                                                searchIsFocused = false;
+                                              });
+                                            },
+                                            onTapOutside: (pointer) {
+                                              setState(() {
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
+                                                searchIsFocused = false;
+                                              });
+                                            },
+                                          ),
                                         ),
-                                        border: InputBorder.none,
-                                        suffixIcon:
-                                            searchController.text.isEmpty
-                                                ? const SizedBox(
-                                                    width: 0,
-                                                    height: 0,
-                                                  )
-                                                : IconButton(
-                                                    icon: Icon(
-                                                      Icons.close,
-                                                      color: Colors.grey[700],
-                                                    ),
-                                                    onPressed: () {
-                                                      searchController.clear();
-                                                      SearchTickets('');
-                                                    }),
-                                      ),
-                                      onChanged: (query) {
-                                        SearchTickets(query);
-                                      },
-                                      onTap: () {
-                                        setState(() {
-                                          searchIsFocused = true;
-                                        });
-                                      },
-                                      onSubmitted: (query) {
-                                        setState(() {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                          searchIsFocused = false;
-                                        });
-                                      },
-                                      onTapOutside: (pointer) {
-                                        setState(() {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                          searchIsFocused = false;
-                                        });
-                                      },
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.sort),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   allTickets.isEmpty ||

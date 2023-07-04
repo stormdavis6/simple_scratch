@@ -14,9 +14,13 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class GamesCarousel extends StatefulWidget {
   final List<Ticket> bestTickets;
+  final List<Ticket> allTickets;
   final bool isPremium;
   const GamesCarousel(
-      {Key? key, required this.bestTickets, required this.isPremium})
+      {Key? key,
+      required this.bestTickets,
+      required this.allTickets,
+      required this.isPremium})
       : super(key: key);
 
   @override
@@ -32,7 +36,12 @@ class _GamesCarouselState extends State<GamesCarousel> {
     return widget.isPremium
         ? CarouselSlider(
             items: widget.bestTickets
-                .map((ticket) => GameCardCarousel(ticket: ticket))
+                .map((ticket) => GameCardCarousel(
+                      bestTicket: ticket,
+                      dashboardTicket: widget.allTickets
+                          .firstWhere((element) => element.name == ticket.name),
+                      isPremium: widget.isPremium,
+                    ))
                 .toList(),
             options: CarouselOptions(
               autoPlay: false,
@@ -51,8 +60,14 @@ class _GamesCarouselState extends State<GamesCarousel> {
                     ),
                     child: ImageFiltered(
                         imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
-                        child:
-                            GameCardCarousel(ticket: widget.bestTickets.first)),
+                        child: GameCardCarousel(
+                          bestTicket: widget.bestTickets.first,
+                          dashboardTicket: widget.allTickets.firstWhere(
+                              (element) =>
+                                  element.name ==
+                                  widget.bestTickets.first.name),
+                          isPremium: widget.isPremium,
+                        )),
                   )
                 ],
                 options: CarouselOptions(
