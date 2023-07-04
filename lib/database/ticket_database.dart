@@ -1,14 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 import '../models/ticket.dart';
 
 class TicketDatabase {
   FirebaseFirestore? _instance;
+
   List<Ticket> _bestTickets = [];
   List<Ticket> _allTickets = [];
-  var now = DateTime.now();
-  var formatter = DateFormat('MMddyyyy');
+
+  DateFormat formatter = DateFormat('MMddyyyy');
+
+  DateTime _getESTTime() {
+    tz.initializeTimeZones();
+    final DateTime now = DateTime.now();
+    final easternTime = tz.getLocation('America/New_York');
+    return tz.TZDateTime.from(now, easternTime);
+  }
 
   List<Ticket> getBestTickets() {
     return _bestTickets;
@@ -21,9 +31,8 @@ class TicketDatabase {
   Future<void> getBestTicketsFromFirestore() async {
     _instance = FirebaseFirestore.instance;
 
-    // ${formatter.format(now)}
-    CollectionReference bestTickets =
-        _instance!.collection('BEST_TICKETS_06282023');
+    CollectionReference bestTickets = _instance!
+        .collection('BEST_TICKETS_${formatter.format(_getESTTime())}');
 
     QuerySnapshot querySnapshot = await bestTickets.get();
     var bestTicketsList = querySnapshot.docs.map((doc) => doc.data());
@@ -40,8 +49,8 @@ class TicketDatabase {
     _instance = FirebaseFirestore.instance;
 
     // ${formatter.format(now)}
-    CollectionReference allTickets =
-        _instance!.collection('GAMES_DASHBOARD_06282023');
+    CollectionReference allTickets = _instance!
+        .collection('GAMES_DASHBOARD_${formatter.format(_getESTTime())}');
 
     QuerySnapshot querySnapshot = await allTickets.get();
     var allTicketsList = querySnapshot.docs.map((doc) => doc.data());

@@ -1,4 +1,5 @@
 import 'package:blur/blur.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
@@ -30,6 +31,7 @@ class _GamesScreenState extends State<GamesScreen> {
   bool isLoading = false;
   bool searchIsFocused = false;
   late TextEditingController searchController;
+  late bool isPremium = false;
 
   @override
   void initState() {
@@ -61,6 +63,14 @@ class _GamesScreenState extends State<GamesScreen> {
     await ticketDatabase.getAllTicketsFromFirestore();
     allTickets = ticketDatabase.getAllTickets();
     duplicateAllTickets = allTickets;
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      //await user.getIdToken(true);
+      print('Getting if user is premium');
+      final idTokenResult = await user.getIdTokenResult();
+      isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       allTickets.forEach((ticket) {
@@ -342,6 +352,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                           height: 345,
                                           child: GamesCarousel(
                                             bestTickets: bestTickets,
+                                            isPremium: isPremium,
                                           ),
                                         )
                                       : SizedBox(
@@ -563,12 +574,15 @@ class _GamesScreenState extends State<GamesScreen> {
                                               ? allTickets
                                                   .map((ticket) =>
                                                       GameCardSmall(
-                                                          ticket: ticket))
+                                                        ticket: ticket,
+                                                        isPremium: isPremium,
+                                                      ))
                                                   .toList()
                                               : allTicketsFiltered
                                                   .map((ticket) =>
                                                       GameCardSmall(
-                                                          ticket: ticket))
+                                                          ticket: ticket,
+                                                          isPremium: isPremium))
                                                   .toList(),
                                         ),
                                   // GridView.builder(
