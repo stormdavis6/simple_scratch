@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/models/filterItem.dart';
+import '../models/filter_item.dart';
 
 class GamesFilterScreen extends StatefulWidget {
   final List<FilterItem> selectedFiltersListPassed;

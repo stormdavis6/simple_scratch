@@ -1,17 +1,16 @@
 import 'package:blur/blur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/database/ticket_database.dart';
-import 'package:simple_scratch/screens/games_filter_screen.dart';
+import 'package:simple_scratch/models/sort_item.dart';
 import 'package:simple_scratch/widgets/bottom_nav_bar.dart';
 import 'package:simple_scratch/widgets/game_card_small.dart';
 import 'package:simple_scratch/widgets/games_carousel.dart';
 import 'package:simple_scratch/widgets/games_filter_sheet.dart';
-import '../models/filterItem.dart';
+import '../models/filter_item.dart';
 import '../models/ticket.dart';
-import '../services/auth_service.dart';
+import '../widgets/games_sort_sheet.dart';
 import '../widgets/side_navigation_drawer.dart';
 
 class GamesScreen extends StatefulWidget {
@@ -23,6 +22,7 @@ class GamesScreen extends StatefulWidget {
 
 class _GamesScreenState extends State<GamesScreen> {
   List<FilterItem> selectedFiltersList = [];
+  SortItem selectedSortItem = SortItem(sortText: 'Ticket Price Desc', id: 2);
   List<Ticket> bestTickets = [];
   List<Ticket> allTickets = [];
   List<Ticket> duplicateAllTickets = [];
@@ -81,6 +81,79 @@ class _GamesScreenState extends State<GamesScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  void sortTickets(List<Ticket> tickets) {
+    //Ticket Price Asc
+    if (selectedSortItem.id == 1) {
+      tickets.sort((a, b) {
+        int cmp = a.price.compareTo(b.price);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Ticket Price Desc
+    else if (selectedSortItem.id == 2) {
+      tickets.sort((a, b) {
+        int cmp = b.price.compareTo(a.price);
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Top Prize Asc
+    else if (selectedSortItem.id == 3) {
+      tickets.sort((a, b) {
+        int cmp = int.parse(a.topPrize.replaceAll(RegExp(r"\D"), ""))
+            .compareTo(int.parse(b.topPrize.replaceAll(RegExp(r"\D"), "")));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Top Prize Desc
+    else if (selectedSortItem.id == 4) {
+      tickets.sort((a, b) {
+        int cmp = int.parse(b.topPrize.replaceAll(RegExp(r"\D"), ""))
+            .compareTo(int.parse(a.topPrize.replaceAll(RegExp(r"\D"), "")));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Overall Odds Asc
+    else if (selectedSortItem.id == 5) {
+      tickets.sort((a, b) {
+        int cmp = double.parse(a.overallOdds.substring(5))
+            .compareTo(double.parse(b.overallOdds.substring(5)));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Overall Odds Desc
+    else if (selectedSortItem.id == 6) {
+      tickets.sort((a, b) {
+        int cmp = double.parse(b.overallOdds.substring(5))
+            .compareTo(double.parse(a.overallOdds.substring(5)));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Calculated Odds Asc
+    else if (selectedSortItem.id == 7) {
+      tickets.sort((a, b) {
+        int cmp = double.parse(a.calcOdds.substring(5))
+            .compareTo(double.parse(b.calcOdds.substring(5)));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
+    //Calculated Odds Desc
+    else if (selectedSortItem.id == 8) {
+      tickets.sort((a, b) {
+        int cmp = double.parse(b.calcOdds.substring(5))
+            .compareTo(double.parse(a.calcOdds.substring(5)));
+        if (cmp != 0) return cmp;
+        return a.name.compareTo(b.name);
+      });
+    }
   }
 
   void filterTickets() {
@@ -158,7 +231,8 @@ class _GamesScreenState extends State<GamesScreen> {
       }
     }
 
-    filteredTicketsIntersection.sort((a, b) => b.price.compareTo(a.price));
+    sortTickets(filteredTicketsIntersection);
+    //filteredTicketsIntersection.sort((a, b) => b.price.compareTo(a.price));
     allTicketsFiltered = filteredTicketsIntersection;
     duplicateAllTicketsFiltered = filteredTicketsIntersection;
   }
@@ -177,7 +251,8 @@ class _GamesScreenState extends State<GamesScreen> {
                 ticket.name.toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
-      allTickets.sort((a, b) => b.price.compareTo(a.price));
+      sortTickets(allTickets);
+      //allTickets.sort((a, b) => b.price.compareTo(a.price));
     });
   }
 
@@ -433,8 +508,6 @@ class _GamesScreenState extends State<GamesScreen> {
                                                         right: 0.0,
                                                         child: GestureDetector(
                                                           onTap: () {
-                                                            print(
-                                                                'Button pressed at index $index');
                                                             selectedFiltersList
                                                                 .removeAt(
                                                                     index);
@@ -443,8 +516,6 @@ class _GamesScreenState extends State<GamesScreen> {
                                                                 searchController
                                                                     .text);
                                                             setState(() {});
-                                                            print(
-                                                                'filter list size: ${selectedFiltersList.length}');
                                                           },
                                                           child: Icon(
                                                             Icons.close,
@@ -531,9 +602,71 @@ class _GamesScreenState extends State<GamesScreen> {
                                             },
                                           ),
                                         ),
-                                        IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.sort),
+                                        Stack(
+                                          children: [
+                                            Positioned(
+                                              width: 8,
+                                              height: 8,
+                                              top: 9.0,
+                                              right: 9.0,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: kYellowLightColor,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomRight:
+                                                        Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () async {
+                                                final result =
+                                                    await showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        backgroundColor:
+                                                            kBackgroundColor,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    8),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8),
+                                                          ),
+                                                        ),
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            GamesSortSheet(
+                                                              selectedSortItemPassed:
+                                                                  selectedSortItem,
+                                                              isPremium:
+                                                                  isPremium,
+                                                            ));
+                                                if (result != null) {
+                                                  selectedSortItem = result;
+                                                  filterTickets();
+                                                  SearchTickets(
+                                                      searchController.text);
+                                                  setState(() {});
+                                                }
+                                              },
+                                              icon: Icon(
+                                                Icons.sort,
+                                                color: kGreenLightColor,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),

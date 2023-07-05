@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/models/filterItem.dart';
+
+import '../models/filter_item.dart';
 
 class GamesFilterSheet extends StatefulWidget {
   final List<FilterItem> selectedFiltersListPassed;
@@ -76,8 +77,43 @@ class _GamesFilterSheetState extends State<GamesFilterSheet> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                  ),
+                  Text(
+                    'Filters',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.black,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
               FilterCard('Ticket Price', kGreenLightColor, kGreenDarkColor, 5,
                   priceFilters),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(
+                color: kBlackLightColor,
+                height: 1,
+                thickness: 1,
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -147,6 +183,9 @@ class _GamesFilterSheetState extends State<GamesFilterSheet> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),
@@ -156,88 +195,82 @@ class _GamesFilterSheetState extends State<GamesFilterSheet> {
 
   Widget FilterCard(String title, Color titleColor, Color borderColor,
       int crossAxisCount, List<FilterItem> filters) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(color: borderColor),
-      ),
-      color: kBackgroundColor,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Positioned.directional(
-                  textDirection: TextDirection.rtl,
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: kBlackLightColor,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.bold,
-                        ),
-                    textAlign: TextAlign.center,
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Positioned.directional(
+                textDirection: TextDirection.rtl,
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Colors.black54,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 10,
+          ),
+          GridView.builder(
+            shrinkWrap: true,
+            itemCount: filters.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 5,
+                crossAxisCount: crossAxisCount,
+                childAspectRatio: 2),
+            itemBuilder: (context, index) {
+              return TextButton(
+                onPressed: () {
+                  setState(() {
+                    if (!filters[index].isSelected) {
+                      selectedFiltersList.add(filters[index]);
+                    } else {
+                      selectedFiltersList.removeAt(
+                          selectedFiltersList.indexWhere(
+                              (element) => element.id == filters[index].id));
+                    }
+                    filters[index].isSelected = !filters[index].isSelected;
+                  });
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  foregroundColor: filters[index].isSelected
+                      ? kBackgroundColor
+                      : kGreenDarkColor,
+                  backgroundColor: filters[index].isSelected
+                      ? kGreenLightColor
+                      : kBackgroundColor,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-              ],
-            ),
-            Container(
-              height: 10,
-            ),
-            GridView.builder(
-              shrinkWrap: true,
-              itemCount: filters.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 5,
-                  crossAxisCount: crossAxisCount,
-                  childAspectRatio: 2),
-              itemBuilder: (context, index) {
-                return TextButton(
-                  onPressed: () {
-                    setState(() {
-                      if (!filters[index].isSelected) {
-                        selectedFiltersList.add(filters[index]);
-                      } else {
-                        selectedFiltersList.removeAt(
-                            selectedFiltersList.indexWhere(
-                                (element) => element.id == filters[index].id));
-                      }
-                      filters[index].isSelected = !filters[index].isSelected;
-                    });
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: filters[index].isSelected
-                        ? kBackgroundColor
-                        : kGreenDarkColor,
-                    backgroundColor: filters[index].isSelected
-                        ? kGreenLightColor
-                        : kBackgroundColor,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    filters[index].filterText,
-                    style: TextStyle(
-                        color: filters[index].isSelected
-                            ? kBackgroundColor
-                            : kGreenLightColor,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold),
-                  ),
-                );
-              },
-            ),
-            Container(
-              height: 10,
-            ),
-          ],
-        ),
+                child: Text(
+                  filters[index].filterText,
+                  style: TextStyle(
+                      color: filters[index].isSelected
+                          ? kBackgroundColor
+                          : kGreenLightColor,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold),
+                ),
+              );
+            },
+          ),
+          Container(
+            height: 10,
+          ),
+        ],
       ),
     );
   }
