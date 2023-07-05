@@ -109,14 +109,14 @@ class _GamesFilterSheetState extends State<GamesFilterSheet> {
               SizedBox(
                 height: 10,
               ),
-              Divider(
-                color: kBlackLightColor,
-                height: 1,
-                thickness: 1,
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              // Divider(
+              //   color: kBlackLightColor,
+              //   height: 1,
+              //   thickness: 1,
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               FilterCard('Top Prize', kGreenLightColor, kGreenDarkColor, 3,
                   topPrizeFilters),
               SizedBox(
@@ -178,6 +178,7 @@ class _GamesFilterSheetState extends State<GamesFilterSheet> {
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Montserrat',
+                          fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
                   ),

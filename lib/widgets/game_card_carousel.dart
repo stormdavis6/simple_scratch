@@ -26,12 +26,14 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return GameDetailsScreen(
-            ticket: widget.dashboardTicket,
-            isPremium: widget.isPremium,
-          );
-        }));
+        if (widget.isPremium) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return GameDetailsScreen(
+              ticket: widget.dashboardTicket,
+              isPremium: widget.isPremium,
+            );
+          }));
+        }
       },
       child: Column(
         children: [

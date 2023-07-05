@@ -91,7 +91,7 @@ class GameDetailsScreen extends StatelessWidget {
                             height: 15,
                           ),
                           Divider(
-                            color: kBlackLightColor,
+                            color: Colors.black45,
                             height: 3,
                             thickness: 1,
                           ),
@@ -113,32 +113,69 @@ class GameDetailsScreen extends StatelessWidget {
                           SizedBox(
                             height: 5,
                           ),
-                          Table(
-                            children: prizesTableRows(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Material(
+                              elevation: 3,
+                              color: kBackgroundColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Table(
+                                    children: prizesTableRows(),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  // Text(
+                                  //   '*Approximate odds of winning and the number of prizes including breakeven prizes is established at the time of printing. Chances of winning will change as prizes are won.',
+                                  //   textAlign: TextAlign.left,
+                                  //   style: TextStyle(fontSize: 8),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 5,
+                                  // ),
+                                ],
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 5,
                           ),
                           Divider(
-                            color: kBlackLightColor,
+                            color: Colors.black45,
                             height: 3,
                             thickness: 1,
                           ),
                           SizedBox(
                             height: 5,
                           ),
-                          infoTable(),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Material(
+                              elevation: 3,
+                              color: kBackgroundColor,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: infoTable(),
+                            ),
+                          ),
                           // Divider(
                           //   color: kBlackLightColor,
                           //   height: 3,
                           //   thickness: 1,
                           // ),
+                          SizedBox(height: 10),
                         ],
                       ),
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -159,33 +196,54 @@ class GameDetailsScreen extends StatelessWidget {
             borderRadius: BorderRadius.all(
               Radius.circular(8),
             ),
-            child: FadeInImage.memoryNetwork(
-              image: ticket.img.replaceAll('_sqr.png', '.jpg'),
-              fit: BoxFit.fill,
-              width: MediaQuery.of(context).size.width * .5 - 8,
-              height: ticket.price <= 2 ? null : 350,
-              placeholder: kTransparentImage,
-              imageErrorBuilder: (BuildContext context, Object exception,
-                  StackTrace? stackTrace) {
-                return const Icon(Icons.error);
+            child: GestureDetector(
+              onTap: () async {
+                await showDialog(
+                    context: context,
+                    builder: (_) {
+                      return Dialog(
+                        elevation: 50,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: Image.network(
+                          ticket.img.replaceAll('_sqr.png', '.jpg'),
+                          // filterQuality: FilterQuality.high,
+                        ),
+                      );
+                    });
               },
-              // loadingBuilder: (BuildContext context, Widget child,
-              //     ImageChunkEvent? loadingProgress) {
-              //   if (loadingProgress == null) return child;
-              //   return Center(
-              //     child: CircularProgressIndicator(
-              //       color: kGreenLightColor,
-              //       value: loadingProgress.expectedTotalBytes != null
-              //           ? loadingProgress.cumulativeBytesLoaded /
-              //               loadingProgress.expectedTotalBytes!
-              //           : null,
-              //     ),
-              //   );
-              // },
-              // errorBuilder: (BuildContext context, Object exception,
-              //     StackTrace? stackTrace) {
-              //   return const Icon(Icons.error);
-              // },
+              child: FadeInImage.memoryNetwork(
+                image: ticket.img.replaceAll('_sqr.png', '.jpg'),
+                fit: BoxFit.fill,
+                width: MediaQuery.of(context).size.width * .5 - 8,
+                height: ticket.price <= 2 ? null : 350,
+                placeholder: kTransparentImage,
+                imageErrorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return const Icon(Icons.error);
+                },
+                // loadingBuilder: (BuildContext context, Widget child,
+                //     ImageChunkEvent? loadingProgress) {
+                //   if (loadingProgress == null) return child;
+                //   return Center(
+                //     child: CircularProgressIndicator(
+                //       color: kGreenLightColor,
+                //       value: loadingProgress.expectedTotalBytes != null
+                //           ? loadingProgress.cumulativeBytesLoaded /
+                //               loadingProgress.expectedTotalBytes!
+                //           : null,
+                //     ),
+                //   );
+                // },
+                // errorBuilder: (BuildContext context, Object exception,
+                //     StackTrace? stackTrace) {
+                //   return const Icon(Icons.error);
+                // },
+              ),
             ),
           ),
           Positioned(
@@ -476,7 +534,7 @@ class GameDetailsScreen extends StatelessWidget {
       listOfRows.add(
         TableRow(
           decoration: BoxDecoration(
-              color: i.isOdd ? kGreenLightColor : kBackgroundColor),
+              color: i.isOdd ? Color(0x3f6d9967) : kBackgroundColor),
           children: [
             Padding(
               padding: const EdgeInsets.all(3.0),

@@ -103,7 +103,7 @@ class _GamesSortSheetState extends State<GamesSortSheet> {
                         selected: _value == index,
                         backgroundColor: kBackgroundColor,
                         elevation: 5,
-                        selectedColor: kGreenLightColor.withOpacity(.75),
+                        selectedColor: kGreenLightColor,
                         onSelected: (selected) {
                           setState(() {
                             _value = selected ? index : 1;
@@ -117,11 +117,11 @@ class _GamesSortSheetState extends State<GamesSortSheet> {
               SizedBox(
                 height: 10,
               ),
-              Divider(
-                color: kBlackLightColor,
-                height: 1,
-                thickness: 1,
-              ),
+              // Divider(
+              //   color: kBlackLightColor,
+              //   height: 1,
+              //   thickness: 1,
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

@@ -78,6 +78,13 @@ class _GamesScreenState extends State<GamesScreen> {
       });
     });
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      allTickets.forEach((ticket) {
+        precacheImage(
+            NetworkImage(ticket.img.replaceAll('_sqr.png', '.jpg')), context);
+      });
+    });
+
     setState(() {
       isLoading = false;
     });
@@ -272,9 +279,9 @@ class _GamesScreenState extends State<GamesScreen> {
             child: Scaffold(
               key: _scaffoldKey,
               backgroundColor: kBackgroundColor,
-              bottomNavigationBar: const BottomNavBar(
-                selectedIndex: 0,
-              ),
+              // bottomNavigationBar: const BottomNavBar(
+              //   selectedIndex: 0,
+              // ),
               drawer: SideNavigationDrawer(),
               drawerEdgeDragWidth: MediaQuery.of(context).size.width * .15,
               // endDrawer: GamesFilterScreen(
@@ -471,7 +478,7 @@ class _GamesScreenState extends State<GamesScreen> {
                                                               kGreenLightColor,
                                                           backgroundColor:
                                                               kGreenLightColor,
-                                                          elevation: 0,
+                                                          elevation: 3,
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
