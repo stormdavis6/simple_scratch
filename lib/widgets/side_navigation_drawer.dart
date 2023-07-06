@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/screens/account_screen.dart';
 import 'package:simple_scratch/screens/auth_screen.dart';
 
 import '../models/user.dart';
@@ -9,7 +10,8 @@ import '../services/auth_service.dart';
 import '../utils.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
-  const SideNavigationDrawer({super.key});
+  final bool isPremium;
+  const SideNavigationDrawer({super.key, required this.isPremium});
 
   @override
   Widget build(BuildContext context) {
@@ -153,14 +155,24 @@ class SideNavigationDrawer extends StatelessWidget {
             ),
             onTap: () {},
           ),
-          ListTile(
-            title: Text(
-              'Account',
-              style: TextStyle(
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
-            ),
-            onTap: () {},
-          ),
+          isPremium
+              ? ListTile(
+                  title: Text(
+                    'Account',
+                    style: TextStyle(
+                        fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return AccountScreen(isPremium: isPremium);
+                    }));
+                  },
+                )
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
           Divider(
             color: kBlackLightColor,
             height: 2,

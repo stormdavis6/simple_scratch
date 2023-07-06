@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/screens/games_screen.dart';
 import 'package:simple_scratch/services/auth_service.dart';
@@ -13,6 +13,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  MobileAds.instance.initialize();
+
+  RequestConfiguration configuration =
+      RequestConfiguration(testDeviceIds: ["0406AF50FE7AA059DDB72E8BAA5AFDC2"]);
+  MobileAds.instance.updateRequestConfiguration(configuration);
+
   runApp(const MyApp());
 }
 
