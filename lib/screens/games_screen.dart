@@ -1,6 +1,7 @@
 import 'package:blur/blur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/database/ticket_database.dart';
 import 'package:simple_scratch/models/sort_item.dart';
@@ -11,6 +12,7 @@ import 'package:simple_scratch/widgets/games_carousel.dart';
 import 'package:simple_scratch/widgets/games_filter_sheet.dart';
 import '../models/filter_item.dart';
 import '../models/ticket.dart';
+import '../utils.dart';
 import '../widgets/games_sort_sheet.dart';
 import '../widgets/side_navigation_drawer.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -30,6 +32,8 @@ class _GamesScreenState extends State<GamesScreen> {
   List<Ticket> duplicateAllTickets = [];
   List<Ticket> allTicketsFiltered = [];
   List<Ticket> duplicateAllTicketsFiltered = [];
+  intl.DateFormat formatter = intl.DateFormat('MMddyyyy');
+  late DateTime pullDate;
   bool isLoading = false;
   bool searchIsFocused = false;
   late TextEditingController searchController;
@@ -77,6 +81,8 @@ class _GamesScreenState extends State<GamesScreen> {
     });
 
     TicketDatabase ticketDatabase = TicketDatabase();
+
+    pullDate = DateTime.parse(formatter.format(ticketDatabase.getESTTime()));
 
     print('Getting best tickets from DB');
     await ticketDatabase.getBestTicketsFromFirestore();
@@ -454,108 +460,69 @@ class _GamesScreenState extends State<GamesScreen> {
                           controller: ScrollController(),
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                physics: BouncingScrollPhysics(),
-                                child: ListView(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  keyboardDismissBehavior:
-                                      ScrollViewKeyboardDismissBehavior.onDrag,
-                                  children: [
-                                    selectedFiltersList.isEmpty &&
-                                            !searchIsFocused &&
-                                            searchController.text.isEmpty
-                                        ? SizedBox(
-                                            height: 345,
-                                            child: GamesCarousel(
-                                              bestTickets: bestTickets,
-                                              allTickets: allTickets,
-                                              isPremium: isPremium,
-                                            ),
-                                          )
-                                        : SizedBox(
-                                            width: 150,
-                                            height:
-                                                selectedFiltersList.isNotEmpty
-                                                    ? 35
-                                                    : 0,
-                                            child: Scrollbar(
-                                              child: ListView.builder(
-                                                controller: ScrollController(),
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                itemCount:
-                                                    selectedFiltersList.length,
-                                                shrinkWrap: true,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemBuilder: (context, index) {
-                                                  return Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            1, 0, 5, 0),
-                                                    child: Stack(
-                                                      children: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            selectedFiltersList
-                                                                .removeAt(
-                                                                    index);
-                                                            filterTickets();
-                                                            SearchTickets(
-                                                                searchController
-                                                                    .text);
-                                                            setState(() {});
-                                                          },
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            padding:
-                                                                EdgeInsets.zero,
-                                                            tapTargetSize:
-                                                                MaterialTapTargetSize
-                                                                    .shrinkWrap,
-                                                            foregroundColor:
-                                                                kGreenLightColor,
-                                                            backgroundColor:
-                                                                kGreenLightColor,
-                                                            elevation: 3,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                                side: BorderSide(
-                                                                    color:
-                                                                        kGreenLightColor)),
-                                                          ),
-                                                          child: Text(
-                                                            selectedFiltersList[
-                                                                            index]
-                                                                        .filterText
-                                                                        .length <=
-                                                                    3
-                                                                ? selectedFiltersList[
-                                                                        index]
-                                                                    .filterText
-                                                                : '     ${selectedFiltersList[index].filterText}     ',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontFamily:
-                                                                    'Montserrat',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ),
-                                                        Positioned(
-                                                          width: 15,
-                                                          height: 15,
-                                                          top: 0.0,
-                                                          right: 0.0,
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
+                              RefreshIndicator(
+                                backgroundColor: kBackgroundColor,
+                                color: kGreenLightColor,
+                                onRefresh: () {
+                                  if (pullDate.compareTo(DateTime.parse(
+                                          formatter.format(
+                                              TicketDatabase().getESTTime()))) <
+                                      0) {
+                                    return getTickets();
+                                  } else {
+                                    // Utils.showSnackBar(
+                                    //     'All tickets are up to date', context);
+                                    return Future.delayed(
+                                        const Duration(milliseconds: 500));
+                                  }
+                                },
+                                child: SingleChildScrollView(
+                                  physics: BouncingScrollPhysics(),
+                                  child: ListView(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
+                                    children: [
+                                      selectedFiltersList.isEmpty &&
+                                              !searchIsFocused &&
+                                              searchController.text.isEmpty
+                                          ? SizedBox(
+                                              height: 345,
+                                              child: GamesCarousel(
+                                                bestTickets: bestTickets,
+                                                allTickets: allTickets,
+                                                isPremium: isPremium,
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              width: 150,
+                                              height:
+                                                  selectedFiltersList.isNotEmpty
+                                                      ? 35
+                                                      : 0,
+                                              child: Scrollbar(
+                                                child: ListView.builder(
+                                                  controller:
+                                                      ScrollController(),
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  itemCount: selectedFiltersList
+                                                      .length,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              1, 0, 5, 0),
+                                                      child: Stack(
+                                                        children: [
+                                                          TextButton(
+                                                            onPressed: () {
                                                               selectedFiltersList
                                                                   .removeAt(
                                                                       index);
@@ -565,253 +532,321 @@ class _GamesScreenState extends State<GamesScreen> {
                                                                       .text);
                                                               setState(() {});
                                                             },
-                                                            child: Icon(
-                                                              Icons.close,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 12,
+                                                            style: TextButton
+                                                                .styleFrom(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              tapTargetSize:
+                                                                  MaterialTapTargetSize
+                                                                      .shrinkWrap,
+                                                              foregroundColor:
+                                                                  kGreenLightColor,
+                                                              backgroundColor:
+                                                                  kGreenLightColor,
+                                                              elevation: 3,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                  side: BorderSide(
+                                                                      color:
+                                                                          kGreenLightColor)),
+                                                            ),
+                                                            child: Text(
+                                                              selectedFiltersList[
+                                                                              index]
+                                                                          .filterText
+                                                                          .length <=
+                                                                      3
+                                                                  ? selectedFiltersList[
+                                                                          index]
+                                                                      .filterText
+                                                                  : '     ${selectedFiltersList[index].filterText}     ',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      'Montserrat',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
+                                                          Positioned(
+                                                            width: 15,
+                                                            height: 15,
+                                                            top: 0.0,
+                                                            right: 0.0,
+                                                            child:
+                                                                GestureDetector(
+                                                              onTap: () {
+                                                                selectedFiltersList
+                                                                    .removeAt(
+                                                                        index);
+                                                                filterTickets();
+                                                                SearchTickets(
+                                                                    searchController
+                                                                        .text);
+                                                                setState(() {});
+                                                              },
+                                                              child: Icon(
+                                                                Icons.close,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 12,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                      //This container is the search bar
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 10),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 0),
+                                        decoration: BoxDecoration(
+                                          color: kBackgroundColor,
+                                          border: Border.all(
+                                              color: searchIsFocused
+                                                  ? kGreenLightColor
+                                                  : Colors.grey[700]!),
+                                          borderRadius:
+                                              BorderRadius.circular(29.5),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: TextField(
+                                                controller: searchController,
+                                                cursorColor: kGreenLightColor,
+                                                textInputAction:
+                                                    TextInputAction.done,
+                                                decoration: InputDecoration(
+                                                  hintText: "Search",
+                                                  icon: Icon(
+                                                    Icons.search,
+                                                    color: Colors.grey[700],
+                                                  ),
+                                                  border: InputBorder.none,
+                                                  suffixIcon: searchController
+                                                          .text.isEmpty
+                                                      ? const SizedBox(
+                                                          width: 0,
+                                                          height: 0,
+                                                        )
+                                                      : IconButton(
+                                                          icon: Icon(
+                                                            Icons.close,
+                                                            color: Colors
+                                                                .grey[700],
+                                                          ),
+                                                          onPressed: () {
+                                                            searchController
+                                                                .clear();
+                                                            SearchTickets('');
+                                                          }),
+                                                ),
+                                                onChanged: (query) {
+                                                  SearchTickets(query);
+                                                },
+                                                onTap: () {
+                                                  setState(() {
+                                                    searchIsFocused = true;
+                                                  });
+                                                },
+                                                onSubmitted: (query) {
+                                                  setState(() {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                    searchIsFocused = false;
+                                                  });
+                                                },
+                                                onTapOutside: (pointer) {
+                                                  setState(() {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                    searchIsFocused = false;
+                                                  });
                                                 },
                                               ),
                                             ),
-                                          ),
-                                    //This container is the search bar
-                                    Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15, vertical: 0),
-                                      decoration: BoxDecoration(
-                                        color: kBackgroundColor,
-                                        border: Border.all(
-                                            color: searchIsFocused
-                                                ? kGreenLightColor
-                                                : Colors.grey[700]!),
-                                        borderRadius:
-                                            BorderRadius.circular(29.5),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextField(
-                                              controller: searchController,
-                                              cursorColor: kGreenLightColor,
-                                              textInputAction:
-                                                  TextInputAction.done,
-                                              decoration: InputDecoration(
-                                                hintText: "Search",
-                                                icon: Icon(
-                                                  Icons.search,
-                                                  color: Colors.grey[700],
-                                                ),
-                                                border: InputBorder.none,
-                                                suffixIcon: searchController
-                                                        .text.isEmpty
-                                                    ? const SizedBox(
-                                                        width: 0,
-                                                        height: 0,
-                                                      )
-                                                    : IconButton(
-                                                        icon: Icon(
-                                                          Icons.close,
-                                                          color:
-                                                              Colors.grey[700],
-                                                        ),
-                                                        onPressed: () {
-                                                          searchController
-                                                              .clear();
-                                                          SearchTickets('');
-                                                        }),
-                                              ),
-                                              onChanged: (query) {
-                                                SearchTickets(query);
-                                              },
-                                              onTap: () {
-                                                setState(() {
-                                                  searchIsFocused = true;
-                                                });
-                                              },
-                                              onSubmitted: (query) {
-                                                setState(() {
-                                                  FocusManager
-                                                      .instance.primaryFocus
-                                                      ?.unfocus();
-                                                  searchIsFocused = false;
-                                                });
-                                              },
-                                              onTapOutside: (pointer) {
-                                                setState(() {
-                                                  FocusManager
-                                                      .instance.primaryFocus
-                                                      ?.unfocus();
-                                                  searchIsFocused = false;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          Stack(
-                                            children: [
-                                              Positioned(
-                                                width: 8,
-                                                height: 8,
-                                                top: 9.0,
-                                                right: 9.0,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: kYellowLightColor,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(8),
-                                                      bottomRight:
-                                                          Radius.circular(8),
-                                                      topRight:
-                                                          Radius.circular(8),
-                                                      bottomLeft:
-                                                          Radius.circular(8),
+                                            Stack(
+                                              children: [
+                                                Positioned(
+                                                  width: 8,
+                                                  height: 8,
+                                                  top: 9.0,
+                                                  right: 9.0,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: kYellowLightColor,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(8),
+                                                        bottomRight:
+                                                            Radius.circular(8),
+                                                        topRight:
+                                                            Radius.circular(8),
+                                                        bottomLeft:
+                                                            Radius.circular(8),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              IconButton(
-                                                onPressed: () async {
-                                                  final result =
-                                                      await showModalBottomSheet(
-                                                          isScrollControlled:
-                                                              true,
-                                                          backgroundColor:
-                                                              kBackgroundColor,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(8),
-                                                              topRight: Radius
-                                                                  .circular(8),
+                                                IconButton(
+                                                  onPressed: () async {
+                                                    final result =
+                                                        await showModalBottomSheet(
+                                                            isScrollControlled:
+                                                                true,
+                                                            backgroundColor:
+                                                                kBackgroundColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        8),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          context: context,
-                                                          builder: (context) =>
-                                                              GamesSortSheet(
-                                                                selectedSortItemPassed:
-                                                                    selectedSortItem,
-                                                                isPremium:
-                                                                    isPremium,
-                                                              ));
-                                                  if (result != null) {
-                                                    selectedSortItem = result;
-                                                    filterTickets();
-                                                    SearchTickets(
-                                                        searchController.text);
-                                                    setState(() {});
-                                                  }
-                                                },
-                                                icon: Icon(
-                                                  Icons.sort,
-                                                  color: kGreenLightColor,
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                GamesSortSheet(
+                                                                  selectedSortItemPassed:
+                                                                      selectedSortItem,
+                                                                  isPremium:
+                                                                      isPremium,
+                                                                ));
+                                                    if (result != null) {
+                                                      selectedSortItem = result;
+                                                      filterTickets();
+                                                      SearchTickets(
+                                                          searchController
+                                                              .text);
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.sort,
+                                                    color: kGreenLightColor,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    allTickets.isEmpty ||
-                                            (allTicketsFiltered.isEmpty &&
-                                                selectedFiltersList.isNotEmpty)
-                                        ? Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.search_off_rounded,
-                                                  size: 70,
-                                                ),
-                                                Text(
-                                                  'Hmmmm, we couldn\'t find any results.',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black,
-                                                      fontFamily: 'Montserrat'),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  selectedFiltersList.isNotEmpty
-                                                      ? 'Please check your spelling or try removing some filters.'
-                                                      : 'Please check your spelling or try different keywords.',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Colors.black,
-                                                      fontFamily: 'Montserrat'),
-                                                )
                                               ],
                                             ),
-                                          )
-                                        : GridView(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            gridDelegate:
-                                                SliverGridDelegateWithMaxCrossAxisExtent(
-                                                    maxCrossAxisExtent: 200,
-                                                    childAspectRatio: 1,
-                                                    crossAxisSpacing: 10,
-                                                    mainAxisSpacing: 10),
-                                            children: selectedFiltersList
-                                                    .isEmpty
-                                                ? allTickets
-                                                    .map((ticket) =>
-                                                        GameCardSmall(
-                                                          ticket: ticket,
-                                                          isPremium: isPremium,
-                                                        ))
-                                                    .toList()
-                                                : allTicketsFiltered
-                                                    .map((ticket) =>
-                                                        GameCardSmall(
+                                          ],
+                                        ),
+                                      ),
+                                      allTickets.isEmpty ||
+                                              (allTicketsFiltered.isEmpty &&
+                                                  selectedFiltersList
+                                                      .isNotEmpty)
+                                          ? Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.search_off_rounded,
+                                                    size: 70,
+                                                  ),
+                                                  Text(
+                                                    'Hmmmm, we couldn\'t find any results.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                            'Montserrat'),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    selectedFiltersList
+                                                            .isNotEmpty
+                                                        ? 'Please check your spelling or try removing some filters.'
+                                                        : 'Please check your spelling or try different keywords.',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                            'Montserrat'),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : GridView(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              gridDelegate:
+                                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                                      maxCrossAxisExtent: 200,
+                                                      childAspectRatio: 1,
+                                                      crossAxisSpacing: 10,
+                                                      mainAxisSpacing: 10),
+                                              children: selectedFiltersList
+                                                      .isEmpty
+                                                  ? allTickets
+                                                      .map((ticket) =>
+                                                          GameCardSmall(
                                                             ticket: ticket,
                                                             isPremium:
-                                                                isPremium))
-                                                    .toList(),
-                                          ),
-                                    // GridView.builder(
-                                    //         controller: ScrollController(),
-                                    //         physics: NeverScrollableScrollPhysics(),
-                                    //         shrinkWrap: true,
-                                    //         gridDelegate:
-                                    //             SliverGridDelegateWithMaxCrossAxisExtent(
-                                    //                 maxCrossAxisExtent: 200,
-                                    //                 childAspectRatio: 1,
-                                    //                 crossAxisSpacing: 10,
-                                    //                 mainAxisSpacing: 10),
-                                    //         itemCount: selectedFiltersList.isEmpty
-                                    //             ? allTickets.length
-                                    //             : allTicketsFiltered.length,
-                                    //         itemBuilder: (BuildContext ctx, index) {
-                                    //           return GameCardSmall(
-                                    //             ticket: selectedFiltersList.isEmpty
-                                    //                 ? allTickets[index]
-                                    //                 : allTicketsFiltered[index],
-                                    //           );
-                                    //         }),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                  ],
+                                                                isPremium,
+                                                          ))
+                                                      .toList()
+                                                  : allTicketsFiltered
+                                                      .map((ticket) =>
+                                                          GameCardSmall(
+                                                              ticket: ticket,
+                                                              isPremium:
+                                                                  isPremium))
+                                                      .toList(),
+                                            ),
+                                      // GridView.builder(
+                                      //         controller: ScrollController(),
+                                      //         physics: NeverScrollableScrollPhysics(),
+                                      //         shrinkWrap: true,
+                                      //         gridDelegate:
+                                      //             SliverGridDelegateWithMaxCrossAxisExtent(
+                                      //                 maxCrossAxisExtent: 200,
+                                      //                 childAspectRatio: 1,
+                                      //                 crossAxisSpacing: 10,
+                                      //                 mainAxisSpacing: 10),
+                                      //         itemCount: selectedFiltersList.isEmpty
+                                      //             ? allTickets.length
+                                      //             : allTicketsFiltered.length,
+                                      //         itemBuilder: (BuildContext ctx, index) {
+                                      //           return GameCardSmall(
+                                      //             ticket: selectedFiltersList.isEmpty
+                                      //                 ? allTickets[index]
+                                      //                 : allTicketsFiltered[index],
+                                      //           );
+                                      //         }),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               _bannerAd != null && !isPremium

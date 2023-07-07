@@ -322,7 +322,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       User? user = await authService.signInWithEmailAndPassword(
           emailController.text.trim(), passwordController.text.trim());
       navigatorKey.currentState?.pushNamed('/');
-      Utils.showSnackBar('Welcome, ${user?.email}');
+      Utils.showSnackBar('Welcome, ${user?.email}', context);
       //print(user?.lastSignInTime.toString());
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
@@ -353,7 +353,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       navigatorKey.currentState
         ?..popUntil((route) => route.isFirst)
         ..pop();
-      Utils.showSnackBar('Welcome, ${user?.email}');
+      Utils.showSnackBar('Welcome, ${user?.email}', context);
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {

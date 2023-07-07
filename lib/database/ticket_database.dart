@@ -13,7 +13,7 @@ class TicketDatabase {
 
   DateFormat formatter = DateFormat('MMddyyyy');
 
-  DateTime _getESTTime() {
+  DateTime getESTTime() {
     tz.initializeTimeZones();
     final DateTime now = DateTime.now();
     final easternTime = tz.getLocation('America/New_York');
@@ -31,8 +31,8 @@ class TicketDatabase {
   Future<void> getBestTicketsFromFirestore() async {
     _instance = FirebaseFirestore.instance;
 
-    CollectionReference bestTickets = _instance!
-        .collection('BEST_TICKETS_${formatter.format(_getESTTime())}');
+    CollectionReference bestTickets =
+        _instance!.collection('BEST_TICKETS_${formatter.format(getESTTime())}');
 
     QuerySnapshot querySnapshot = await bestTickets.get();
     var bestTicketsList = querySnapshot.docs.map((doc) => doc.data());
@@ -50,7 +50,7 @@ class TicketDatabase {
 
     // ${formatter.format(now)}
     CollectionReference allTickets = _instance!
-        .collection('GAMES_DASHBOARD_${formatter.format(_getESTTime())}');
+        .collection('GAMES_DASHBOARD_${formatter.format(getESTTime())}');
 
     QuerySnapshot querySnapshot = await allTickets.get();
     var allTicketsList = querySnapshot.docs.map((doc) => doc.data());

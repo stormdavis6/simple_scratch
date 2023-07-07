@@ -220,7 +220,8 @@ class SideNavigationDrawer extends StatelessWidget {
                   onTap: () {
                     authService.signOut();
                     Navigator.pushNamed(context, '/');
-                    Utils.showSnackBar('${user?.email} was signed out');
+                    Utils.showSnackBar(
+                        '${user?.email} was signed out', context);
                   },
                 )
               : SizedBox(

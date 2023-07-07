@@ -70,12 +70,17 @@ class AuthService {
     return await _firebaseAuth.signOut();
   }
 
-  // Future _getUserIsPremium(auth.User? user) async {
-  //   if (user != null) {
-  //     await user.getIdToken(true);
-  //     final idTokenResult = await user.getIdTokenResult();
-  //     isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
-  //     print(isPremium);
-  //   }
-  // }
+  Future<User?> reauthenticateUser(String email, String password) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      final authResult = await user.reauthenticateWithCredential(
+          auth.EmailAuthProvider.credential(email: email, password: password));
+
+      return _userFromFirebase(authResult.user);
+    }
+  }
+
+  Future<void> updateEmail(String newEmail) async {
+    _firebaseAuth.currentUser?.updateEmail(newEmail);
+  }
 }

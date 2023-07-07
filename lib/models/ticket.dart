@@ -38,6 +38,7 @@ class Ticket {
   final String? gameNum;
   final String? launchDate;
   final String? status;
+  final String? date;
   final dynamic prizes;
 
   Ticket(
@@ -54,6 +55,7 @@ class Ticket {
       required this.gameNum,
       required this.launchDate,
       required this.status,
+      required this.date,
       required this.prizes});
 
   factory Ticket.fromJsonBestTicket(Map<String, dynamic> json) {
@@ -71,6 +73,7 @@ class Ticket {
         gameNum: null,
         launchDate: null,
         status: null,
+        date: null,
         prizes: null);
   }
 
@@ -89,6 +92,7 @@ class Ticket {
         gameNum: json['gameNum'],
         launchDate: json['launchDate'],
         status: json['status'],
+        date: json['date'],
         prizes: json['prizes']);
   }
 }

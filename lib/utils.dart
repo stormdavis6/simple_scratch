@@ -5,7 +5,7 @@ import 'constants.dart';
 class Utils {
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();
 
-  static showSnackBar(String? text) {
+  static showSnackBar(String? text, context) {
     if (text == null) return;
 
     final snackBar = SnackBar(
@@ -18,7 +18,10 @@ class Utils {
         borderRadius: BorderRadius.circular(29.5),
       ),
       behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
+      margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height - 100,
+          right: 20,
+          left: 20),
     );
 
     messengerKey.currentState!

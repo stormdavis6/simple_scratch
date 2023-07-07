@@ -217,7 +217,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     try {
       await authService.sendPasswordResetEmail(emailController.text.trim());
       Utils.showSnackBar(
-          'Password reset email sent to ${emailController.text.trim()}');
+          'Password reset email sent to ${emailController.text.trim()}',
+          context);
       navigatorKey.currentState!.pop();
       navigatorKey.currentState!.pop();
     } on FirebaseAuthException catch (e) {
@@ -228,7 +229,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         } else if (exCode == 'user-not-found') {
           print(e.message.toString());
         } else {
-          Utils.showSnackBar(e.message.toString());
+          Utils.showSnackBar(e.message.toString(), context);
         }
       });
       navigatorKey.currentState!.pop();

@@ -355,7 +355,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ?..popUntil((route) => route.isFirst)
         ..pop();
       Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
+          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}', context);
     } on FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
@@ -399,7 +399,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ?..popUntil((route) => route.isFirst)
         ..pop();
       Utils.showSnackBar(
-          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}');
+          'Welcome, ${FirebaseAuth.instance.currentUser?.email!}', context);
     } on FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
