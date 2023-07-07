@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/main.dart';
 import 'package:simple_scratch/widgets/password_sheet.dart';
 
 import '../models/user.dart';
@@ -21,7 +24,6 @@ class _AccountScreenState extends State<AccountScreen> {
   final newEmailController = TextEditingController();
   final emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  bool editButtonPressed = false;
 
   @override
   void initState() {
@@ -133,9 +135,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               decoration: InputDecoration(
                                 prefixIcon: IconButton(
                                   onPressed: () async {
-                                    final isValid =
-                                        formKey.currentState!.validate();
-                                    if (!isValid) return;
                                     await showModalBottomSheet(
                                         isScrollControlled: true,
                                         backgroundColor: kBackgroundColor,
@@ -153,9 +152,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       .bottom),
                                               child: PasswordSheet(),
                                             ));
-                                    setState(() {
-                                      editButtonPressed = !editButtonPressed;
-                                    });
+                                    // setState(() {});
                                   },
                                   icon: Icon(
                                     Icons.edit,

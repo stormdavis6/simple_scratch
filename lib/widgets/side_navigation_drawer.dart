@@ -155,7 +155,7 @@ class SideNavigationDrawer extends StatelessWidget {
             ),
             onTap: () {},
           ),
-          isPremium
+          isSignedIn
               ? ListTile(
                   title: Text(
                     'Account',

@@ -6,6 +6,7 @@ import '../main.dart';
 import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../services/auth_service.dart';
+import '../utils.dart';
 
 class PasswordSheet extends StatefulWidget {
   const PasswordSheet({super.key});
@@ -21,7 +22,8 @@ class _PasswordSheetState extends State<PasswordSheet> {
   final newEmailController = TextEditingController();
   final emailController = TextEditingController();
   final pageViewController = PageController();
-  String errorText = '';
+  String errorText1 = '';
+  String errorText2 = '';
   late bool passwordVisible;
 
   @override
@@ -42,9 +44,9 @@ class _PasswordSheetState extends State<PasswordSheet> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    final user = context.watch<User?>();
+    final user = context.read<User?>();
     return Container(
-      height: MediaQuery.of(context).size.height * .5 - 8,
+      height: MediaQuery.of(context).size.height * .40 - 8,
       child: PageView(
         physics: NeverScrollableScrollPhysics(),
         controller: pageViewController,
@@ -63,17 +65,6 @@ class _PasswordSheetState extends State<PasswordSheet> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close),
-                      ),
-                    ],
-                  ),
                   Center(
                     child: SizedBox(
                       width: 300,
@@ -116,6 +107,12 @@ class _PasswordSheetState extends State<PasswordSheet> {
                               decoration: InputDecoration(
                                 hintText: 'Password',
                                 labelText: 'Password',
+                                floatingLabelStyle: TextStyle(
+                                  color: kGreenLightColor,
+                                ),
+                                hintStyle: TextStyle(
+                                  color: Colors.grey[600],
+                                ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: kGreenLightColor),
@@ -145,13 +142,13 @@ class _PasswordSheetState extends State<PasswordSheet> {
                             SizedBox(
                               height: 20,
                             ),
-                            errorText.isNotEmpty
+                            errorText1.isNotEmpty
                                 ? Center(
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 0, 10),
                                       child: Text(
-                                        errorText,
+                                        errorText1,
                                         style: TextStyle(
                                             color: Colors.red, fontSize: 14),
                                       ),
@@ -180,9 +177,6 @@ class _PasswordSheetState extends State<PasswordSheet> {
                                     authService, user.email!);
                               },
                             ),
-                            SizedBox(
-                              height: 40,
-                            ),
                           ],
                         ),
                       ),
@@ -206,17 +200,6 @@ class _PasswordSheetState extends State<PasswordSheet> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.close),
-                      ),
-                    ],
-                  ),
                   Center(
                     child: SizedBox(
                       width: 300,
@@ -227,7 +210,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'First, we need to verify your password',
+                              'Now, let\'s update the email associated with your account',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 17,
@@ -236,11 +219,18 @@ class _PasswordSheetState extends State<PasswordSheet> {
                             ),
                             const SizedBox(height: 30),
                             TextFormField(
+                                // autofocus: true,
                                 controller: newEmailController,
                                 cursorColor: kGreenLightColor,
                                 decoration: InputDecoration(
                                   labelText: 'New Email',
                                   hintText: 'New Email',
+                                  floatingLabelStyle: TextStyle(
+                                    color: kGreenLightColor,
+                                  ),
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
                                         BorderSide(color: kGreenLightColor),
@@ -261,13 +251,13 @@ class _PasswordSheetState extends State<PasswordSheet> {
                             SizedBox(
                               height: 5,
                             ),
-                            errorText.isNotEmpty
+                            errorText2.isNotEmpty
                                 ? Center(
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 0, 10),
                                       child: Text(
-                                        errorText,
+                                        errorText2,
                                         style: TextStyle(
                                             color: Colors.red, fontSize: 14),
                                       ),
@@ -294,9 +284,6 @@ class _PasswordSheetState extends State<PasswordSheet> {
                               onPressed: () async {
                                 await updateEmail(authService);
                               },
-                            ),
-                            SizedBox(
-                              height: 40,
                             ),
                           ],
                         ),
@@ -338,7 +325,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
         if (exCode == 'invalid-email' ||
             exCode == 'wrong-password' ||
             exCode == 'user-not-found') {
-          errorText = 'Email or password is invalid';
+          errorText1 = 'Password is invalid';
         }
       });
     }
@@ -361,14 +348,15 @@ class _PasswordSheetState extends State<PasswordSheet> {
 
     try {
       await authService.updateEmail(newEmailController.text.trim());
-      //navigatorKey.currentState!.pop();
+      navigatorKey.currentState!.pop();
+      Utils.showSnackBar('Successfully updated email!', context);
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
-        if (exCode == 'invalid-email' ||
-            exCode == 'wrong-password' ||
-            exCode == 'user-not-found') {
-          errorText = 'Email or password is invalid';
+        if (exCode == 'invalid-email') {
+          errorText2 = 'Email is invalid';
+        } else if (exCode == 'email-already-in-use') {
+          errorText2 = 'Email address is already in use by another account';
         }
       });
     }
