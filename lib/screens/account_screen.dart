@@ -130,7 +130,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             width: 250,
                             child: TextFormField(
                               readOnly: true,
-                              canRequestFocus: false,
+                              focusNode: AlwaysDisabledFocusNode(),
+                              // canRequestFocus: false,
                               controller: emailController..text = user!.email!,
                               decoration: InputDecoration(
                                 prefixIcon: IconButton(
@@ -174,4 +175,9 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
     );
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

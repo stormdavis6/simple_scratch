@@ -85,7 +85,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
                             const SizedBox(height: 20),
                             TextFormField(
                               readOnly: true,
-                              canRequestFocus: false,
+                              // canRequestFocus: false,
                               controller: emailController..text = user!.email!,
                               cursorColor: kGreenLightColor,
                               decoration: InputDecoration(
@@ -149,6 +149,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
                                           0, 0, 0, 10),
                                       child: Text(
                                         errorText1,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.red, fontSize: 14),
                                       ),
@@ -258,6 +259,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
                                           0, 0, 0, 10),
                                       child: Text(
                                         errorText2,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.red, fontSize: 14),
                                       ),
@@ -318,7 +320,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
           email, passwordController.text.trim());
       pageViewController.animateToPage(pageViewController.page!.toInt() + 1,
           duration: Duration(milliseconds: 400), curve: Curves.easeIn);
-      //navigatorKey.currentState!.pop();
+      navigatorKey.currentState!.pop();
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
       setState(() {
@@ -328,8 +330,8 @@ class _PasswordSheetState extends State<PasswordSheet> {
           errorText1 = 'Password is invalid';
         }
       });
+      navigatorKey.currentState!.pop();
     }
-    navigatorKey.currentState!.pop();
   }
 
   Future updateEmail(AuthService authService) async {
@@ -359,7 +361,7 @@ class _PasswordSheetState extends State<PasswordSheet> {
           errorText2 = 'Email address is already in use by another account';
         }
       });
+      navigatorKey.currentState!.pop();
     }
-    navigatorKey.currentState!.pop();
   }
 }

@@ -81,6 +81,6 @@ class AuthService {
   }
 
   Future<void> updateEmail(String newEmail) async {
-    _firebaseAuth.currentUser?.updateEmail(newEmail);
+    await _firebaseAuth.currentUser?.updateEmail(newEmail);
   }
 }
