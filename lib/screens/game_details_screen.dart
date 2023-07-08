@@ -220,7 +220,9 @@ class GameDetailsScreen extends StatelessWidget {
                 image: ticket.img.replaceAll('_sqr.png', '.jpg'),
                 fit: BoxFit.fill,
                 width: MediaQuery.of(context).size.width * .5 - 8,
-                height: ticket.price <= 5 ? null : 350,
+                height: ticket.price > 5 && double.parse(ticket.height!) > 350
+                    ? 350
+                    : double.parse(ticket.height!) * .5 - 8,
                 placeholder: kTransparentImage,
                 imageErrorBuilder: (BuildContext context, Object exception,
                     StackTrace? stackTrace) {

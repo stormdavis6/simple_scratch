@@ -134,6 +134,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               // canRequestFocus: false,
                               controller: emailController..text = user!.email!,
                               decoration: InputDecoration(
+                                labelText: 'Email',
                                 prefixIcon: IconButton(
                                   onPressed: () async {
                                     await showModalBottomSheet(
