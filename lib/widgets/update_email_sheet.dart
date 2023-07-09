@@ -8,14 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../services/auth_service.dart';
 import '../utils.dart';
 
-class PasswordSheet extends StatefulWidget {
-  const PasswordSheet({super.key});
+class UpdateEmailSheet extends StatefulWidget {
+  const UpdateEmailSheet({super.key});
 
   @override
-  State<PasswordSheet> createState() => _PasswordSheetState();
+  State<UpdateEmailSheet> createState() => _UpdateEmailSheetState();
 }
 
-class _PasswordSheetState extends State<PasswordSheet> {
+class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
   final formKey1 = GlobalKey<FormState>();
   final formKey2 = GlobalKey<FormState>();
   final passwordController = TextEditingController();

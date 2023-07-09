@@ -41,6 +41,8 @@ class Ticket {
   final String? date;
   final String? height;
   final String? width;
+  final String? overallEv;
+  final String? calculatedEv;
   final dynamic prizes;
 
   Ticket(
@@ -60,6 +62,8 @@ class Ticket {
       required this.date,
       required this.height,
       required this.width,
+      required this.overallEv,
+      required this.calculatedEv,
       required this.prizes});
 
   factory Ticket.fromJsonBestTicket(Map<String, dynamic> json) {
@@ -80,6 +84,8 @@ class Ticket {
         date: null,
         height: null,
         width: null,
+        overallEv: null,
+        calculatedEv: null,
         prizes: null);
   }
 
@@ -101,6 +107,8 @@ class Ticket {
         date: json['date'],
         height: json['height'],
         width: json['width'],
+        overallEv: json['EV'],
+        calculatedEv: json['adjustedEV'],
         prizes: json['prizes']);
   }
 }

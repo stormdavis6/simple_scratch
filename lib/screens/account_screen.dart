@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/main.dart';
-import 'package:simple_scratch/widgets/password_sheet.dart';
+import 'package:simple_scratch/widgets/update_email_sheet.dart';
+import 'package:simple_scratch/widgets/update_password_sheet.dart';
 
 import '../models/user.dart';
 import '../services/auth_service.dart';
@@ -137,23 +138,26 @@ class _AccountScreenState extends State<AccountScreen> {
                                 labelText: 'Email',
                                 prefixIcon: IconButton(
                                   onPressed: () async {
-                                    await showModalBottomSheet(
-                                        isScrollControlled: true,
-                                        backgroundColor: kBackgroundColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            topRight: Radius.circular(8),
+                                    if (user.providerId == 'password') {
+                                      await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: kBackgroundColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                            ),
                                           ),
-                                        ),
-                                        context: context,
-                                        builder: (context) => Padding(
-                                              padding: EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context)
-                                                      .viewInsets
-                                                      .bottom),
-                                              child: PasswordSheet(),
-                                            ));
+                                          context: context,
+                                          builder: (context) => Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: UpdateEmailSheet(),
+                                              ));
+                                    }
                                     // setState(() {});
                                   },
                                   icon: Icon(
@@ -161,6 +165,62 @@ class _AccountScreenState extends State<AccountScreen> {
                                     color: kGreenLightColor,
                                   ),
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              obscureText: true,
+                              readOnly: true,
+                              focusNode: AlwaysDisabledFocusNode(),
+                              initialValue: '********',
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                prefixIcon: IconButton(
+                                  onPressed: () async {
+                                    if (user.providerId == 'password') {
+                                      await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: kBackgroundColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                            ),
+                                          ),
+                                          context: context,
+                                          builder: (context) => Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                child: UpdatePasswordSheet(),
+                                              ));
+                                    }
+                                    // setState(() {});
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: kGreenLightColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              readOnly: true,
+                              focusNode: AlwaysDisabledFocusNode(),
+                              initialValue: user.creationTime.toString(),
+                              decoration: InputDecoration(
+                                labelText: 'User Since',
                               ),
                             ),
                           ),
