@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import '../constants.dart';
+import '../main.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
+import '../utils.dart';
 
 class UpdatePasswordSheet extends StatefulWidget {
   const UpdatePasswordSheet({super.key});
@@ -148,7 +150,7 @@ class _UpdatePasswordSheetState extends State<UpdatePasswordSheet> {
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                           hintText: 'Confirm New Password',
-                          labelText: 'New Password',
+                          labelText: 'Confirm New Password',
                           floatingLabelStyle: TextStyle(
                             color: kGreenLightColor,
                           ),
@@ -222,8 +224,7 @@ class _UpdatePasswordSheetState extends State<UpdatePasswordSheet> {
                           style: TextStyle(fontSize: 24, color: Colors.white),
                         ),
                         onPressed: () async {
-                          // await reauthenticateUser(
-                          //     authService, user.email!);
+                          await updateEmail(authService, user!.email!);
                         },
                       ),
                     ],
@@ -235,5 +236,39 @@ class _UpdatePasswordSheetState extends State<UpdatePasswordSheet> {
         ),
       ),
     );
+  }
+
+  Future updateEmail(AuthService authService, String email) async {
+    final isValid = formKey.currentState!.validate();
+    if (!isValid) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(
+          color: kGreenLightColor,
+        ),
+      ),
+    );
+
+    try {
+      await authService.updatePassword(
+          email,
+          currentPasswordController.text.trim(),
+          newPasswordController.text.trim());
+      navigatorKey.currentState!.pop();
+      Utils.showSnackBar('Successfully updated password!', context);
+    } on auth.FirebaseAuthException catch (e) {
+      String exCode = e.code.toString();
+      setState(() {
+        if (exCode == 'wrong-password') {
+          errorText = 'Current password is invalid';
+        } else if (exCode == 'weak-password') {
+          errorText = 'New password is too weak';
+        }
+      });
+      navigatorKey.currentState!.pop();
+    }
   }
 }
