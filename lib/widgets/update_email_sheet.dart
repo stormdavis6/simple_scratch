@@ -20,6 +20,7 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
   final formKey2 = GlobalKey<FormState>();
   final passwordController = TextEditingController();
   final newEmailController = TextEditingController();
+  final newEmailCConfirmController = TextEditingController();
   final emailController = TextEditingController();
   final pageViewController = PageController();
   String errorText1 = '';
@@ -36,6 +37,7 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
   void dispose() {
     passwordController.dispose();
     newEmailController.dispose();
+    newEmailCConfirmController.dispose();
     emailController.dispose();
     pageViewController.dispose();
     super.dispose();
@@ -45,10 +47,10 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final user = context.read<User?>();
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * .40 - 8,
       child: PageView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageViewController,
         children: [
           Container(
@@ -85,11 +87,11 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
                             const SizedBox(height: 20),
                             TextFormField(
                               readOnly: true,
-                              // canRequestFocus: false,
+                              canRequestFocus: false,
                               controller: emailController..text = user!.email!,
                               cursorColor: kGreenLightColor,
                               decoration: InputDecoration(
-                                labelText: 'Current Email',
+                                labelText: 'Email',
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: kGreenLightColor),
@@ -149,9 +151,12 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
                                           0, 0, 0, 10),
                                       child: Text(
                                         errorText1,
+                                        maxLines: 3,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: Colors.red, fontSize: 14),
+                                            color: Colors.red,
+                                            fontSize: 14,
+                                            overflow: TextOverflow.ellipsis),
                                       ),
                                     ),
                                   )
@@ -224,8 +229,8 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
                                 controller: newEmailController,
                                 cursorColor: kGreenLightColor,
                                 decoration: InputDecoration(
-                                  labelText: 'New Email',
-                                  hintText: 'New Email',
+                                  labelText: 'Email',
+                                  hintText: 'Email',
                                   floatingLabelStyle: TextStyle(
                                     color: kGreenLightColor,
                                   ),
@@ -252,6 +257,40 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
                             SizedBox(
                               height: 5,
                             ),
+                            TextFormField(
+                                // autofocus: true,
+                                controller: newEmailCConfirmController,
+                                cursorColor: kGreenLightColor,
+                                decoration: InputDecoration(
+                                  labelText: 'Confirm Email',
+                                  hintText: 'Confirm Email',
+                                  floatingLabelStyle: TextStyle(
+                                    color: kGreenLightColor,
+                                  ),
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey[600],
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: kGreenLightColor),
+                                  ),
+                                ),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (email) {
+                                  if (email != null &&
+                                      !EmailValidator.validate(email)) {
+                                    return 'Enter a valid email';
+                                  } else if (email?.trim() !=
+                                      newEmailController.text.trim()) {
+                                    return 'Emails must match';
+                                  } else {
+                                    return null;
+                                  }
+                                }),
+                            SizedBox(
+                              height: 5,
+                            ),
                             errorText2.isNotEmpty
                                 ? Center(
                                     child: Padding(
@@ -269,6 +308,9 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
                                     height: 0,
                                     width: 0,
                                   ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size.fromHeight(40),
@@ -326,8 +368,15 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
       setState(() {
         if (exCode == 'invalid-email' ||
             exCode == 'wrong-password' ||
-            exCode == 'user-not-found') {
+            exCode == 'user-not-found' ||
+            exCode == 'user-mismatch' ||
+            exCode == 'invalid-credential') {
           errorText1 = 'Password is invalid';
+        } else if (e.code == 'too-many-requests') {
+          errorText1 =
+              'This account has been temporarily disabled due to many failed login attempts. Try again later or reset your password.';
+        } else {
+          errorText1 = 'Something went wrong, please try again later';
         }
       });
       navigatorKey.currentState!.pop();
@@ -351,6 +400,7 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
     try {
       await authService.updateEmail(newEmailController.text.trim());
       navigatorKey.currentState!.pop();
+      navigatorKey.currentState!.pop();
       Utils.showSnackBar('Successfully updated email!', context);
     } on auth.FirebaseAuthException catch (e) {
       String exCode = e.code.toString();
@@ -359,6 +409,8 @@ class _UpdateEmailSheetState extends State<UpdateEmailSheet> {
           errorText2 = 'Email is invalid';
         } else if (exCode == 'email-already-in-use') {
           errorText2 = 'Email address is already in use by another account';
+        } else {
+          errorText2 = 'Something went wrong, please try again later';
         }
       });
       navigatorKey.currentState!.pop();

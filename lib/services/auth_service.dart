@@ -78,15 +78,14 @@ class AuthService {
 
       return _userFromFirebase(authResult.user);
     }
+    return null;
   }
 
   Future<void> updateEmail(String newEmail) async {
     await _firebaseAuth.currentUser?.updateEmail(newEmail);
   }
 
-  Future<void> updatePassword(
-      String email, String password, String newPassword) async {
-    await reauthenticateUser(email, password);
+  Future<void> updatePassword(String newPassword) async {
     await _firebaseAuth.currentUser?.updatePassword(newPassword);
   }
 }

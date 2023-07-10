@@ -1,12 +1,7 @@
-import 'dart:io';
-
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as date;
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
-import 'package:simple_scratch/main.dart';
 import 'package:simple_scratch/widgets/update_email_sheet.dart';
 import 'package:simple_scratch/widgets/update_password_sheet.dart';
 
@@ -25,6 +20,7 @@ class _AccountScreenState extends State<AccountScreen> {
   final newEmailController = TextEditingController();
   final emailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final formatter = date.DateFormat('yMMMMd');
 
   @override
   void initState() {
@@ -218,9 +214,31 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: TextFormField(
                               readOnly: true,
                               focusNode: AlwaysDisabledFocusNode(),
-                              initialValue: user.creationTime.toString(),
+                              initialValue: user.creationTime != null
+                                  ? formatter.format(user.creationTime!)
+                                  : 'Date not found',
                               decoration: InputDecoration(
                                 labelText: 'User Since',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              readOnly: true,
+                              focusNode: AlwaysDisabledFocusNode(),
+                              initialValue:
+                                  widget.isPremium ? 'Premium' : 'Non-Premium',
+                              decoration: InputDecoration(
+                                labelText: 'Subscription',
+                                prefixIcon: widget.isPremium
+                                    ? null
+                                    : Icon(
+                                        Icons.edit,
+                                        color: kGreenLightColor,
+                                      ),
                               ),
                             ),
                           ),
