@@ -38,6 +38,8 @@ class _GamesSortSheetState extends State<GamesSortSheet> {
     });
   }
 
+  //TODO Make ASC/DESC their own choiceChips
+
   List<SortItem> sortFilters = [
     SortItem(sortText: 'Ticket Price Asc', id: 1),
     SortItem(sortText: 'Ticket Price Desc', id: 2),

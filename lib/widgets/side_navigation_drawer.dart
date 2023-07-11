@@ -217,8 +217,8 @@ class SideNavigationDrawer extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontWeight: FontWeight.w600),
                   ),
-                  onTap: () {
-                    authService.signOut();
+                  onTap: () async {
+                    await authService.signOut();
                     Navigator.pushNamed(context, '/');
                     Utils.showSnackBar(
                         '${user?.email} was signed out', context);

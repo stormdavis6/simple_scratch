@@ -22,6 +22,7 @@ class GameCardSmall extends StatefulWidget {
 }
 
 class _GameCardSmallState extends State<GameCardSmall> {
+  //TODO add calc EV to card? Then also add to sorting
   @override
   Widget build(BuildContext context) {
     final user = context.watch<User?>();
@@ -38,7 +39,6 @@ class _GameCardSmallState extends State<GameCardSmall> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-            flex: 2,
             child: Material(
               elevation: 3,
               color: kBackgroundColor,
@@ -56,8 +56,8 @@ class _GameCardSmallState extends State<GameCardSmall> {
                     child: FadeInImage.memoryNetwork(
                       image: widget.ticket.img,
                       fit: BoxFit.fill,
-                      width: 400,
-                      height: 400, placeholder: kTransparentImage,
+                      width: 320,
+                      height: 320, placeholder: kTransparentImage,
                       imageErrorBuilder: (BuildContext context,
                           Object exception, StackTrace? stackTrace) {
                         return const Icon(Icons.error);
@@ -109,299 +109,316 @@ class _GameCardSmallState extends State<GameCardSmall> {
               ),
             ),
           ),
-          Expanded(
-            flex: 0,
-            child: Material(
-              elevation: 3,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(8),
-                bottomRight: Radius.circular(8),
-              ),
-              child: Container(
-                width: 320,
-                decoration: BoxDecoration(
-                  color: kBackgroundColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                  ),
+          Material(
+            elevation: 3,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(8),
+            ),
+            child: Container(
+              width: 320,
+              decoration: BoxDecoration(
+                color: kBackgroundColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
                 ),
-                child: Column(
-                  children: [
-                    Center(
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontSize: 13,
-                            color: Colors.black,
+              ),
+              child: Column(
+                children: [
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Overall Odds: ',
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Overall Odds: ',
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(0, 2),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(2, 4),
+                          ),
+                          TextSpan(
+                            text: widget.ticket.overallOdds.substring(4),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: kBlackLightColor,
+                    height: 3,
+                    thickness: 1,
+                  ),
+                  widget.isPremium
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Calculated Odds: ',
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            TextSpan(
-                              text: widget.ticket.overallOdds.substring(0, 2),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds
+                                          .substring(0, 2),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds
+                                          .substring(2, 4),
+                                    ),
+                                    TextSpan(
+                                      text: widget.ticket.calcOdds.substring(4),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            TextSpan(
-                              text: widget.ticket.overallOdds.substring(2, 4),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Calculated Odds: ',
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            TextSpan(
-                              text: widget.ticket.overallOdds.substring(4),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  //TODO: implement pricing page on tap
+                                },
+                                child: RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    children: [
+                                      WidgetSpan(
+                                          child: Icon(
+                                            Icons.lock,
+                                            color: kGreenLightColor,
+                                            size: 14,
+                                          ),
+                                          alignment:
+                                              PlaceholderAlignment.middle),
+                                      TextSpan(
+                                          text: 'Premium',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: kGreenLightColor)),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    Divider(
-                      color: kBlackLightColor,
-                      height: 3,
-                      thickness: 1,
-                    ),
-                    widget.isPremium
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: 'Calculated Odds: ',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: widget.ticket.calcOdds
-                                            .substring(0, 2),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                      TextSpan(
-                                        text: widget.ticket.calcOdds
-                                            .substring(2, 4),
-                                      ),
-                                      TextSpan(
-                                        text:
-                                            widget.ticket.calcOdds.substring(4),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: 'Calculated Odds: ',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: RichText(
-                                    text: TextSpan(
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {},
-                                        text: 'Premium',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: kGreenLightColor))),
-                              ),
-                            ],
-                          ),
-                    // Divider(
-                    //   color: kBlackLightColor,
-                    //   height: 3,
-                    //   thickness: 1,
-                    // ),
-                    // widget.isPremium
-                    //     ? Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 12,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                     text: 'Overall EV: ',
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 14,
-                    //                   fontWeight: FontWeight.bold,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                       text: '\$${widget.ticket.overallEv}'),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       )
-                    //     : Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 12,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                     text: 'Overall EV: ',
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: RichText(
-                    //                 text: TextSpan(
-                    //                     recognizer: TapGestureRecognizer()
-                    //                       ..onTap = () {},
-                    //                     text: 'Premium',
-                    //                     style: TextStyle(
-                    //                         fontSize: 16,
-                    //                         fontWeight: FontWeight.bold,
-                    //                         decoration: TextDecoration.underline,
-                    //                         color: kGreenLightColor))),
-                    //           ),
-                    //         ],
-                    //       ),
-                    // widget.isPremium
-                    //     ? Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 12,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                     text: 'Calculated EV: ',
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 14,
-                    //                   fontWeight: FontWeight.bold,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                       text:
-                    //                           '\$${widget.ticket.calculatedEv}'),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       )
-                    //     : Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Center(
-                    //             child: RichText(
-                    //               text: TextSpan(
-                    //                 style: const TextStyle(
-                    //                   fontFamily: 'Montserrat',
-                    //                   fontSize: 12,
-                    //                   color: Colors.black,
-                    //                 ),
-                    //                 children: <TextSpan>[
-                    //                   TextSpan(
-                    //                     text: 'Calculated EV: ',
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: RichText(
-                    //                 text: TextSpan(
-                    //                     recognizer: TapGestureRecognizer()
-                    //                       ..onTap = () {},
-                    //                     text: 'Premium',
-                    //                     style: TextStyle(
-                    //                         fontSize: 16,
-                    //                         fontWeight: FontWeight.bold,
-                    //                         decoration: TextDecoration.underline,
-                    //                         color: kGreenLightColor))),
-                    //           ),
-                    //         ],
-                    //       ),
-                    SizedBox(
-                      height: 1,
-                    )
-                  ],
-                ),
+                  // Divider(
+                  //   color: kBlackLightColor,
+                  //   height: 3,
+                  //   thickness: 1,
+                  // ),
+                  // widget.isPremium
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 12,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                     text: 'Overall EV: ',
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 14,
+                  //                   fontWeight: FontWeight.bold,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                       text: '\$${widget.ticket.overallEv}'),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 12,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                     text: 'Overall EV: ',
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Center(
+                  //             child: RichText(
+                  //                 text: TextSpan(
+                  //                     recognizer: TapGestureRecognizer()
+                  //                       ..onTap = () {},
+                  //                     text: 'Premium',
+                  //                     style: TextStyle(
+                  //                         fontSize: 16,
+                  //                         fontWeight: FontWeight.bold,
+                  //                         decoration: TextDecoration.underline,
+                  //                         color: kGreenLightColor))),
+                  //           ),
+                  //         ],
+                  //       ),
+                  // widget.isPremium
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 12,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                     text: 'Calculated EV: ',
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 14,
+                  //                   fontWeight: FontWeight.bold,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                       text:
+                  //                           '\$${widget.ticket.calculatedEv}'),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           Center(
+                  //             child: RichText(
+                  //               text: TextSpan(
+                  //                 style: const TextStyle(
+                  //                   fontFamily: 'Montserrat',
+                  //                   fontSize: 12,
+                  //                   color: Colors.black,
+                  //                 ),
+                  //                 children: <TextSpan>[
+                  //                   TextSpan(
+                  //                     text: 'Calculated EV: ',
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Center(
+                  //             child: RichText(
+                  //                 text: TextSpan(
+                  //                     recognizer: TapGestureRecognizer()
+                  //                       ..onTap = () {},
+                  //                     text: 'Premium',
+                  //                     style: TextStyle(
+                  //                         fontSize: 16,
+                  //                         fontWeight: FontWeight.bold,
+                  //                         decoration: TextDecoration.underline,
+                  //                         color: kGreenLightColor))),
+                  //           ),
+                  //         ],
+                  //       ),
+                  SizedBox(
+                    height: 1,
+                  )
+                ],
               ),
             ),
           ),

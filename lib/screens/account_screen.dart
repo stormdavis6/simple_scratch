@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as date;
 import 'package:provider/provider.dart';
@@ -7,10 +8,11 @@ import 'package:simple_scratch/widgets/update_password_sheet.dart';
 
 import '../models/user.dart';
 import '../services/auth_service.dart';
+import '../utils.dart';
 
 class AccountScreen extends StatefulWidget {
   final bool isPremium;
-  const AccountScreen({super.key, required this.isPremium});
+  AccountScreen({super.key, required this.isPremium});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -132,35 +134,40 @@ class _AccountScreenState extends State<AccountScreen> {
                               controller: emailController..text = user!.email!,
                               decoration: InputDecoration(
                                 labelText: 'Email',
-                                prefixIcon: IconButton(
-                                  onPressed: () async {
-                                    if (user.providerId == 'password') {
-                                      await showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          backgroundColor: kBackgroundColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                          context: context,
-                                          builder: (context) => Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                            .viewInsets
-                                                            .bottom),
-                                                child: UpdateEmailSheet(),
-                                              ));
-                                    }
-                                    // setState(() {});
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: kGreenLightColor,
-                                  ),
-                                ),
+                                prefixIcon: user.providerId == 'password'
+                                    ? IconButton(
+                                        onPressed: () async {
+                                          if (user.providerId == 'password') {
+                                            await showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    kBackgroundColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                                context: context,
+                                                builder: (context) => Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: MediaQuery.of(
+                                                                  context)
+                                                              .viewInsets
+                                                              .bottom),
+                                                      child: UpdateEmailSheet(),
+                                                    ));
+                                          }
+                                          // setState(() {});
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: kGreenLightColor,
+                                        ),
+                                      )
+                                    : null,
                               ),
                             ),
                           ),
@@ -175,28 +182,57 @@ class _AccountScreenState extends State<AccountScreen> {
                               initialValue: '********',
                               decoration: InputDecoration(
                                 labelText: 'Password',
+                                prefixIcon: user.providerId == 'password'
+                                    ? IconButton(
+                                        onPressed: () async {
+                                          if (user.providerId == 'password') {
+                                            await showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    kBackgroundColor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                                context: context,
+                                                builder: (context) => Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: MediaQuery.of(
+                                                                  context)
+                                                              .viewInsets
+                                                              .bottom),
+                                                      child:
+                                                          UpdatePasswordSheet(),
+                                                    ));
+                                          }
+                                          // setState(() {});
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: kGreenLightColor,
+                                        ),
+                                      )
+                                    : null,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              readOnly: true,
+                              focusNode: AlwaysDisabledFocusNode(),
+                              initialValue:
+                                  widget.isPremium ? 'Premium' : 'Non-Premium',
+                              decoration: InputDecoration(
+                                labelText: 'Subscription',
                                 prefixIcon: IconButton(
                                   onPressed: () async {
-                                    if (user.providerId == 'password') {
-                                      await showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          backgroundColor: kBackgroundColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                          context: context,
-                                          builder: (context) => Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                            .viewInsets
-                                                            .bottom),
-                                                child: UpdatePasswordSheet(),
-                                              ));
-                                    }
                                     // setState(() {});
                                   },
                                   icon: Icon(
@@ -229,24 +265,22 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: TextFormField(
                               readOnly: true,
                               focusNode: AlwaysDisabledFocusNode(),
-                              initialValue:
-                                  widget.isPremium ? 'Premium' : 'Non-Premium',
+                              initialValue: user.lastSignInTime != null
+                                  ? formatter.format(user.creationTime!)
+                                  : 'Date not found',
                               decoration: InputDecoration(
-                                labelText: 'Subscription',
-                                prefixIcon: widget.isPremium
-                                    ? null
-                                    : Icon(
-                                        Icons.edit,
-                                        color: kGreenLightColor,
-                                      ),
+                                labelText: 'Last Sign In',
                               ),
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: 30,
+                        ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

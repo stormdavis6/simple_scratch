@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:blur/blur.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:simple_scratch/constants.dart';

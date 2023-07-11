@@ -50,16 +50,21 @@ class _GamesCarouselState extends State<GamesCarousel> {
               enlargeFactor: 0.3,
             ),
           )
-        : Stack(
-            children: [
-              CarouselSlider(
-                items: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+        : GestureDetector(
+            onTap: () {
+              //TODO: implement pricing page on tap
+            },
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                CarouselSlider(
+                  items: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      child: ImageFiltered(
+                        imageFilter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
                         child: GameCardCarousel(
                           bestTicket: widget.bestTickets.first,
                           dashboardTicket: widget.allTickets.firstWhere(
@@ -67,47 +72,74 @@ class _GamesCarouselState extends State<GamesCarousel> {
                                   element.name ==
                                   widget.bestTickets.first.name),
                           isPremium: widget.isPremium,
-                        )),
-                  )
-                ],
-                options: CarouselOptions(
-                  scrollPhysics: NeverScrollableScrollPhysics(),
-                  autoPlay: false,
-                  aspectRatio: 1.25,
-                  enlargeCenterPage: true,
-                  enlargeFactor: 0.3,
-                ),
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: kBlackLightColor,
+                        ),
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Premium Content\n',
-                        ),
-                        TextSpan(
-                          recognizer: TapGestureRecognizer()..onTap = () {},
-                          text: 'Upgrade Today!',
-                          style: TextStyle(
-                              fontSize: 25,
-                              decoration: TextDecoration.underline,
-                              color: kBlackLightColor),
-                        ),
-                      ],
-                    ),
+                    )
+                  ],
+                  options: CarouselOptions(
+                    scrollPhysics: NeverScrollableScrollPhysics(),
+                    autoPlay: false,
+                    aspectRatio: 1.25,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.3,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * .75 - 8,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 24,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            WidgetSpan(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 2),
+                                  child: Icon(
+                                    Icons.lock,
+                                    color: kGreenLightColor,
+                                    size: 24,
+                                  ),
+                                ),
+                                alignment: PlaceholderAlignment.middle),
+                            TextSpan(
+                                text: 'Premium',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                    color: kGreenLightColor)),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  'Unlock Premium to view the best tickets at a glance! ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
     // Center(
     //         child: Stack(
