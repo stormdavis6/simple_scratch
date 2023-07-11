@@ -107,7 +107,9 @@ class GameDetailsScreen extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: simpleScratchTicketStats(context),
+                            child: isPremium
+                                ? simpleScratchTicketStats(context)
+                                : simpleScratchTicketStatsBlur(context),
                           ),
                           SizedBox(
                             height: 15,
@@ -798,6 +800,176 @@ class GameDetailsScreen extends StatelessWidget {
       borderRadius: BorderRadius.all(
         Radius.circular(8),
       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Simple Scratch Stats',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: kGreenLightColor,
+                      fontFamily: 'Pacifico',
+                      fontWeight: FontWeight.w500,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Calculated Odds',
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: ticket.calcOdds,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Calculated Prob',
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '${ticket.calcProb}%',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Overall EV',
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '\$${ticket.overallEv}',
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Calculated EV',
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '\$${ticket.calculatedEv}',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget simpleScratchTicketStatsBlur(context) {
+    return Material(
+      elevation: 3,
+      color: kBackgroundColor,
+      borderRadius: BorderRadius.all(
+        Radius.circular(8),
+      ),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -806,30 +978,13 @@ class GameDetailsScreen extends StatelessWidget {
               Radius.circular(8),
             ),
             child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                  sigmaX: isPremium ? 0 : 6, sigmaY: isPremium ? 0 : 6),
+              imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Positioned.directional(
-                      //   textDirection: TextDirection.rtl,
-                      //   child: Text(
-                      //     'Simple Scratch Stats',
-                      //     style: Theme.of(context)
-                      //         .textTheme
-                      //         .titleLarge
-                      //         ?.copyWith(
-                      //             foreground: Paint()
-                      //               ..style = PaintingStyle.stroke
-                      //               ..strokeWidth = 2
-                      //               ..color = kGreenOliveColor,
-                      //             fontFamily: 'Pacifico'),
-                      //     textAlign: TextAlign.center,
-                      //   ),
-                      // ),
                       Text(
                         'Simple Scratch Stats',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -1050,7 +1205,6 @@ class GameDetailsScreen extends StatelessWidget {
   }
 
   Widget ticketInfo(context) {
-    //TODO make font size bigger & add icon buttons if needed
     return Material(
       elevation: 3,
       color: kBackgroundColor,
@@ -1087,14 +1241,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Game Number',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1106,14 +1260,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.gameNum,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1125,14 +1279,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Start Date',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1144,14 +1298,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.launchDate,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1163,14 +1317,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Top Prize',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1182,14 +1336,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.topPrize,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1205,14 +1359,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Claim Deadline',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1224,14 +1378,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.claimDeadline,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1243,14 +1397,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'End Date',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1262,14 +1416,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.endDate,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1281,20 +1435,20 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: [
                         TextSpan(
                           text: 'Overall Odds ',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13),
+                              fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                         WidgetSpan(
                             child: IconButton(
                               padding: EdgeInsets.zero,
                               constraints: BoxConstraints(),
-                              iconSize: 11,
+                              iconSize: 13,
                               icon: Icon(
                                 Icons.info_outline,
                                 color: kGreenLightColor,
@@ -1315,14 +1469,14 @@ class GameDetailsScreen extends StatelessWidget {
                     text: TextSpan(
                       style: const TextStyle(
                         fontFamily: 'Montserrat',
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.black,
                       ),
                       children: <TextSpan>[
                         TextSpan(
                           text: ticket.overallOdds,
                           style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 13),
+                              fontWeight: FontWeight.normal, fontSize: 15),
                         ),
                       ],
                     ),
@@ -1330,110 +1484,6 @@ class GameDetailsScreen extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  // RichText(
-                  //   text: TextSpan(
-                  //     style: const TextStyle(
-                  //       fontFamily: 'Montserrat',
-                  //       fontSize: 13,
-                  //       fontWeight: FontWeight.bold,
-                  //       color: Colors.black,
-                  //     ),
-                  //     children: <TextSpan>[
-                  //       TextSpan(
-                  //         text: 'Calculated Odds',
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // isPremium
-                  //     ? RichText(
-                  //         text: TextSpan(
-                  //           style: const TextStyle(
-                  //             fontFamily: 'Montserrat',
-                  //             fontSize: 13,
-                  //             color: Colors.black,
-                  //           ),
-                  //           children: <TextSpan>[
-                  //             TextSpan(
-                  //               text: ticket.calcOdds,
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     : RichText(
-                  //         text: TextSpan(
-                  //           style: const TextStyle(
-                  //             fontFamily: 'Montserrat',
-                  //             fontSize: 16,
-                  //             color: Colors.black,
-                  //           ),
-                  //           children: <TextSpan>[
-                  //             TextSpan(
-                  //                 recognizer: TapGestureRecognizer()
-                  //                   ..onTap = () {},
-                  //                 text: 'Premium',
-                  //                 style: TextStyle(
-                  //                     fontWeight: FontWeight.bold,
-                  //                     decoration: TextDecoration.underline,
-                  //                     color: kGreenLightColor)),
-                  //           ],
-                  //         ),
-                  //       ),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
-                  // RichText(
-                  //   text: TextSpan(
-                  //     style: const TextStyle(
-                  //       fontFamily: 'Montserrat',
-                  //       fontSize: 13,
-                  //       fontWeight: FontWeight.bold,
-                  //       color: Colors.black,
-                  //     ),
-                  //     children: <TextSpan>[
-                  //       TextSpan(
-                  //         text: 'Overall EV',
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // isPremium
-                  //     ? RichText(
-                  //         text: TextSpan(
-                  //           style: const TextStyle(
-                  //             fontFamily: 'Montserrat',
-                  //             fontSize: 13,
-                  //             color: Colors.black,
-                  //           ),
-                  //           children: <TextSpan>[
-                  //             TextSpan(
-                  //               text: '\$${ticket.overallEv}',
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       )
-                  //     : RichText(
-                  //         text: TextSpan(
-                  //           style: const TextStyle(
-                  //             fontFamily: 'Montserrat',
-                  //             fontSize: 16,
-                  //             color: Colors.black,
-                  //           ),
-                  //           children: <TextSpan>[
-                  //             TextSpan(
-                  //                 recognizer: TapGestureRecognizer()
-                  //                   ..onTap = () {},
-                  //                 text: 'Premium',
-                  //                 style: TextStyle(
-                  //                     fontWeight: FontWeight.bold,
-                  //                     decoration: TextDecoration.underline,
-                  //                     color: kGreenLightColor)),
-                  //           ],
-                  //         ),
-                  //       ),
                 ],
               ),
             ],

@@ -225,42 +225,44 @@ class _GameCardSmallState extends State<GameCardSmall> {
                                   ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: 'Calculated Odds: ',
+                                      text: 'Calculated Odds:',
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  //TODO: implement pricing page on tap
-                                },
-                                child: RichText(
-                                  overflow: TextOverflow.ellipsis,
-                                  text: TextSpan(
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 14,
-                                      color: Colors.black,
+                            Expanded(
+                              child: Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    //TODO: implement pricing page on tap
+                                  },
+                                  child: RichText(
+                                    overflow: TextOverflow.ellipsis,
+                                    text: TextSpan(
+                                      style: const TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      children: [
+                                        WidgetSpan(
+                                            child: Icon(
+                                              Icons.lock,
+                                              color: kGreenLightColor,
+                                              size: 15,
+                                            ),
+                                            alignment:
+                                                PlaceholderAlignment.middle),
+                                        TextSpan(
+                                            text: 'Premium',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                color: kGreenLightColor)),
+                                      ],
                                     ),
-                                    children: [
-                                      WidgetSpan(
-                                          child: Icon(
-                                            Icons.lock,
-                                            color: kGreenLightColor,
-                                            size: 14,
-                                          ),
-                                          alignment:
-                                              PlaceholderAlignment.middle),
-                                      TextSpan(
-                                          text: 'Premium',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              color: kGreenLightColor)),
-                                    ],
                                   ),
                                 ),
                               ),

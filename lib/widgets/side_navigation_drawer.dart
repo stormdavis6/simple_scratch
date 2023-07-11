@@ -147,14 +147,14 @@ class SideNavigationDrawer extends StatelessWidget {
               }
             },
           ),
-          ListTile(
-            title: Text(
-              'Analysis',
-              style: TextStyle(
-                  fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
-            ),
-            onTap: () {},
-          ),
+          // ListTile(
+          //   title: Text(
+          //     'Analysis',
+          //     style: TextStyle(
+          //         fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
+          //   ),
+          //   onTap: () {},
+          // ),
           isSignedIn
               ? ListTile(
                   title: Text(

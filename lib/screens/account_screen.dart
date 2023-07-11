@@ -266,7 +266,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               readOnly: true,
                               focusNode: AlwaysDisabledFocusNode(),
                               initialValue: user.lastSignInTime != null
-                                  ? formatter.format(user.creationTime!)
+                                  ? formatter.format(user.lastSignInTime!)
                                   : 'Date not found',
                               decoration: InputDecoration(
                                 labelText: 'Last Sign In',
