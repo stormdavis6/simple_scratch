@@ -477,17 +477,18 @@ class _GamesScreenState extends State<GamesScreen> {
                                   backgroundColor: kBackgroundColor,
                                   color: kGreenLightColor,
                                   onRefresh: () {
-                                    // if (pullDate.compareTo(DateTime.parse(
-                                    //         formatter.format(TicketDatabase()
-                                    //             .getESTTime()))) <
-                                    //     0) {
-                                    return getTickets();
-                                    // } else {
-                                    //   // Utils.showSnackBar(
-                                    //   //     'All tickets are up to date', context);
-                                    //   return Future.delayed(
-                                    //       const Duration(milliseconds: 500));
-                                    // }
+                                    if (pullDate.compareTo(DateTime.parse(
+                                            formatter.format(TicketDatabase()
+                                                .getESTTime()))) <
+                                        0) {
+                                      return getTickets();
+                                    } else {
+                                      // Utils.showSnackBar(
+                                      //     'All tickets are up to date',
+                                      //     context);
+                                      return Future.delayed(
+                                          const Duration(milliseconds: 500));
+                                    }
                                   },
                                   child: SingleChildScrollView(
                                     physics: BouncingScrollPhysics(),

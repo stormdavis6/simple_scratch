@@ -84,8 +84,8 @@ class Ticket {
         date: null,
         height: null,
         width: null,
-        overallEv: null,
-        calculatedEv: null,
+        overallEv: json['EV'],
+        calculatedEv: json['adjustedEV'],
         prizes: null);
   }
 

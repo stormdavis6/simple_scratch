@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  badges:
+    dependency: transitive
+    description:
+      name: badges
+      sha256: "727580d938b7a1ff47ea42df730d581415606b4224cfa708671c10287f8d3fe6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
   blur:
     dependency: "direct main"
     description:
@@ -432,6 +440,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  pricing_cards:
+    dependency: "direct main"
+    description:
+      name: pricing_cards
+      sha256: "02bac1947942d3cce2b2cda7eb7793360fab07c9048ec2bba46f0ad97056f957"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   provider:
     dependency: "direct main"
     description:
