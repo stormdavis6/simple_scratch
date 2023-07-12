@@ -612,7 +612,7 @@ class GameDetailsScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width * .5 - 18,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               RichText(
                 textAlign: TextAlign.center,

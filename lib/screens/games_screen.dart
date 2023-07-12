@@ -98,10 +98,11 @@ class _GamesScreenState extends State<GamesScreen> {
 
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      //await user.getIdToken(true);
+      await user.getIdToken(true);
       print('Getting if user is premium');
       final idTokenResult = await user.getIdTokenResult();
       isPremium = idTokenResult.claims?['stripeRole'] != null ? true : false;
+      print(isPremium);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -476,17 +477,17 @@ class _GamesScreenState extends State<GamesScreen> {
                                   backgroundColor: kBackgroundColor,
                                   color: kGreenLightColor,
                                   onRefresh: () {
-                                    if (pullDate.compareTo(DateTime.parse(
-                                            formatter.format(TicketDatabase()
-                                                .getESTTime()))) <
-                                        0) {
-                                      return getTickets();
-                                    } else {
-                                      // Utils.showSnackBar(
-                                      //     'All tickets are up to date', context);
-                                      return Future.delayed(
-                                          const Duration(milliseconds: 500));
-                                    }
+                                    // if (pullDate.compareTo(DateTime.parse(
+                                    //         formatter.format(TicketDatabase()
+                                    //             .getESTTime()))) <
+                                    //     0) {
+                                    return getTickets();
+                                    // } else {
+                                    //   // Utils.showSnackBar(
+                                    //   //     'All tickets are up to date', context);
+                                    //   return Future.delayed(
+                                    //       const Duration(milliseconds: 500));
+                                    // }
                                   },
                                   child: SingleChildScrollView(
                                     physics: BouncingScrollPhysics(),
@@ -500,13 +501,10 @@ class _GamesScreenState extends State<GamesScreen> {
                                         selectedFiltersList.isEmpty &&
                                                 !searchIsFocused &&
                                                 searchController.text.isEmpty
-                                            ? SizedBox(
-                                                height: 345,
-                                                child: GamesCarousel(
-                                                  bestTickets: bestTickets,
-                                                  allTickets: allTickets,
-                                                  isPremium: isPremium,
-                                                ),
+                                            ? GamesCarousel(
+                                                bestTickets: bestTickets,
+                                                allTickets: allTickets,
+                                                isPremium: isPremium,
                                               )
                                             : SizedBox(
                                                 width: 150,
@@ -822,9 +820,9 @@ class _GamesScreenState extends State<GamesScreen> {
                                                 gridDelegate:
                                                     SliverGridDelegateWithMaxCrossAxisExtent(
                                                         maxCrossAxisExtent: 200,
-                                                        childAspectRatio: 1,
-                                                        crossAxisSpacing: 10,
-                                                        mainAxisSpacing: 10),
+                                                        childAspectRatio: .75,
+                                                        crossAxisSpacing: 25,
+                                                        mainAxisSpacing: 25),
                                                 children: selectedFiltersList
                                                         .isEmpty
                                                     ? allTickets

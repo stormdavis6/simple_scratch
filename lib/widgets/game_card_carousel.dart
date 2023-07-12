@@ -55,29 +55,20 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
                     child: Image.network(
                       widget.bestTicket.img,
                       fit: BoxFit.fill,
-                      width: 320,
-                      height: 320,
+                      width: 400,
+                      height: 400,
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;
-                        // return Center(
-                        //   child: CircularProgressIndicator(
-                        //     color: kGreenLightColor,
-                        //     value: loadingProgress.expectedTotalBytes != null
-                        //         ? loadingProgress.cumulativeBytesLoaded /
-                        //             loadingProgress.expectedTotalBytes!
-                        //         : null,
-                        //   ),
-                        // );
                         return Center(
                           child: SizedBox(
-                            width: 320.0,
-                            height: 320.0,
+                            width: 400,
+                            height: 400,
                             child: FadeInImage.memoryNetwork(
                               image: widget.bestTicket.img,
                               fit: BoxFit.fill,
-                              width: 320,
-                              height: 320,
+                              width: 400,
+                              height: 400,
                               placeholder: kTransparentImage,
                               imageErrorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
@@ -123,187 +114,340 @@ class _GameCardCarouselState extends State<GameCardCarousel> {
               ),
             ),
           ),
-          Material(
-            elevation: 3,
-            color: kBackgroundColor,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(8),
-            ),
-            child: Container(
-              width: 320,
-              decoration: BoxDecoration(
-                color: kBackgroundColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: Material(
+              elevation: 3,
+              color: kBackgroundColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(3, 0, 3, 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // RichText(
-                        //   text: TextSpan(
-                        //     style: const TextStyle(
-                        //       fontFamily: 'Montserrat',
-                        //       fontSize: 14,
-                        //       color: Colors.black,
-                        //     ),
-                        //     children: <TextSpan>[
-                        //       TextSpan(
-                        //         text: 'Ticket Price: ',
-                        //       ),
-                        //       TextSpan(
-                        //         text: '\$${widget.ticket.price.toString()}',
-                        //         style: TextStyle(fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 16,
-                              color: Colors.black,
+              child: Container(
+                width: 320,
+                decoration: BoxDecoration(
+                  color: kBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Overall Odds: ',
+                                ),
+                              ],
                             ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Overall Odds: ',
-                              ),
-                              TextSpan(
-                                text: widget.bestTicket.overallOdds
-                                    .substring(0, 2),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              TextSpan(
-                                text: widget.bestTicket.overallOdds
-                                    .substring(2, 4),
-                              ),
-                              TextSpan(
-                                text:
-                                    widget.bestTicket.overallOdds.substring(4),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: kBlackLightColor,
-                    height: 3,
-                    thickness: 1,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(3, 0, 3, 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // RichText(
-                        //   text: TextSpan(
-                        //     style: const TextStyle(
-                        //       fontFamily: 'Montserrat',
-                        //       fontSize: 14,
-                        //       color: Colors.black,
-                        //     ),
-                        //     children: <TextSpan>[
-                        //       TextSpan(
-                        //         text: 'Top Prize: ',
-                        //       ),
-                        //       TextSpan(
-                        //         text: widget.ticket.topPrize,
-                        //         style: TextStyle(fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 16,
-                              color: Colors.black,
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: widget.bestTicket.overallOdds
+                                      .substring(0, 2),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                                TextSpan(
+                                  text: widget.bestTicket.overallOdds
+                                      .substring(2, 4),
+                                ),
+                                TextSpan(
+                                  text: widget.bestTicket.overallOdds
+                                      .substring(4),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ],
                             ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Calculated Odds: ',
-                              ),
-                              TextSpan(
-                                text:
-                                    widget.bestTicket.calcOdds.substring(0, 2),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              TextSpan(
-                                text:
-                                    widget.bestTicket.calcOdds.substring(2, 4),
-                              ),
-                              TextSpan(
-                                text: widget.bestTicket.calcOdds.substring(4),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Divider(
+                      color: kBlackLightColor,
+                      height: 3,
+                      thickness: 1,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Calculated Odds: ',
+                                ),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: widget.bestTicket.calcOdds
+                                      .substring(0, 2),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                                TextSpan(
+                                  text: widget.bestTicket.calcOdds
+                                      .substring(2, 4),
+                                ),
+                                TextSpan(
+                                  text: widget.bestTicket.calcOdds.substring(4),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: kBlackLightColor,
+                      height: 3,
+                      thickness: 1,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Calculated EV: ',
+                                ),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '\$${widget.bestTicket.calculatedEv}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
-    // ClipRRect(
-    //   borderRadius: const BorderRadius.all(
-    //     Radius.circular(8),
-    //   ),
-    //   child: ImageFiltered(
-    //     imageFilter: ImageFilter.blur(
-    //         sigmaX: sigmaX, sigmaY: sigmaY, tileMode: TileMode.clamp),
-    //     child: child,
-    //   ),
-    // )
-    // : ClipRRect(
-    //     borderRadius: BorderRadius.all(
-    //       Radius.circular(8),
-    //     ),
-    //     child: ImageFiltered(
-    //       imageFilter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-    //       child: Column(
-    //         children: [
-    //           Expanded(
-    //             child: Material(
-    //               elevation: 3,
-    //               child: Container(
-    //                 height: 320,
-    //                 width: 320,
-    //                 decoration: BoxDecoration(
-    //                   color: kGreenLightColor,
-    //                   borderRadius: BorderRadius.all(
-    //                     Radius.circular(8),
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           ),
-    //           Container(
-    //             color: kBackgroundColor,
-    //             height: 50,
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   );
   }
 }
+
+// Column(
+// crossAxisAlignment: CrossAxisAlignment.center,
+// children: [
+// Row(
+// mainAxisAlignment: MainAxisAlignment.spaceAround,
+// children: [
+// Column(
+// children: [
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text: 'Overall Odds: ',
+// ),
+// ],
+// ),
+// ),
+// Divider(
+// color: kBlackLightColor,
+// height: 7,
+// thickness: 1,
+// ),
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text: 'Calculated Odds: ',
+// ),
+// ],
+// ),
+// ),
+// Divider(
+// color: kBlackLightColor,
+// height: 7,
+// thickness: 1,
+// ),
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text: 'Calculated EV: ',
+// ),
+// ],
+// ),
+// ),
+// ],
+// ),
+// Column(
+// children: [
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text: widget.bestTicket.overallOdds
+//     .substring(0, 2),
+// style: TextStyle(
+// fontWeight: FontWeight.bold,
+// fontSize: 20),
+// ),
+// TextSpan(
+// text: widget.bestTicket.overallOdds
+//     .substring(2, 4),
+// ),
+// TextSpan(
+// text: widget.bestTicket.overallOdds
+//     .substring(4),
+// style: TextStyle(
+// fontWeight: FontWeight.bold,
+// fontSize: 20),
+// ),
+// ],
+// ),
+// ),
+// Divider(
+// color: kBlackLightColor,
+// height: 3,
+// thickness: 1,
+// ),
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text: widget.bestTicket.calcOdds
+//     .substring(0, 2),
+// style: TextStyle(
+// fontWeight: FontWeight.bold,
+// fontSize: 20),
+// ),
+// TextSpan(
+// text: widget.bestTicket.calcOdds
+//     .substring(2, 4),
+// ),
+// TextSpan(
+// text: widget.bestTicket.calcOdds
+//     .substring(4),
+// style: TextStyle(
+// fontWeight: FontWeight.bold,
+// fontSize: 20),
+// ),
+// ],
+// ),
+// ),
+// Divider(
+// color: kBlackLightColor,
+// height: 3,
+// thickness: 1,
+// ),
+// RichText(
+// text: TextSpan(
+// style: const TextStyle(
+// fontFamily: 'Montserrat',
+// fontSize: 16,
+// color: Colors.black,
+// ),
+// children: <TextSpan>[
+// TextSpan(
+// text:
+// '\$${widget.bestTicket.calculatedEv}',
+// style: TextStyle(
+// fontWeight: FontWeight.bold,
+// fontSize: 20),
+// ),
+// ],
+// ),
+// ),
+// ],
+// )
+// ],
+// )
+// ],
+// )

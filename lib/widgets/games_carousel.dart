@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/widgets/game_card_big.dart';
 import 'package:simple_scratch/widgets/game_card_carousel.dart';
+import 'package:simple_scratch/widgets/game_card_carousel_blurred.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../constants.dart';
 import '../models/ticket.dart';
@@ -31,8 +32,6 @@ class _GamesCarouselState extends State<GamesCarousel> {
   List<Widget> gameSliders = [];
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<User?>();
-    //bool isPremium = user?.isPremium == null ? false : true;
     return widget.isPremium
         ? CarouselSlider(
             items: widget.bestTickets
@@ -45,7 +44,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
                 .toList(),
             options: CarouselOptions(
               autoPlay: false,
-              aspectRatio: 1.25,
+              aspectRatio: 1.15,
               enlargeCenterPage: true,
               enlargeFactor: 0.3,
             ),
@@ -55,31 +54,16 @@ class _GamesCarouselState extends State<GamesCarousel> {
               //TODO: implement pricing page on tap
             },
             child: Stack(
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
               children: [
                 CarouselSlider(
-                  items: [
-                    ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      child: ImageFiltered(
-                        imageFilter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-                        child: GameCardCarousel(
-                          bestTicket: widget.bestTickets.first,
-                          dashboardTicket: widget.allTickets.firstWhere(
-                              (element) =>
-                                  element.name ==
-                                  widget.bestTickets.first.name),
-                          isPremium: widget.isPremium,
-                        ),
-                      ),
-                    )
+                  items: const [
+                    GameCardCarouselBlurred(),
                   ],
                   options: CarouselOptions(
                     scrollPhysics: NeverScrollableScrollPhysics(),
                     autoPlay: false,
-                    aspectRatio: 1.25,
+                    aspectRatio: 1.15,
                     enlargeCenterPage: true,
                     enlargeFactor: 0.3,
                   ),
@@ -129,6 +113,7 @@ class _GamesCarouselState extends State<GamesCarousel> {
                               text:
                                   'Unlock Premium to view the best tickets at a glance! ',
                               style: TextStyle(
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
