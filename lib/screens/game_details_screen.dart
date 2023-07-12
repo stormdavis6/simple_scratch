@@ -211,6 +211,7 @@ class GameDetailsScreen extends StatelessWidget {
             context: context,
             builder: (_) {
               return Dialog(
+                backgroundColor: Colors.transparent,
                 elevation: 50,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
