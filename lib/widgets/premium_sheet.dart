@@ -1,6 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/widgets/pricing_cards.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../utils.dart';
 
 class PremiumSheet extends StatefulWidget {
   const PremiumSheet({super.key});
@@ -18,6 +22,7 @@ class _PremiumSheetState extends State<PremiumSheet> {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -182,44 +187,140 @@ class _PremiumSheetState extends State<PremiumSheet> {
             SizedBox(
               height: 40,
             ),
-            // Text(
-            //   'Select a plan for your free trial',
-            //   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            //         color: Colors.white,
-            //         fontFamily: 'Montserrat',
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //   textAlign: TextAlign.center,
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
+            Text(
+              'Select the plan best for you',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: PricingCards(pricingCards: [
                     PricingCard(
-                      cardColor: kBackgroundColor,
-                      title: 'Premium Annual',
-                      price: '\$50',
-                      subPriceText: '/yr',
-                      billedText: 'Just \$4.17 per month, billed annually',
-                      mainPricingHighlightText: 'Best Deal',
-                      mainPricing: true,
-                      badgeColor: kGreenLightColor,
-                      cardBorder: RoundedRectangleBorder(
-                        side: BorderSide(color: kGreenLightColor, width: 4.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+                        cardColor: kBackgroundColor,
+                        title: 'Premium Annual',
+                        price: '\$50',
+                        subPriceText: '/yr',
+                        billedText: '\$4.17 per month, billed annually',
+                        mainPricingHighlightText: 'Best Deal',
+                        mainPricing: true,
+                        badgeColor: kGreenLightColor,
+                        cardBorder: RoundedRectangleBorder(
+                          side: BorderSide(color: kGreenLightColor, width: 4.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        onPress: () {
+                          Utils.showInfoPopUp(
+                              Text('In-App Purchases are Coming Soon'),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'We are still working on implementing in-app purchases for our mobile app.',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'In the meantime, you can subscribe to premium by going to ',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: 'simplescratch.net',
+                                          style: TextStyle(
+                                              color: kGreenLightColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: 16),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              launchURL();
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              context);
+                        }),
                     PricingCard(
-                      cardColor: kBackgroundColor,
-                      title: 'Premium Monthly',
-                      price: '\$5',
-                      subPriceText: '/mo',
-                      billedText: '',
-                    ),
+                        cardColor: kBackgroundColor,
+                        title: 'Premium Monthly',
+                        price: '\$5',
+                        subPriceText: '/mo',
+                        billedText: '',
+                        cardBorder: RoundedRectangleBorder(
+                          side: BorderSide(color: kGreenLightColor, width: 4.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        onPress: () {
+                          Utils.showInfoPopUp(
+                              Text('In-App Purchases are Coming Soon'),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'We are still working on implementing in-app purchases for our mobile app.',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'In the meantime, you can subscribe to premium by going to ',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: 'simplescratch.net',
+                                          style: TextStyle(
+                                              color: kGreenLightColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              fontSize: 16),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              launchURL();
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              context);
+                        }),
                   ]),
                 )
               ],
@@ -243,120 +344,9 @@ class _PremiumSheetState extends State<PremiumSheet> {
   }
 }
 
-// SizedBox(
-// width: MediaQuery.of(context).size.width * .5 - 8,
-// child: Card(
-// elevation: 3,
-// shadowColor: kBlackLightColor,
-// color: kBlackLightColor,
-// child: Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: Column(
-// mainAxisAlignment: MainAxisAlignment.end,
-// children: [
-// Row(
-// mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// children: [
-// Text(
-// 'Yearly',
-// style: Theme.of(context)
-//     .textTheme
-//     .titleMedium
-//     ?.copyWith(
-// color: Colors.white,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.center,
-// ),
-// Icon(
-// Icons.check,
-// color: kGreenLightColor,
-// )
-// ],
-// ),
-// Text(
-// '\$50.00 / year',
-// style: Theme.of(context)
-//     .textTheme
-//     .titleMedium
-//     ?.copyWith(
-// color: Colors.grey.shade500,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.left,
-// ),
-// Text(
-// 'Just \$4.17 per month, billed annually',
-// style:
-// Theme.of(context).textTheme.bodyLarge?.copyWith(
-// color: Colors.grey.shade500,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.center,
-// ),
-// ],
-// ),
-// ),
-// ),
-// ),
-// SizedBox(
-// width: MediaQuery.of(context).size.width * .5 - 8,
-// child: Card(
-// elevation: 3,
-// shadowColor: kBlackLightColor,
-// color: kBlackLightColor,
-// child: Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: Column(
-// children: [
-// Row(
-// mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// children: [
-// Text(
-// 'Yearly',
-// style: Theme.of(context)
-//     .textTheme
-//     .titleMedium
-//     ?.copyWith(
-// color: Colors.white,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.center,
-// ),
-// Icon(
-// Icons.check,
-// color: kGreenLightColor,
-// )
-// ],
-// ),
-// Text(
-// '\$50.00 / year',
-// style: Theme.of(context)
-//     .textTheme
-//     .titleMedium
-//     ?.copyWith(
-// color: Colors.grey.shade500,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.left,
-// ),
-// Text(
-// 'Just \$4.17 per month, billed annually',
-// style:
-// Theme.of(context).textTheme.bodyLarge?.copyWith(
-// color: Colors.grey.shade500,
-// fontFamily: 'Montserrat',
-// fontWeight: FontWeight.bold,
-// ),
-// textAlign: TextAlign.center,
-// ),
-// ],
-// ),
-// ),
-// ),
-// )
+launchURL() async {
+  Uri url = Uri.parse('https://simplescratch.net/#/pricing');
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
+  }
+}

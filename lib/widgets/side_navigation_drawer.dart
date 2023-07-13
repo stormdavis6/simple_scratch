@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/screens/account_screen.dart';
 import 'package:simple_scratch/screens/auth_screen.dart';
+import 'package:simple_scratch/widgets/premium_sheet.dart';
 
 import '../models/user.dart';
 import '../services/auth_service.dart';
@@ -184,7 +185,15 @@ class SideNavigationDrawer extends StatelessWidget {
               style: TextStyle(
                   fontFamily: 'Montserrat', fontWeight: FontWeight.w500),
             ),
-            onTap: () {},
+            onTap: () async {
+              await showModalBottomSheet(
+                backgroundColor: Color(0xff20201e),
+                isScrollControlled: true,
+                enableDrag: false,
+                context: context,
+                builder: (context) => PremiumSheet(),
+              );
+            },
           ),
           ListTile(
             title: Text(

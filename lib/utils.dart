@@ -45,7 +45,7 @@ class Utils {
     //   ..showSnackBar(snackBar);
   }
 
-  static showInfoPopUp(String title, String body, context) {
+  static showInfoPopUp(Widget title, Widget body, context) {
     if (Platform.isAndroid) {
       showDialog(
           context: context,
@@ -58,8 +58,8 @@ class Utils {
               ),
               backgroundColor: kBackgroundColor,
               elevation: 3,
-              title: Text(title),
-              content: Text(body),
+              title: title,
+              content: body,
               actions: <Widget>[
                 TextButton(
                   child: const Text(
@@ -86,8 +86,8 @@ class Utils {
           context: context,
           builder: (context) {
             return CupertinoAlertDialog(
-              title: Text(title),
-              content: Text(body),
+              title: title,
+              content: body,
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,

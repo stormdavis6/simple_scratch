@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:simple_scratch/constants.dart';
+import 'package:simple_scratch/widgets/premium_sheet.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../models/ticket.dart';
 import '../screens/game_details_screen.dart';
@@ -21,8 +22,13 @@ class _GameCardCarouselBlurredState extends State<GameCardCarouselBlurred> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        //TODO take to premium page on tap
+      onTap: () async {
+        await showModalBottomSheet(
+          isScrollControlled: true,
+          enableDrag: false,
+          context: context,
+          builder: (context) => PremiumSheet(),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(

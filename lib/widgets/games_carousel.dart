@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_scratch/widgets/game_card_big.dart';
 import 'package:simple_scratch/widgets/game_card_carousel.dart';
 import 'package:simple_scratch/widgets/game_card_carousel_blurred.dart';
+import 'package:simple_scratch/widgets/premium_sheet.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../constants.dart';
 import '../models/ticket.dart';
@@ -50,8 +51,14 @@ class _GamesCarouselState extends State<GamesCarousel> {
             ),
           )
         : GestureDetector(
-            onTap: () {
-              //TODO: implement pricing page on tap
+            onTap: () async {
+              await showModalBottomSheet(
+                backgroundColor: Color(0xff20201e),
+                isScrollControlled: true,
+                enableDrag: false,
+                context: context,
+                builder: (context) => PremiumSheet(),
+              );
             },
             child: Stack(
               alignment: Alignment.center,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_scratch/constants.dart';
 import 'package:simple_scratch/screens/game_details_screen.dart';
+import 'package:simple_scratch/widgets/premium_sheet.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/ticket.dart';
@@ -260,8 +261,14 @@ class _GameCardSmallState extends State<GameCardSmall> {
                               ),
                               Center(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    //TODO: implement pricing page on tap
+                                  onTap: () async {
+                                    await showModalBottomSheet(
+                                      backgroundColor: Color(0xff20201e),
+                                      isScrollControlled: true,
+                                      enableDrag: false,
+                                      context: context,
+                                      builder: (context) => PremiumSheet(),
+                                    );
                                   },
                                   child: RichText(
                                     overflow: TextOverflow.ellipsis,
@@ -358,8 +365,14 @@ class _GameCardSmallState extends State<GameCardSmall> {
                               ),
                               Center(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    //TODO: implement pricing page on tap
+                                  onTap: () async {
+                                    await showModalBottomSheet(
+                                      backgroundColor: Color(0xff20201e),
+                                      isScrollControlled: true,
+                                      enableDrag: false,
+                                      context: context,
+                                      builder: (context) => PremiumSheet(),
+                                    );
                                   },
                                   child: RichText(
                                     overflow: TextOverflow.ellipsis,

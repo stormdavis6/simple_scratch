@@ -94,13 +94,11 @@ class PricingCards extends StatelessWidget {
           children: [
             Card(
               color: pc.cardColor,
-              shape: pc.mainPricing
-                  ? pc.cardBorder ??
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.red, width: 4.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      )
-                  : null,
+              shape: pc.cardBorder ??
+                  RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.red, width: 4.0),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
               child: Container(
                 padding: EdgeInsets.all(16),
                 child: Column(
@@ -141,7 +139,7 @@ class PricingCards extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   shape: BadgeShape.square,
-                  position: BadgePosition.topEnd(top: -10),
+                  position: BadgePosition.topStart(top: -10),
                   borderRadius: BorderRadius.circular(16),
                   toAnimate: false,
                   child: pricingCard,
