@@ -24,7 +24,6 @@ class GameDetailsScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,24 +166,10 @@ class GameDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  // Text(
-                                  //   '*Approximate odds of winning and the number of prizes including breakeven prizes is established at the time of printing. Chances of winning will change as prizes are won.',
-                                  //   textAlign: TextAlign.left,
-                                  //   style: TextStyle(fontSize: 8),
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 5,
-                                  // ),
                                 ],
                               ),
                             ),
                           ),
-
-                          // Divider(
-                          //   color: kBlackLightColor,
-                          //   height: 3,
-                          //   thickness: 1,
-                          // ),
                           SizedBox(height: 10),
                         ],
                       ),
@@ -610,119 +595,110 @@ class GameDetailsScreen extends StatelessWidget {
   }
 
   Widget rightOfImageText(context) {
-    return Expanded(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .5 - 38,
       child: Padding(
         padding: const EdgeInsets.only(left: 20),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * .5 - 18,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Pacifico',
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: ticket.name,
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            decorationThickness: 1,
-                            decorationColor: kGreenLightColor)),
-                  ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Pacifico',
+                  fontSize: 20,
+                  color: Colors.black,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              RichText(
-                textAlign: TextAlign.left,
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 13,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Top Prize',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              RichText(
-                textAlign: TextAlign.right,
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 13,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: ticket.topPrize,
+                children: <TextSpan>[
+                  TextSpan(
+                      text: ticket.name,
                       style: TextStyle(
-                          fontWeight: FontWeight.normal, fontSize: 16),
-                    ),
-                  ],
+                          decoration: TextDecoration.underline,
+                          decorationThickness: 1,
+                          decorationColor: kGreenLightColor)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 13,
+                  color: Colors.black,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Top Prize',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  children: [
-                    TextSpan(
-                      text: 'Overall Odds ',
-                    ),
-                    WidgetSpan(
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          iconSize: 14,
-                          icon: Icon(
-                            Icons.info_outline_rounded,
-                            color: kGreenLightColor,
-                          ),
-                          onPressed: () {
-                            Utils.showInfoPopUp(Text('Overall Odds'),
-                                Text(Utils.overallOdds), context);
-                          },
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 13,
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: ticket.topPrize,
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Overall Odds ',
+                  ),
+                  WidgetSpan(
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        iconSize: 14,
+                        icon: Icon(
+                          Icons.info_outline_rounded,
+                          color: kGreenLightColor,
                         ),
-                        alignment: PlaceholderAlignment.top),
-                  ],
-                ),
+                        onPressed: () {
+                          Utils.showInfoPopUp(Text('Overall Odds'),
+                              Text(Utils.overallOdds), context);
+                        },
+                      ),
+                      alignment: PlaceholderAlignment.top),
+                ],
               ),
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 16,
-                    color: Colors.black,
+            ),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: ticket.overallOdds,
                   ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: ticket.overallOdds,
-                    ),
-                  ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -64,7 +64,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   fontFamily: 'Pacifico',
                                   fontWeight: FontWeight.bold,
                                 ),
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.center,
                           ),
                           SizedBox(
                             height: 20,
