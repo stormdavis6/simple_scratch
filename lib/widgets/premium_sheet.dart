@@ -346,7 +346,7 @@ class _PremiumSheetState extends State<PremiumSheet> {
 
 launchURL() async {
   Uri url = Uri.parse('https://simplescratch.net/#/pricing');
-  if (!await launchUrl(url)) {
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
     throw Exception('Could not launch $url');
   }
 }
