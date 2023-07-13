@@ -7,6 +7,7 @@ import 'package:simple_scratch/widgets/premium_sheet.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../models/ticket.dart';
 import '../screens/game_details_screen.dart';
+import '../screens/premium_screen.dart';
 
 class GameCardCarouselBlurred extends StatefulWidget {
   const GameCardCarouselBlurred({
@@ -22,13 +23,10 @@ class _GameCardCarouselBlurredState extends State<GameCardCarouselBlurred> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        await showModalBottomSheet(
-          isScrollControlled: true,
-          enableDrag: false,
-          context: context,
-          builder: (context) => PremiumSheet(),
-        );
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return PremiumScreen();
+        }));
       },
       child: Padding(
         padding: const EdgeInsets.only(

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_scratch/models/ticket.dart';
+import 'package:simple_scratch/screens/premium_screen.dart';
 import 'package:simple_scratch/utils.dart';
 import 'package:simple_scratch/widgets/premium_sheet.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -973,14 +974,10 @@ class GameDetailsScreen extends StatelessWidget {
 
   Widget simpleScratchTicketStatsBlur(context) {
     return GestureDetector(
-      onTap: () async {
-        await showModalBottomSheet(
-          backgroundColor: Color(0xff20201e),
-          isScrollControlled: true,
-          enableDrag: false,
-          context: context,
-          builder: (context) => PremiumSheet(),
-        );
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return PremiumScreen();
+        }));
       },
       child: Material(
         elevation: 3,
@@ -1160,13 +1157,10 @@ class GameDetailsScreen extends StatelessWidget {
             Visibility(
               visible: !isPremium,
               child: GestureDetector(
-                onTap: () async {
-                  await showModalBottomSheet(
-                    isScrollControlled: true,
-                    enableDrag: false,
-                    context: context,
-                    builder: (context) => PremiumSheet(),
-                  );
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return PremiumScreen();
+                  }));
                 },
                 child: Column(
                   children: [

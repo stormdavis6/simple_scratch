@@ -11,6 +11,7 @@ import 'package:transparent_image/transparent_image.dart';
 import '../constants.dart';
 import '../models/ticket.dart';
 import '../models/user.dart';
+import '../screens/premium_screen.dart';
 import '../services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
@@ -51,14 +52,10 @@ class _GamesCarouselState extends State<GamesCarousel> {
             ),
           )
         : GestureDetector(
-            onTap: () async {
-              await showModalBottomSheet(
-                backgroundColor: Color(0xff20201e),
-                isScrollControlled: true,
-                enableDrag: false,
-                context: context,
-                builder: (context) => PremiumSheet(),
-              );
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return PremiumScreen();
+              }));
             },
             child: Stack(
               alignment: Alignment.center,
@@ -133,40 +130,5 @@ class _GamesCarouselState extends State<GamesCarousel> {
               ],
             ),
           );
-    // Center(
-    //         child: Stack(
-    //           children: [
-    //             ClipRRect(
-    //               borderRadius: const BorderRadius.all(
-    //                 Radius.circular(8),
-    //               ),
-    //               child: ImageFiltered(
-    //                 imageFilter: ImageFilter.blur(
-    //                     sigmaX: 60, sigmaY: 60, tileMode: TileMode.clamp),
-    //                 child: FadeInImage.memoryNetwork(
-    //                     height: 320,
-    //                     width: 320,
-    //                     placeholder: kTransparentImage,
-    //                     image:
-    //                         'https://nclottery.com/Content/Images/Instant/nc842_sqr.png'),
-    //               ),
-    //             ),
-    //             Positioned.fill(
-    //               child: Align(
-    //                 alignment: Alignment.center,
-    //                 child: RichText(
-    //                     text: TextSpan(
-    //                         recognizer: TapGestureRecognizer()..onTap = () {},
-    //                         text: 'Premium',
-    //                         style: TextStyle(
-    //                             fontSize: 30,
-    //                             fontWeight: FontWeight.bold,
-    //                             decoration: TextDecoration.underline,
-    //                             color: kGreenLightColor))),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       );
   }
 }
