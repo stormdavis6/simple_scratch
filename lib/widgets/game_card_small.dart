@@ -10,6 +10,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 import '../models/ticket.dart';
 import '../models/user.dart';
+import '../screens/new_game_details_screen.dart';
 import '../services/auth_service.dart';
 
 class GameCardSmall extends StatefulWidget {
@@ -30,7 +31,7 @@ class _GameCardSmallState extends State<GameCardSmall> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return GameDetailsScreen(
+          return NewGameDetailsScreen(
             ticket: widget.ticket,
             isPremium: widget.isPremium,
           );
